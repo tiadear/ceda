@@ -38,6 +38,13 @@ var myRoomID = null;
                         $('#contentWrap').show();
                     });
 
+                    $('#users li').on('click', function(){
+                        var userselected =  $(this).attr('id');
+                        console.log('userlistid: '+ $(this).attr('id'));
+
+                        socket.emit('joinRoom', userselected, currentuser);
+                    });
+
                 });
             }
         });
@@ -49,7 +56,7 @@ var myRoomID = null;
             myRoomID = data.id;
             console.log('room id: '+data.id);
             console.log('room owner: '+data.roomowner);
-            console.log('room responder: '+data.roomresp);
+            console.log('room other: '+data.roomresp);
         });
 
 

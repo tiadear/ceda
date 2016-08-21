@@ -38,8 +38,13 @@ var chatHistory = {};
 
 io.on('connection', function(socket){
 
-    socket.on('addUser', function(username, callback){
+    function updateUsers(){
+        //update the user list
+        socket.emit('updateUsers', {users: users});
+        socket.broadcast.emit('updateUsers', {users: users});
+    }
 
+    socket.on('addUser', function(username, callback){
         if (Object.getOwnPropertyNames(users).length > 0) {
             console.log('there are other users');
             callback(false);
@@ -56,7 +61,7 @@ io.on('connection', function(socket){
             socket.username = username;
 
             //push username into array
-            users[socket.id] = {"username" : username, "room" : {"id" : roomID}};
+            users[socket.id] = {"username" : username, "room" : {"id" : roomID}, currentroom : null};
 
             //send connection msg to user who connected
             socket.emit('updateChat', username, 'you have connected');
@@ -70,56 +75,7 @@ io.on('connection', function(socket){
             sockets.push(socket);
     });
 
-
-
-    function updateUsers(){
-        //update the user list
-        socket.emit('updateUsers', {users: users});
-        socket.broadcast.emit('updateUsers', {users: users});
-    }
-
-
-
-
-    socket.on('createRoom', function(userselected, currentuser) {
-
-
-    });
-
-
-
-
-    socket.on('joinRoom', function(userselected, currentuser){
-
-        //and one of those rooms is with the person selected
-        if(users[socket.id].room[userselected] !== undefined) {
-
-            console.log('does '+ users[currentuser].username +' have the room: '+users[socket.id].room[userselected]);
-            console.log('does '+ users[userselected].username +' have the room: '+users[userselected].room[socket.id]);
-
-            //get the room id
-            var roomid = users[socket.id].room[userselected];
-            var room = rooms[roomid];
-
-            //name the room
-            socket.room = roomid;
-
-            //add the person in the room.js file
-            room.addPerson(socket.id);
-
-            socket.room = room.id;
-
-            //add person to the room
-            socket.join(socket.room);
-
-            //update the room id on the client
-            socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
-
-            //let everyone in the room know
-            io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
-        }
-
-        else {
+    function newRoom(currentuser, userselected){
             //assign random id number
             var id = uuid.v4();
 
@@ -143,15 +99,71 @@ io.on('connection', function(socket){
 
             //add the room id to both users array
             users[currentuser].room[userselected] = id;
+            users[currentuser].currentroom = id;
             users[userselected].room[currentuser] = id;
 
             chatHistory[socket.room] = [];
         }
+
+        function existingRoom(currentuser, userselected) {
+            console.log('does '+ users[currentuser].username +' have the room: '+users[socket.id].room[userselected]);
+            console.log('does '+ users[userselected].username +' have the room: '+users[userselected].room[socket.id]); 
+
+            //get the room id
+            var roomid = users[socket.id].room[userselected];
+            var room = rooms[roomid];
+
+            //name the room
+            socket.room = roomid;
+
+            //add the person in the room.js file
+            room.addPerson(socket.id);
+
+            socket.room = room.id;
+
+            //add person to the room
+            socket.join(socket.room);
+
+            //update the room id on the client
+            socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
+
+            users[socket.id].currentroom = room.id;
+
+            //let everyone in the room know
+            io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
+        }
+
+    socket.on('joinRoom', function(userselected, currentuser){
         
+        //if they have already been assigned a room with this user
+        if(users[socket.id].room[userselected] !== undefined) {
+            existingRoom(currentuser, userselected);
+            console.log(users[socket.id].username+' has joined room '+socket.room);
+        }
+
+        //if they are initiating the conversation
+        else {
+            newRoom(currentuser, userselected);
+            console.log(users[socket.id].username+' has started room '+socket.room);
+        }    
     });
 
+    socket.on('switchRoom', function(userselected, currentuser){
+        socket.leave(socket.room);
+        console.log(users[socket.id].username+' has left room '+socket.room)
 
+        //if they have already been assigned a room with this user
+        if(users[socket.id].room[userselected] !== undefined) {
+            existingRoom(currentuser, userselected);
+            console.log(users[socket.id].username+' has joined room '+socket.room);
+        } 
 
+        //if they are initiating the conversation
+        else {
+            newRoom(currentuser, userselected);
+            console.log(users[socket.id].username+' has started room '+socket.room);
+        }
+    });
 
     socket.on('disconnect', function(data){
         if(typeof users[socket.id] !== 'undefined') {
@@ -165,17 +177,11 @@ io.on('connection', function(socket){
         }
     });
 
-
-
-
     socket.on('userTyping', function(data) {
         if(typeof users[socket.id] !== 'undefined') {
             io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: users[socket.id].username});
         }
     });
-
-
-
 
     socket.on('sendChat', function(data) {
         //send a msg
@@ -193,12 +199,6 @@ io.on('connection', function(socket){
     });
 
 });
-
-
-
-
-
-
 
 
 Array.prototype.contains = function(k, callback) { 
