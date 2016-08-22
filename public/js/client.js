@@ -3,10 +3,24 @@ var myRoomID = null;
 
     $(function(){
 
+
+
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
             $('#incoming').append('<li>' + username + ': ' + data + '</li>');
         });
+
+        
+        
+        
+
+
+        socket.on('updateHistory', function(data){
+            $('#incoming').append('<li><b>ealier messages</b></li>')
+            $.each(data, function(data, msg) {
+                $('#incoming').append('<li>'+ msg +'</li>')
+            });
+        })
 
 
 
@@ -54,9 +68,12 @@ var myRoomID = null;
         //update the room ID
         socket.on('sendRoomID', function(data) {
             myRoomID = data.id;
-            console.log('room id: '+data.id);
-            console.log('room owner: '+data.roomowner);
-            console.log('room other: '+data.roomresp);
+
+            //error checking...
+            //console.log('room id: '+data.id);
+            //console.log('room owner: '+data.roomowner);
+            //console.log('room other: '+data.roomresp);
+
         });
 
 
@@ -126,18 +143,18 @@ var myRoomID = null;
                 $('#usernameWrap').hide();
                 $('#chooseuserWrap').show();
 
-                if(data) {
-                    $('#usersList').append('<li>You are the only user online right now.<b>Continue?</b></li>');
-                } else {
-
-                }
-                
             });
             $('#username').val('');
-
         });
 
-        
+
+
+        //swap to video chat
+        $('#swaptovideo').on('click', function(){
+            console.log('is anything happening?');
+            $('#videoDisplay').show();
+        });
+
 
 
 

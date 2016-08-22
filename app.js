@@ -6,6 +6,7 @@ var express = require('express'),
     port = 3000,
     io = require('socket.io').listen(server),
     Room = require('./room.js'),
+    nodeStatic = require('node-static'),
     uuid = require('uuid'),
     _ = require('underscore')._;
 
@@ -21,22 +22,18 @@ server.listen(port, function(){
 
 
 
-
-
-
-
-
-
-
-
-
 var users = {}; //people
 var rooms = {};
 var sockets = []; //clients
 var chatHistory = {};
 
 
-io.on('connection', function(socket){
+io.sockets.on('connection', function(socket){
+
+    socket.on('message', function(message) {
+        // for a real app, would be room-only (not broadcast)
+        socket.broadcast.emit('message', message);
+    });
 
     function updateUsers(){
         //update the user list
@@ -46,10 +43,10 @@ io.on('connection', function(socket){
 
     socket.on('addUser', function(username, callback){
         if (Object.getOwnPropertyNames(users).length > 0) {
-            console.log('there are other users');
+            //console.log('there are other users');
             callback(false);
         } else {
-            console.log('users is empty');
+            //console.log('users is empty');
             callback(true);
         }
 
@@ -76,92 +73,102 @@ io.on('connection', function(socket){
     });
 
     function newRoom(currentuser, userselected){
-            //assign random id number
-            var id = uuid.v4();
+        //assign random id number
+        var id = uuid.v4();
 
-            //create the room
-            var room = new Room(id, currentuser, userselected);
+        //create the room
+        var room = new Room(id, currentuser, userselected);
 
-            //add it to the array
-            rooms[id] = room;
+        //add it to the array
+        rooms[id] = room;
 
-            //name the room
-            socket.room = id;
+        //name the room
+        socket.room = id;
 
-            //auto join the creator of the room
-            socket.join(socket.room);
+        //auto join the creator of the room
+        socket.join(socket.room);
 
-            //add creator to room obj
-            room.addPerson(socket.id);
+        //add creator to room obj
+        room.addPerson(socket.id);
 
-             //update the room id on the client
-            socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
+         //update the room id on the client
+        socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
 
-            //add the room id to both users array
-            users[currentuser].room[userselected] = id;
-            users[currentuser].currentroom = id;
-            users[userselected].room[currentuser] = id;
+        //add the room id to both users array
+        users[currentuser].room[userselected] = id;
+        users[currentuser].currentroom = id;
+        users[userselected].room[currentuser] = id;
 
-            chatHistory[socket.room] = [];
+        chatHistory[socket.room] = [];
+
+        socket.emit('roomReady');
+    }
+
+    function existingRoom(currentuser, userselected) {
+        //console.log('does '+ users[currentuser].username +' have the room: '+users[socket.id].room[userselected]);
+        //console.log('does '+ users[userselected].username +' have the room: '+users[userselected].room[socket.id]); 
+
+        //get the room id
+        var roomid = users[socket.id].room[userselected];
+        var room = rooms[roomid];
+
+        //name the room
+        socket.room = roomid;
+
+        //add the person in the room.js file
+        room.addPerson(socket.id);
+
+        socket.room = room.id;
+
+        //add person to the room
+        socket.join(socket.room);
+
+        //assign the room id to the current room
+        users[socket.id].currentroom = room.id;
+
+        //update the room id on the client
+        socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
+
+        //let everyone in the room know
+        io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
+
+        var keys = _.keys(chatHistory);
+        if (_.contains(keys, socket.room)) {
+            socket.emit("updateHistory", chatHistory[socket.room]);
         }
 
-        function existingRoom(currentuser, userselected) {
-            console.log('does '+ users[currentuser].username +' have the room: '+users[socket.id].room[userselected]);
-            console.log('does '+ users[userselected].username +' have the room: '+users[userselected].room[socket.id]); 
-
-            //get the room id
-            var roomid = users[socket.id].room[userselected];
-            var room = rooms[roomid];
-
-            //name the room
-            socket.room = roomid;
-
-            //add the person in the room.js file
-            room.addPerson(socket.id);
-
-            socket.room = room.id;
-
-            //add person to the room
-            socket.join(socket.room);
-
-            //update the room id on the client
-            socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
-
-            users[socket.id].currentroom = room.id;
-
-            //let everyone in the room know
-            io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
-        }
+        socket.emit('channelReady')
+    }
 
     socket.on('joinRoom', function(userselected, currentuser){
-        
+
         //if they have already been assigned a room with this user
         if(users[socket.id].room[userselected] !== undefined) {
             existingRoom(currentuser, userselected);
-            console.log(users[socket.id].username+' has joined room '+socket.room);
+            //console.log(users[socket.id].username+' has joined room '+socket.room);
         }
 
         //if they are initiating the conversation
         else {
             newRoom(currentuser, userselected);
-            console.log(users[socket.id].username+' has started room '+socket.room);
-        }    
+            //console.log(users[socket.id].username+' has started room '+socket.room);
+        }
     });
 
     socket.on('switchRoom', function(userselected, currentuser){
         socket.leave(socket.room);
-        console.log(users[socket.id].username+' has left room '+socket.room)
+        //console.log(users[socket.id].username+' has left room '+socket.room)
 
         //if they have already been assigned a room with this user
         if(users[socket.id].room[userselected] !== undefined) {
             existingRoom(currentuser, userselected);
-            console.log(users[socket.id].username+' has joined room '+socket.room);
+            //console.log(users[socket.id].username+' has joined room '+socket.room);
         } 
 
         //if they are initiating the conversation
         else {
             newRoom(currentuser, userselected);
-            console.log(users[socket.id].username+' has started room '+socket.room);
+            //console.log(users[socket.id].username+' has started room '+socket.room);
         }
     });
 

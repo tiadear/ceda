@@ -1,31 +1,9 @@
 <html>
 <head>
-    
-    <style>
-        #contentWrap {
-            display: none;
-        }
-        #chooseuserWrap {
-            display: none;
-        }
-        #usersList li {
-            cursor: pointer;
-        }
-        #chatWrap {
-            float: left;
-            padding: 10px;
-        }
-        #userDisplay {
-            float: left;
-            height: 100vh;
-            width: 150px;
-            border-right: solid 1px #000;
-            padding: 10px;    
-        }
-
-    </style>
-
-
+    <title>ceda</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
     <body>
 
@@ -57,11 +35,30 @@
                 <input type="text" id="outgoing">
             </div>
 
+            <div id="videosWrap">
+                <!--<div id="swaptovideo">Swap to video chat</div>-->
+
+                <div id="videoDisplay">
+                    
+                    <video id="localVideo" autoplay muted></video>
+                    <video id="remoteVideo" autoplay></video>
+
+                    <div>
+                      <button id="startButton">Start</button>
+                      <button id="callButton">Call</button>
+                      <button id="hangupButton">Hang Up</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="js/lib/adapter.js"></script>
         <script src="js/client.js"></script>
+        <script src="js/main.js"></script>
+        
 
     </body>
 </html>
