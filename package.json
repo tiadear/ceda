@@ -5,8 +5,21 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.5",
+    "lodash": "^4.14.0",
+    "mysql": "^2.11.1",
+    "node-static": "^0.7.8",
+    "node-uuid": "^1.4.7",
+    "socket.io": "^1.4.8",
+    "underscore": "^1.8.3",
+    "uuid": "^2.0.2",
+    "webrtc.io": "0.0.4"
+  }
 }

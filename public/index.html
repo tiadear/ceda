@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>ceda</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+    <body>
+
+        <div id="usernameWrap">
+            <p>Please enter a username</p>
+            <form id="userform">
+                <input size="35" id="username"></input>
+                <input type="submit"></input>
+            </form>
+        </div>
+
+        <div id="chooseuserWrap">
+            <p>Users online right now</p>
+            <div id="usersList">
+            </div>
+        </div>
+
+        <div id="contentWrap">
+
+            <div id="userDisplay">
+                <b>Users online:</b>
+                <div id="users"></div>
+            </div>
+
+            <div id="chatWrap">
+                <b>Incoming Chat:</b>
+                <ul id="incoming"></ul>
+                <br>
+                <input type="text" id="outgoing">
+            </div>
+
+            <div id="videosWrap">
+                <!--<div id="swaptovideo">Swap to video chat</div>-->
+
+                <div id="videoDisplay">
+                    
+                    <video id="localVideo" autoplay muted></video>
+                    <video id="remoteVideo" autoplay></video>
+
+                    <div>
+                      <button id="startButton">Start</button>
+                      <button id="callButton">Call</button>
+                      <button id="hangupButton">Hang Up</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/lib/adapter.js"></script>
+        <script src="js/client.js"></script>
+        <script src="js/main.js"></script>
+        
+
+    </body>
+</html>
