@@ -32,9 +32,22 @@ var myRoomID = null;
 
     $(function(){
 
+        // For todays date;
+        Date.prototype.today = function () { 
+            return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+        }
+
+        // For the time now
+        Date.prototype.timeNow = function () {
+            return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
+        }
+
+        var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
+
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
             $('#incoming').append('<li>' + username + ': ' + data + '</li>');
+            $('#incoming').append('<li>' + datetime +  '</li>');
             socket.emit('message', data);
         });
 
@@ -110,7 +123,7 @@ var myRoomID = null;
 
         function timeoutFunction() {
             typing = false;
-            socket.emit("typing", false);
+            socket.emit("isTyping", false);
         }
 
         //when something is entered into the outgoing message box
@@ -195,6 +208,15 @@ var myRoomID = null;
         });
 
 
+
+
+
+
+
+
+
+
+
         /////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////
         // WebRTC STUFF
@@ -213,13 +235,13 @@ var myRoomID = null;
         hangupButton.onclick = hangup;
 
         function gotStream(stream) {
-          console.log('Adding local stream.');
-          localVideo.src = window.URL.createObjectURL(stream);
-          localStream = stream;
-          sendMessage('got user media');
-          if (isInitiator) {
-            callButton.disabled = false;
-          }
+            console.log('Adding local stream.');
+            localVideo.src = window.URL.createObjectURL(stream);
+            localStream = stream;
+            sendMessage('got user media');
+            if (isInitiator) {
+                callButton.disabled = false;
+            }
         }
 
         function start() {
@@ -236,7 +258,6 @@ var myRoomID = null;
 
         function call() {
             callButton.disabled = true;
-            hangupButton.disabled = false;
             maybeStart();
         }
 
@@ -259,6 +280,7 @@ var myRoomID = null;
             createPeerConnection();
             pc.addStream(localStream);
             isStarted = true;
+            hangupButton.disabled = false;
             console.log('isInitiator', isInitiator);
             if (isInitiator) {
               doCall();
@@ -349,15 +371,15 @@ var myRoomID = null;
             // No TURN server. Get one from computeengineondemand.appspot.com:
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
-              if (xhr.readyState === 4 && xhr.status === 200) {
-                var turnServer = JSON.parse(xhr.responseText);
-                console.log('Got TURN server: ', turnServer);
-                pcConfig.iceServers.push({
-                  'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
-                  'credential': turnServer.password
-                });
-                turnReady = true;
-              }
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var turnServer = JSON.parse(xhr.responseText);
+                    console.log('Got TURN server: ', turnServer);
+                    pcConfig.iceServers.push({
+                        'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+                        'credential': turnServer.password
+                    });
+                    turnReady = true;
+                }
             };
             xhr.open('GET', turnURL, true);
             xhr.send();
@@ -365,19 +387,21 @@ var myRoomID = null;
         }
 
         function handleRemoteStreamAdded(event) {
-          console.log('Remote stream added.');
-          remoteVideo.src = window.URL.createObjectURL(event.stream);
-          remoteStream = event.stream;
+            console.log('Remote stream added.');
+            remoteVideo.src = window.URL.createObjectURL(event.stream);
+            remoteStream = event.stream;
         }
 
         function handleRemoteStreamRemoved(event) {
-          console.log('Remote stream removed. Event: ', event);
+            console.log('Remote stream removed. Event: ', event);
         }
 
         function hangup() {
-          console.log('Hanging up.');
-          stop();
-          sendMessage('bye');
+            console.log('Hanging up.');
+            stop();
+            sendMessage('bye');
+            hangupButton.disabled = true;
+            callButton.disabled = false;
         }
 
         function handleRemoteHangup() {
