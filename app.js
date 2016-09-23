@@ -101,7 +101,7 @@ io.sockets.on('connection', function(socket){
 
         chatHistory[socket.room] = [];
 
-        socket.emit('roomReady');
+        socket.emit('createdRoom');
     }
 
     function existingRoom(currentuser, userselected) {
@@ -137,7 +137,7 @@ io.sockets.on('connection', function(socket){
             socket.emit("updateHistory", chatHistory[socket.room]);
         }
 
-        socket.emit('channelReady')
+        socket.emit('channelReady');
     }
 
     socket.on('joinRoom', function(userselected, currentuser){

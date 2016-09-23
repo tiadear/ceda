@@ -31,7 +31,6 @@ var sdpConstraints = {
 var socket = io.connect();
 
 
-
 socket.on('roomReady', function() {
   console.log('room ready');
   isInitiator = true;
