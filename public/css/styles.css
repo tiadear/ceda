@@ -2,7 +2,10 @@
   box-sizing: border-box; }
 
 body {
-  font-family: 'Open Sans', sans-serif; }
+  font-family: "Questrial", sans-serif; }
+
+header {
+  background-color: #ea5455; }
 
 #chooseuserWrap {
   display: none; }
@@ -15,7 +18,7 @@ body {
     float: left;
     height: 100vh;
     width: 20%;
-    border-right: solid 1px #000;
+    border-right: solid 1px #000000;
     padding: 10px; }
     #contentWrap #userDisplay #users li {
       cursor: pointer; }
@@ -27,7 +30,7 @@ body {
   #contentWrap #videosWrap {
     float: left;
     height: 100vh;
-    border-left: solid 1px #000;
+    border-left: solid 1px #000000;
     width: 50%;
     padding: 10px; }
     #contentWrap #videosWrap #videoDisplay video {
@@ -35,20 +38,21 @@ body {
       width: 320px; }
     #contentWrap #videosWrap #videoDisplay button {
       width: 50px;
-      background-color: #27ae60;
+      background-color: #ea5455;
       cursor: pointer;
       text-align: center;
       margin: 0 auto;
-      border: 1px solid #27ae60;
+      border: 1px solid #ea5455;
+      color: #ffffff;
       border-radius: 5px; }
     #contentWrap #videosWrap #swaptovideo {
-      background-color: #27ae60;
+      background-color: #ea5455;
       cursor: pointer;
       width: 200px;
       text-align: center;
       margin: 0 auto;
       padding: 5px 10px;
-      border: 1px solid #27ae60;
+      border: 1px solid #ea5455;
       border-radius: 5px; }
 
 /*# sourceMappingURL=styles.css.map */

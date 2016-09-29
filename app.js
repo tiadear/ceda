@@ -9,6 +9,10 @@ var express = require('express'),
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
     mysql = require('mysql'),
+    passport = require('passport'),
+    expressSession = require('express-session'),
+    dbConfig = require('./db.js'),
+    mongoose = require('mongoose'),
     _ = require('underscore')._;
 
 app.use(express.static(__dirname + '/public'));
@@ -19,6 +23,25 @@ app.get('/', function(req, res){
 
 server.listen(port, function(){
     console.log('listening on *:3000');
+});
+
+
+
+
+
+mongoose.connect('dbConfig.url');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+    done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done){
+    User.findyId(id, function(err, user){
+        done(err, user);
+    });
 });
 
 
@@ -92,17 +115,18 @@ io.sockets.on('connection', function(socket){
         //populate the clients array with the client object
         sockets.push(socket);
 
-        var newuser = {username: username, user_type: 0};
-        con.query('INSERT INTO users SET ?', newuser, function(err,res){
-            if(err) throw err;
+            var newuser = {username: username, user_type: 0};
+            con.query('INSERT INTO users SET ?', newuser, function(err,res){
+                if(err) throw err;
 
-            var lastinsertID = res.insertId;
+                var lastinsertID = res.insertId;
 
-            //push username into array
-            users[socket.id] = {"username" : username, "user_id" : lastinsertID, "room" : {"id" : roomID}, currentroom : null};
+                //push username into array
+                users[socket.id] = {"username" : username, "user_id" : lastinsertID, "room" : {"id" : roomID}, currentroom : null};
 
-            updateUsers();
-        });
+                updateUsers();
+            });
+        
         
     });
 
@@ -138,7 +162,7 @@ io.sockets.on('connection', function(socket){
         //Insert into db
         var userinit = users[currentuser].user_id;
         var userresp = users[userselected].user_id;
-        var newroom = {user_init_id: userinit, user_resp_id: userresp, date_created: CURRENT_TIMESTAMP, room_type: 0};
+        var newroom = {user_init_id: userinit, user_resp_id: userresp, room_type: 0};
 
         con.query('INSERT INTO room SET ?', newroom, function(err,res){
             if(err) throw err;
@@ -180,6 +204,8 @@ io.sockets.on('connection', function(socket){
     }
 
     socket.on('joinRoom', function(userselected, currentuser){
+
+        //con.query('SELECT id, user_init_id, user_resp_id, room_type, room_id FROM room, users WHERE users.room_id = id AND ')
 
         //if they have already been assigned a room with this user
         if(users[socket.id].room[userselected] !== undefined) {

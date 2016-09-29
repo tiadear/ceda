@@ -227,8 +227,10 @@ var myRoomID = null;
         var startButton = document.getElementById('startButton');
         var callButton = document.getElementById('callButton');
         var hangupButton = document.getElementById('hangupButton');
+        var muteButton = document.getElementById('muteButton');
 
         callButton.disabled = true;
+        muteButton.disabled = true;
         hangupButton.disabled = true;
         startButton.onclick = start;
         callButton.onclick = call;
@@ -246,6 +248,7 @@ var myRoomID = null;
 
         function start() {
             startButton.disabled = true;
+            muteButton.disabled = false;
             navigator.mediaDevices.getUserMedia({
                 audio: false,
                 video: true
@@ -402,6 +405,11 @@ var myRoomID = null;
             sendMessage('bye');
             hangupButton.disabled = true;
             callButton.disabled = false;
+        }
+
+        function mute() {
+            console.log('mute');
+            stream.getAudioTracks()[0].enabled = false;
         }
 
         function handleRemoteHangup() {
