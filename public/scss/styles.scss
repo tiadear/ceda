@@ -1,9 +1,16 @@
+@import 'vars';
+@import 'mixins';
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: $sans;
+}
+
+header {
+    background-color: $red;
 }
 
 
@@ -33,7 +40,7 @@ body {
         float: left;
         height: 100vh;
         width: 20%;
-        border-right: solid 1px #000;
+        border-right: solid 1px $black;
         padding: 10px;
         
         #users{
@@ -53,7 +60,7 @@ body {
     #videosWrap {
         float: left;
         height: 100vh;
-        border-left: solid 1px #000;
+        border-left: solid 1px $black;
         width: 50%;
         padding: 10px;
 
@@ -66,23 +73,24 @@ body {
 
             button {
                 width: 50px;
-                background-color: #27ae60;
+                background-color: $red;
                 cursor: pointer;
                 text-align: center;
                 margin: 0 auto;
-                border: 1px solid #27ae60;
+                border: 1px solid $red;
+                color: $white;
                 border-radius: 5px;
             }
         }
 
         #swaptovideo {
-            background-color: #27ae60;
+            background-color: $red;
             cursor: pointer;
             width: 200px;
             text-align: center;
             margin: 0 auto;
             padding: 5px 10px;
-            border: 1px solid #27ae60;
+            border: 1px solid $red;
             border-radius: 5px;
         }
     }

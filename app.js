@@ -8,6 +8,11 @@ var express = require('express'),
     Room = require('./room.js'),
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
+    mysql = require('mysql'),
+    passport = require('passport'),
+    expressSession = require('express-session'),
+    dbConfig = require('./db.js'),
+    mongoose = require('mongoose'),
     _ = require('underscore')._;
 
 app.use(express.static(__dirname + '/public'));
@@ -22,10 +27,54 @@ server.listen(port, function(){
 
 
 
+
+
+mongoose.connect('dbConfig.url');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+    done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done){
+    User.findyId(id, function(err, user){
+        done(err, user);
+    });
+});
+
+
+
+
+// First you need to create a connection to the db
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ceda"
+});
+
+con.connect(function(err){
+  if(err){
+    console.log('Error connecting to Db');
+    return;
+  }
+  console.log('Connection established');
+});
+
+
+
+
+
+
+
+
+
+
 var users = {}; //people
 var rooms = {};
 var sockets = []; //clients
-var chatHistory = {};
 
 
 io.sockets.on('connection', function(socket){
@@ -50,26 +99,35 @@ io.sockets.on('connection', function(socket){
             callback(true);
         }
 
-         console.log('username: ' + username);
+        console.log('username: ' + username);
 
-            roomID = null;
+        roomID = null;
 
-            //attach username to socket
-            socket.username = username;
+        //attach username to socket
+        socket.username = username;
 
-            //push username into array
-            users[socket.id] = {"username" : username, "room" : {"id" : roomID}, currentroom : null};
+        //send connection msg to user who connected
+        socket.emit('updateChat', username, 'you have connected');
 
-            //send connection msg to user who connected
-            socket.emit('updateChat', username, 'you have connected');
+        //send connection msg to everyone else
+        socket.broadcast.emit('updateChat', username, 'is now online');
 
-            //send connection msg to everyone else
-            socket.broadcast.emit('updateChat', username, 'is now online');
+        //populate the clients array with the client object
+        sockets.push(socket);
 
-            updateUsers();
+            var newuser = {username: username, user_type: 0};
+            con.query('INSERT INTO users SET ?', newuser, function(err,res){
+                if(err) throw err;
 
-            //populate the clients array with the client object
-            sockets.push(socket);
+                var lastinsertID = res.insertId;
+
+                //push username into array
+                users[socket.id] = {"username" : username, "user_id" : lastinsertID, "room" : {"id" : roomID}, currentroom : null};
+
+                updateUsers();
+            });
+        
+        
     });
 
     function newRoom(currentuser, userselected){
@@ -99,15 +157,19 @@ io.sockets.on('connection', function(socket){
         users[currentuser].currentroom = id;
         users[userselected].room[currentuser] = id;
 
-        chatHistory[socket.room] = [];
+        socket.emit('createdRoom');
 
-        socket.emit('roomReady');
+        //Insert into db
+        var userinit = users[currentuser].user_id;
+        var userresp = users[userselected].user_id;
+        var newroom = {user_init_id: userinit, user_resp_id: userresp, room_type: 0};
+
+        con.query('INSERT INTO room SET ?', newroom, function(err,res){
+            if(err) throw err;
+        });
     }
 
     function existingRoom(currentuser, userselected) {
-        //console.log('does '+ users[currentuser].username +' have the room: '+users[socket.id].room[userselected]);
-        //console.log('does '+ users[userselected].username +' have the room: '+users[userselected].room[socket.id]); 
-
         //get the room id
         var roomid = users[socket.id].room[userselected];
         var room = rooms[roomid];
@@ -132,15 +194,18 @@ io.sockets.on('connection', function(socket){
         //let everyone in the room know
         io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
 
-        var keys = _.keys(chatHistory);
-        if (_.contains(keys, socket.room)) {
-            socket.emit("updateHistory", chatHistory[socket.room]);
-        }
+        con.query('SELECT id, user_id, message, timestamp FROM chat_history WHERE room_id = ?', socket.room ,function(err,res){
+            if(err) throw err;
+            socket.emit('updateHistory', res);
+            console.log(res);
+        });
 
-        socket.emit('channelReady')
+        socket.emit('channelReady');
     }
 
     socket.on('joinRoom', function(userselected, currentuser){
+
+        //con.query('SELECT id, user_init_id, user_resp_id, room_type, room_id FROM room, users WHERE users.room_id = id AND ')
 
         //if they have already been assigned a room with this user
         if(users[socket.id].room[userselected] !== undefined) {
@@ -192,17 +257,19 @@ io.sockets.on('connection', function(socket){
 
     socket.on('sendChat', function(data) {
         //send a msg
-
-        //if (io.sockets.manager.roomClients[socket.id]['/'+socket.room] !== undefined ) {
         if(socket.room !== undefined){
             io.sockets.in(socket.room).emit("updateChat", socket.username, data);
             socket.emit("isTyping", false);
-            chatHistory[socket.room].push(users[socket.id].username + ": " + data);
+
+            var newmessage = {user_id: '1', message: data, timestamp: CURRENT_TIMESTAMP}
+
+            con.query('INSERT INTO chat_history SET ?', newmessage, function(err,res){
+                if(err) throw err;
+            });
 
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
         }
-
     });
 
 });
@@ -224,32 +291,10 @@ Array.prototype.contains = function(k, callback) {
 
 
 
-
-
-
-/*
-var mysql = require("mysql");
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: ""
-});
-
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
-});
-
-con.end();
-
-*/
-
-
-
-
-
+//con.end(function(err) {
+  // The connection is terminated gracefully
+  // Ensures all previously enqueued queries are still
+  // before sending a COM_QUIT packet to the MySQL server.
+//});
  
 
