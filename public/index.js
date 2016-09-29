@@ -3,7 +3,7 @@
     <title>ceda</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
 </head>
     <body>
 
@@ -47,6 +47,7 @@
                       <button id="startButton">Start</button>
                       <button id="callButton">Call</button>
                       <button id="hangupButton">Hang Up</button>
+                      <button id="muteButton">Mute Sound</button>
                     </div>
                 </div>
             </div>
@@ -57,7 +58,7 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/lib/adapter.js"></script>
         <script src="js/client.js"></script>
-        <script src="js/main.js"></script>
+
         
 
     </body>
