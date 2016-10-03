@@ -1,5 +1,5 @@
 
-const path = require('path')  
+const path = require('path');
 var express = require('express'),
     favicon = require('static-favicon'),
     logger = require('morgan');
@@ -32,37 +32,59 @@ server.listen(port, function(){
 
 
 
-
+// routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 
 
 
-
-
-/*
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "ceda"
-});
-
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
-});
-*/
-
-
-
 // set up views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+
+
+
+// oath
+var config = require('./oauth.js');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
+var GithubStrategy = require('passport-github2').Strategy;
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var InstagramStrategy = require('passport-instagram').Strategy;
+
+
+
+
+// passport config
+var Account = require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+//passport.serializeUser(Account.serializeUser());
+//passport.deserializeUser(Account.deserializeUser());
+
+passport.serializeUser(function(user, done){
+    done(null, user);
+});
+passport.deserializeUser(function(obj, done){
+    done(null, obj);
+});
+
+
+
+
+//
+passport.use(new FacebookStrategy({
+    clientID: config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret,
+    callbackURL: config.facebook.callbackURL
+    },
+    function(accessToken, refreshToken, profile, done) {
+        process.nextTick(function() {
+            return done(null, profile);
+        });
+    }
+));
 
 
 
@@ -83,17 +105,10 @@ app.use(flash());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/', routes);
-
-
-
-
-// passport config
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+app.get('./models/account', ensureAuthenticated, function(req, res){
+  res.render('account', { user: req.user });
+});
 
 
 
