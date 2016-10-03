@@ -1,6 +1,10 @@
 
 const path = require('path')  
 var express = require('express'),
+    favicon = require('static-favicon'),
+    logger = require('morgan');
+    cookieParser = require('cookie-parser');
+    bodyParser = require('body-parser');
     app = express(),
     server = require('http').createServer(app),
     port = 3000,
@@ -11,16 +15,17 @@ var express = require('express'),
     mysql = require('mysql'),
     passport = require('passport'),
     expressSession = require('express-session'),
-    dbConfig = require('./db.js'),
+    db = require('./db.js'),
+    flash = require('connect-flash'),
+    LocalStrategy = require('passport-local').Strategy,
     mongoose = require('mongoose'),
+    debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
-app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res){
-    res.sendFile('index');
-});
 
+
+// connect to port
 server.listen(port, function(){
     console.log('listening on *:3000');
 });
@@ -28,26 +33,15 @@ server.listen(port, function(){
 
 
 
-
-mongoose.connect('dbConfig.url');
-app.use(expressSession({secret: 'mySecretKey'}));
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done){
-    User.findyId(id, function(err, user){
-        done(err, user);
-    });
-});
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 
 
 
-// First you need to create a connection to the db
+
+
+/*
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -62,16 +56,94 @@ con.connect(function(err){
   }
   console.log('Connection established');
 });
+*/
+
+
+
+// set up views
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 
 
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(flash());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use('/', routes);
 
 
 
 
+// passport config
+var Account = require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 
+
+
+// connect to db
+mongoose.connect(db.url);
+mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
+mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
+
+
+
+
+// 404
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+
+
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+module.exports = app;
+
+
+
+
+// socket stuff
 var users = {}; //people
 var rooms = {};
 var sockets = []; //clients
