@@ -7,7 +7,12 @@ var Account = new Schema({
 	password: String,
 	email: String,
 	firstName: String,
-	lastName: String
+	lastName: String,
+	provider: String,
+	facebook: {},
+	twitter: {},
+	google: {},
+	oathID: String
 });
 
 Account.plugin(passportLocalMongoose);

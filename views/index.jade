@@ -5,7 +5,13 @@ block content
 		if (!user)
 			a(href="/login") Login
 			br
-			a(href="/register") Register
+			a(href="/signup") Sign Up
+			br
+			a(href="/auth/facebook") Login via Facebook
+			br
+			a(href="/auth/twitter") Login via Twitter
+			br
+			a(href="/auth/google") Login via Google
 		if (user)
 			p You are currently logged in as #{user.username}
 			a(href="/logout") Logout

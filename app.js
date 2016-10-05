@@ -1,24 +1,25 @@
 
-const path = require('path');
-var express = require('express'),
-    favicon = require('static-favicon'),
+const   path = require('path'),
+        express = require('express'),
+        app = express(),
+        server = require('http').createServer(app),
+        port = 3000,
+        io = require('socket.io').listen(server),
+        Room = require('./room.js'),
+        passport = require('passport'),
+        expressSession = require('express-session'),
+        mongoose = require('mongoose'),
+        db = require('./db.js'),
+        User = require('./models/account.js');
+
+var favicon = require('static-favicon'),
     logger = require('morgan');
     cookieParser = require('cookie-parser');
     bodyParser = require('body-parser');
-    app = express(),
-    server = require('http').createServer(app),
-    port = 3000,
-    io = require('socket.io').listen(server),
-    Room = require('./room.js'),
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
-    mysql = require('mysql'),
-    passport = require('passport'),
-    expressSession = require('express-session'),
-    db = require('./db.js'),
     flash = require('connect-flash'),
     LocalStrategy = require('passport-local').Strategy,
-    mongoose = require('mongoose'),
     debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
@@ -34,7 +35,6 @@ server.listen(port, function(){
 
 // routes
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 
 
@@ -46,46 +46,36 @@ app.set('view engine', 'jade');
 
 
 
-// oath
-var config = require('./oauth.js');
-var FacebookStrategy = require('passport-facebook').Strategy;
-var TwitterStrategy = require('passport-twitter').Strategy;
-var GithubStrategy = require('passport-github2').Strategy;
-var GoogleStrategy = require('passport-google-oauth2').Strategy;
-var InstagramStrategy = require('passport-instagram').Strategy;
+// passport strategies
 
+const local = require('./passport/local');
+const facebook = require('./passport/facebook');
+/*
+const google = require('./passport/google');
+const twitter = require('./passport/twitter');
+*/
 
 
 
 // passport config
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
+//var Account = require('./models/account');
+//passport.use(new LocalStrategy(Account.authenticate()));
 //passport.serializeUser(Account.serializeUser());
 //passport.deserializeUser(Account.deserializeUser());
 
 passport.serializeUser(function(user, done){
     done(null, user);
 });
-passport.deserializeUser(function(obj, done){
-    done(null, obj);
+passport.deserializeUser(function(id, done){
+    done(null, id);
 });
 
-
-
-
-//
-passport.use(new FacebookStrategy({
-    clientID: config.facebook.clientID,
-    clientSecret: config.facebook.clientSecret,
-    callbackURL: config.facebook.callbackURL
-    },
-    function(accessToken, refreshToken, profile, done) {
-        process.nextTick(function() {
-            return done(null, profile);
-        });
-    }
-));
-
+passport.use(local);
+passport.use(facebook);
+/*
+passport.use(google);
+passport.use(twitter);
+*/
 
 
 
@@ -106,9 +96,14 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.get('./models/account', ensureAuthenticated, function(req, res){
+
+app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
+
+
+
+
 
 
 
@@ -131,17 +126,6 @@ app.use(function(req, res, next) {
 
 
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
 
 // production error handler
 // no stacktraces leaked to user
@@ -152,6 +136,12 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+// test authentication
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+}
 
 module.exports = app;
 
