@@ -4,13 +4,59 @@
 const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport');
-
 var User = require('../models/account.js');
-//rt.use(new LocalStrategy(User.authenticate()));
+
 
 //module.exports = new LocalStrategy(User.authenticate());
 
+module.exports = new LocalStrategy({
+	usernameField: 'email',
+	passwordField: 'password', 
+	passReqToCallback: true
+	},
+	function(req, email, password, done) {
+		process.nextTick(function(){
+			User.findOne({email : email}, function(err, user){
+				if(err) {
+					return done(err);
+					console.log('something went horribly wrong');
+				}
 
+				if(user) {
+					return done(null, false);
+					console.log('user exists');
+				} 
+
+				else {
+					user = new User ({
+						//username: username,
+		          		password: password,
+		          		email: email,
+		          		//firstname: firstName,
+		          		//lastName: lastName,
+		          		provider: 'local'
+					});
+					user.save(function(err){
+						if(err) {
+							console.log(err);
+							return done(err);
+						} else {
+							console.log('saving user');
+							return done(null, user);
+						}
+					});
+				} // end else
+			});
+		});
+	}
+);
+
+
+
+
+
+
+/*
 module.exports = new LocalStrategy({
 	usernameField: 'email',
 	passwordField: 'password'
@@ -24,11 +70,11 @@ module.exports = new LocalStrategy({
 	        	done(null, user);
 	      	} else {
 	        	user = new User({
-		          	username: username,
-		          	password: String,
+		          	//username: username,
+		          	password: password,
 		          	email: email,
-		          	firstname: firstName,
-		          	lastName: lastName,
+		          	//firstname: firstName,
+		          	//lastName: lastName,
 		          	provider: 'local'
 	        	});
 		        user.save(function(err) {
@@ -44,6 +90,6 @@ module.exports = new LocalStrategy({
 	}
 );
 
-
+*/
 
 

@@ -19,7 +19,6 @@ var favicon = require('static-favicon'),
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
     flash = require('connect-flash'),
-    LocalStrategy = require('passport-local').Strategy,
     debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
@@ -58,11 +57,6 @@ const twitter = require('./passport/twitter');
 
 
 // passport config
-//var Account = require('./models/account');
-//passport.use(new LocalStrategy(Account.authenticate()));
-//passport.serializeUser(Account.serializeUser());
-//passport.deserializeUser(Account.deserializeUser());
-
 passport.serializeUser(function(user, done){
     done(null, user);
 });
@@ -86,7 +80,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('express-session')({
-    secret: 'keyboard cat',
+    secret: 'mustardmanforpresident',
     resave: false,
     saveUninitialized: false
 }));

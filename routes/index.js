@@ -1,7 +1,7 @@
 // ROUTES!!!
 
 
-const Account = require('../models/account');
+const Account = require('../models/account.js');
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
@@ -17,15 +17,21 @@ router.get('/signup', function(req, res) {
 });
 
 
+
+/*
 router.post('/signup', function(req, res, next) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+    Account.register(new Account({ username : req.body.email }), req.body.password, function(err, account) {
         if (err) {
+            console.log('sign-up error 1');
+            console.log(req.body.email );
+            console.log(req.body.password );
           return res.render('signup', { error : err.message });
         }
 
         passport.authenticate('local')(req, res, function () {
             req.session.save(function (err) {
                 if (err) {
+                    console.log('sign-up error 2');
                     return next(err);
                 }
                 res.redirect('/');
@@ -33,6 +39,19 @@ router.post('/signup', function(req, res, next) {
         });
     });
 });
+*/
+
+
+
+router.post('/signup', passport.authenticate('local', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
+        req.session.save(function (err) {
+            if(err){
+                return next(err);
+            }
+            res.redirect('/');
+        });
+    }
+);
 
 
 
@@ -76,6 +95,7 @@ router.get('auth/twitter/callback',
 	}
 );
 
+
 router.get('auth/google', 
 	passport.authenticate('google', { scope: [
 		'https://www.googleapis.com/auth/plus.login',
@@ -103,6 +123,10 @@ router.get('/logout', function(req, res, next) {
         res.redirect('/');
     });
 });
+
+
+
+
 
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
