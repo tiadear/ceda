@@ -20,7 +20,8 @@ userSchema.methods.generateHash = function(password) {
 }
 
 userSchema.methods.validPassword = function(password) {
-	return bcrypt.compareSync(password, this.local.password);
+	console.log(this.password);
+	return bcrypt.compareSync(password, this.password);
 }
 
 //userSchema.plugin(passportLocalMongoose);

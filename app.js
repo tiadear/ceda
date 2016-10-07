@@ -45,36 +45,6 @@ app.set('view engine', 'jade');
 
 
 
-// passport strategies
-
-const local = require('./passport/local');
-const facebook = require('./passport/facebook');
-/*
-const google = require('./passport/google');
-const twitter = require('./passport/twitter');
-*/
-
-
-
-// passport config
-passport.serializeUser(function(user, done){
-    return done(null, user.id);
-});
-passport.deserializeUser(function(id, done){
-    User.findById(id, function(err, user){
-        return done(err,user);
-    });
-});
-
-passport.use(local);
-passport.use(facebook);
-/*
-passport.use(google);
-passport.use(twitter);
-*/
-
-
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -94,14 +64,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
 
 
 
+// passport strategies
+var local = require('./passport/local');
+var facebook = require('./passport/facebook');
+/*
+var google = require('./passport/google');
+var twitter = require('./passport/twitter');
+*/
 
+
+
+
+// passport config
+passport.serializeUser(function(user, done){
+    return done(null, user.id);
+});
+passport.deserializeUser(function(id, done){
+    User.findById(id, function(err, user){
+        return done(err,user);
+    });
+});
+
+passport.use(local, 'local-signup');
+passport.use(local, 'local-login');
+passport.use(facebook);
+/*
+passport.use(google);
+passport.use(twitter);
+*/
 
 
 

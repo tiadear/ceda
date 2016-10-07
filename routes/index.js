@@ -1,10 +1,15 @@
 // ROUTES!!!
 
-
 const User = require('../models/account.js');
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
+const LocalStrategy = require('passport-local').Strategy;
+const local = require('../passport/local');
+local.strategy(passport);
+
+
+
 
 router.get('/', function(req, res){
 	res.render('index', {user : req.user});
@@ -16,34 +21,7 @@ router.get('/signup', function(req, res) {
 	res.render('signup', { });
 });
 
-
-
-/*
-router.post('/signup', function(req, res, next) {
-    User.register(new User({ username : req.body.email }), req.body.password, function(err, account) {
-        if (err) {
-            console.log('sign-up error 1');
-            console.log(req.body.email );
-            console.log(req.body.password );
-          return res.render('signup', { error : err.message });
-        }
-
-        passport.authenticate('local')(req, res, function () {
-            req.session.save(function (err) {
-                if (err) {
-                    console.log('sign-up error 2');
-                    return next(err);
-                }
-                res.redirect('/');
-            });
-        });
-    });
-});
-*/
-
-
-
-router.post('/signup', passport.authenticate('local', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
+router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
         req.session.save(function (err) {
             if(err){
                 return next(err);
@@ -59,12 +37,18 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user, error : req.flash('error')});
 });
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), function(req, res, next) {
+router.post('/login', passport.authenticate('local-login', { 
+    failureRedirect: '/login', 
+    failureFlash: true 
+}), function(req, res, next) {
     req.session.save(function (err) {
         if (err) {
+            console.log(err);
+            console.log('login error 1');
             return next(err);
         }
         res.redirect('/');
+        console.log('login redirect');
     });
 });
 
