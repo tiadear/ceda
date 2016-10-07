@@ -4,10 +4,8 @@
 const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport');
-var User = require('../models/account.js');
+var User = require('../models/account');
 
-
-//module.exports = new LocalStrategy(User.authenticate());
 
 module.exports = new LocalStrategy({
 	usernameField: 'email',
@@ -28,21 +26,21 @@ module.exports = new LocalStrategy({
 				} 
 
 				else {
-					user = new User ({
-						//username: username,
-		          		password: password,
-		          		email: email,
-		          		//firstname: firstName,
-		          		//lastName: lastName,
-		          		provider: 'local'
-					});
-					user.save(function(err){
+					var newUser = new User ()
+					newUser.email = email;
+					newUser.password = newUser.generateHash(password);
+					newUser.firstName = req.body.firstName;
+					newUser.lastName = req.body.lastName;
+					newUser.provider = 'local';
+
+					newUser.save(function(err){
 						if(err) {
 							console.log(err);
+							console.log('saving error')
 							return done(err);
 						} else {
 							console.log('saving user');
-							return done(null, user);
+							return done(null, newUser);
 						}
 					});
 				} // end else
@@ -50,46 +48,4 @@ module.exports = new LocalStrategy({
 		});
 	}
 );
-
-
-
-
-
-
-/*
-module.exports = new LocalStrategy({
-	usernameField: 'email',
-	passwordField: 'password'
-	},
-	function (email, password, done) {
-		User.findOne({ email: email }, function(err, user) {
-	      	if(err) {
-	        	console.log(err);  // handle errors!
-	      	}
-	      	if (!err && user !== null) {
-	        	done(null, user);
-	      	} else {
-	        	user = new User({
-		          	//username: username,
-		          	password: password,
-		          	email: email,
-		          	//firstname: firstName,
-		          	//lastName: lastName,
-		          	provider: 'local'
-	        	});
-		        user.save(function(err) {
-		          	if(err) {
-		            	console.log(err);  // handle errors!
-		          	} else {
-		            	console.log("saving user ...");
-		            	done(null, user);
-		          	}
-		        });
-	      	}
-	    });
-	}
-);
-
-*/
-
 

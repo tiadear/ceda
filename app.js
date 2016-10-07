@@ -58,10 +58,12 @@ const twitter = require('./passport/twitter');
 
 // passport config
 passport.serializeUser(function(user, done){
-    done(null, user);
+    return done(null, user.id);
 });
 passport.deserializeUser(function(id, done){
-    done(null, id);
+    User.findById(id, function(err, user){
+        return done(err,user);
+    });
 });
 
 passport.use(local);
@@ -70,6 +72,7 @@ passport.use(facebook);
 passport.use(google);
 passport.use(twitter);
 */
+
 
 
 
@@ -90,6 +93,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+
 
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
@@ -130,6 +134,10 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+
+
+
 
 // test authentication
 function ensureAuthenticated(req, res, next) {

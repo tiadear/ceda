@@ -1,7 +1,7 @@
 // ROUTES!!!
 
 
-const Account = require('../models/account.js');
+const User = require('../models/account.js');
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
@@ -20,7 +20,7 @@ router.get('/signup', function(req, res) {
 
 /*
 router.post('/signup', function(req, res, next) {
-    Account.register(new Account({ username : req.body.email }), req.body.password, function(err, account) {
+    User.register(new User({ username : req.body.email }), req.body.password, function(err, account) {
         if (err) {
             console.log('sign-up error 1');
             console.log(req.body.email );
