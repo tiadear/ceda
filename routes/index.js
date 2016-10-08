@@ -7,6 +7,7 @@ const router = express.Router();
 const LocalStrategy = require('passport-local').Strategy;
 const local = require('../passport/local');
 local.strategy(passport);
+const facebook = require('../passport/facebook');
 
 
 
@@ -56,14 +57,16 @@ router.post('/login', passport.authenticate('local-login', {
 
 // social media
 
-router.get('auth/facebook', 
-	passport.authenticate('facebook'),
-	function(req, res) {}
+router.get('/auth/facebook',
+	passport.authenticate('facebook', {scope : ['email']}),
+    function(req, res) {}
 );
-router.get('auth/facebook/callback',
+
+router.get('/auth/facebook/callback',
 	passport.authenticate('facebook', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/account');
+        console.log('fb redirect going wrong');
+		res.redirect('/');
 	}
 );
 
@@ -92,6 +95,22 @@ router.get('auth/google/callback',
 		res.redirect('/account');
 	}
 );
+
+
+
+
+
+router.get('/account', ensureAuthenticated, function(req, res){
+  res.render('account');
+});
+
+// test authentication
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  console.log('is authenticated');
+  res.redirect('/');
+}
+
 
 
 

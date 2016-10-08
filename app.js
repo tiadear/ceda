@@ -64,9 +64,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
 
 
 
@@ -135,11 +132,7 @@ app.use(function(err, req, res, next) {
 
 
 
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/');
-}
+
 
 module.exports = app;
 

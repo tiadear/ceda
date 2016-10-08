@@ -1,19 +1,17 @@
-var ids = {
-  facebook: {
+module.exports = {
+  'facebook': {
     clientID: '1095165423893839',
-    clientSecret: '0e1df4f703bdd2b63d9f1138b43d19f',
-    callbackURL: 'http://127.0.0.1:3000/auth/facebook/callback'
+    clientSecret: 'abf555499533da026c2b21a160a131e6',
+    callbackURL: 'http://localhost:3000/auth/facebook/callback'
   },
-  twitter: {
+  'twitter': {
     consumerKey: 'get_your_own',
     consumerSecret: 'get_your_own',
-    callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+    callbackURL: "http://localhost:3000/auth/twitter/callback"
   },
-  google: {
+  'google': {
     clientID: 'get_your_own',
     clientSecret: 'get_your_own',
-    callbackURL: 'http://127.0.0.1:3000/auth/google/callback'
+    callbackURL: 'http://localhost:3000/auth/google/callback'
   }
 };
-
-module.exports = ids;
