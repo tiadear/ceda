@@ -22,8 +22,8 @@ block content
 					a(href="/settings") Settings
 				div#option3
 					a(href="/forum") Forum
-			div.fb
-				p facebook id: <%=user.oathID %>
-				p facebook id: <%=user.email %>
-				p facebook id: <%=user.firstName %>
-				p facebook id: <%=user.lastName %>
+			.fb
+				p facebook id: #{user.id}
+				p facebook email: #{user.email}
+				p facebook username: #{user.username}
+				p facebook first name: #{user.firstName}

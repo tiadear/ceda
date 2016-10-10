@@ -13,9 +13,7 @@ module.exports = new FacebookStrategy({
     profileFields: ['id', 'name', 'displayName', 'email']
     },
     function(accessToken, refreshToken, profile, done) {
-        console.log('fb point 1');
         User.findOne({ oauthID: profile.id }, function(err, user) {
-            console.log('fb point 2')
             if(err) {
                 console.log(err);  // handle errors!
                 return done(err);
@@ -28,7 +26,7 @@ module.exports = new FacebookStrategy({
 
                 var newUser = new User ();
                 newUser.email = profile.emails[0].value;
-                newUser.username = profile.username;
+                newUser.username = profile.displayName;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
                 newUser.provider = 'facebook';
@@ -40,7 +38,7 @@ module.exports = new FacebookStrategy({
                         console.log(err);
                     } else {
                         console.log("saving user ...");
-                        done(null, user);
+                        done(null, newUser);
                     }
                 });
             }
