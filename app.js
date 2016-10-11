@@ -70,9 +70,10 @@ app.use('/', routes);
 // passport strategies
 var local = require('./passport/local');
 var facebook = require('./passport/facebook');
+var twitter = require('./passport/twitter');
 /*
 var google = require('./passport/google');
-var twitter = require('./passport/twitter');
+
 */
 
 
@@ -91,9 +92,10 @@ passport.deserializeUser(function(id, done){
 passport.use(local, 'local-signup');
 passport.use(local, 'local-login');
 passport.use(facebook);
+passport.use(twitter);
 /*
 passport.use(google);
-passport.use(twitter);
+
 */
 
 

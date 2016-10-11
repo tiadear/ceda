@@ -65,34 +65,33 @@ router.get('/auth/facebook',
 router.get('/auth/facebook/callback',
 	passport.authenticate('facebook', {failureRedirect: '/'}),
 	function(req, res){
-        console.log('fb redirect going wrong');
 		res.redirect('/');
 	}
 );
 
 
-router.get('auth/twitter', 
+router.get('/auth/twitter', 
 	passport.authenticate('twitter'),
 	function(req, res) {}
 );
-router.get('auth/twitter/callback',
+router.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/account');
+		res.redirect('/');
 	}
 );
 
 
-router.get('auth/google', 
+router.get('/auth/google', 
 	passport.authenticate('google', { scope: [
 		'https://www.googleapis.com/auth/plus.login',
     	'https://www.googleapis.com/auth/plus.profile.emails.read'
 	]})
 );
-router.get('auth/google/callback',
+router.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/account');
+		res.redirect('/');
 	}
 );
 

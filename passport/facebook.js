@@ -7,15 +7,15 @@ const User = require('../models/account.js');
 
 
 module.exports = new FacebookStrategy({
-    clientID: '1095165423893839',
-    clientSecret: 'abf555499533da026c2b21a160a131e6',
-    callbackURL: 'http://localhost:3000/auth/facebook/callback',
+    clientID: config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret,
+    callbackURL: config.facebook.callbackURL,
     profileFields: ['id', 'name', 'displayName', 'email']
     },
     function(accessToken, refreshToken, profile, done) {
         User.findOne({ oauthID: profile.id }, function(err, user) {
             if(err) {
-                console.log(err);  // handle errors!
+                console.log(err);
                 return done(err);
             }
             if(user) {

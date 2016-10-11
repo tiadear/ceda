@@ -5,8 +5,8 @@ module.exports = {
     callbackURL: 'http://localhost:3000/auth/facebook/callback'
   },
   'twitter': {
-    consumerKey: 'get_your_own',
-    consumerSecret: 'get_your_own',
+    consumerKey: 'Q1SlugHBjAO9ipKDDUA8u2cET',
+    consumerSecret: 'TLd8iIxsI7uFLEnujDE6nen8arabrR3fhJ0YrWvbxBJoxlrtUx',
     callbackURL: "http://localhost:3000/auth/twitter/callback"
   },
   'google': {
