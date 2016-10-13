@@ -1,0 +1,14 @@
+extends layout
+block content
+	h1 Who would you like to talk to?
+	a(href='/chat')
+		button.chatChoice#chatProfessional(type='button') Professional
+	a(href='/chat')
+		button.chatChoice#chatPeer(type='button') Peer
+	if(professional)
+		ul
+			li
+			li
+			li
+	if(peer)
+		p assigning you to a random stranger now

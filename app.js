@@ -7,6 +7,7 @@ const   path = require('path'),
         io = require('socket.io').listen(server),
         Room = require('./room.js'),
         passport = require('passport'),
+        nodemailer = require('nodemailer'),
         expressSession = require('express-session'),
         mongoose = require('mongoose'),
         db = require('./db.js'),
@@ -29,6 +30,11 @@ var favicon = require('static-favicon'),
 server.listen(port, function(){
     console.log('listening on *:3000');
 });
+
+
+
+module.exports = app;
+
 
 
 
@@ -132,7 +138,7 @@ app.use(function(err, req, res, next) {
 
 
 
-module.exports = app;
+
 
 
 

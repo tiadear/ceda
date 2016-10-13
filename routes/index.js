@@ -28,6 +28,7 @@ router.post('/signup', passport.authenticate('local-signup', { failureRedirect: 
                 return next(err);
             }
             res.redirect('/');
+
         });
     }
 );
@@ -53,6 +54,47 @@ router.post('/login', passport.authenticate('local-login', {
     });
 });
 
+
+
+router.get('/forgot', function(req,res){
+    res.render('forgot', {
+        user : req.user
+    });
+});
+
+
+router.post('/forgot', local.forgot,
+    function(req, res, next) {
+        if(err){
+            console.log(err);
+            return next(err);
+        }
+        console.log('forgot redirect');
+        res.redirect('/');
+    }
+);
+
+/*
+router.post('/forgot', 
+    passport.authenticate('local-forget', {
+        failureRedirect : '/forgot',
+        failureFlash: true
+    }),
+    function(req, res){
+        res.redirect('/');
+    }  
+);
+*/
+
+router.get('/reset', function(req,res) {
+    passport.authenticate('local-reset', {
+        failureRedirect : '/forgot',
+        failureFlash: true
+    }),
+    function(req, res){
+        res.redirect('/');
+    } 
+});
 
 
 // social media
@@ -130,9 +172,15 @@ router.get('/logout', function(req, res, next) {
 
 
 
-router.get('/ping', function(req, res){
-    res.status(200).send("pong!");
+router.get('/chat', function(req, res) {
+    res.render('chat', {
+        user : req.user
+    });
 });
+
+
+
+
 
 module.exports = router;
 

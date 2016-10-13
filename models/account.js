@@ -2,17 +2,20 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var passportLocalMongoose = require('passport-local-mongoose');
 
+
 var userSchema = mongoose.Schema({
 	username: String,
 	password: String,
 	email: String,
+	resetPasswordToken: String,
+	resetPasswordExpires: Date,
 	firstName: String,
 	lastName: String,
 	provider: String,
 	facebook: {},
 	twitter: {},
 	google: {},
-	oathID: String
+	oauthID: String
 });
 
 userSchema.methods.generateHash = function(password) {

@@ -6,10 +6,9 @@ html
     link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
     link(rel='stylesheet', href='/css/styles.css')
     link(rel='stylesheet', href='/css/formstyle.css')
-    script.
-      if(window.location.hash && window.location.hash = '#_=_')
-        window.location.hash = '';
-      
+    script(type='text/javascript').
+      if(window.location.hash && window.location.hash = '#_=_') window.location.hash= '' 
+
   body
     if (error && error.length > 0)
       br
