@@ -44,6 +44,14 @@ var myRoomID = null;
 
         var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
 
+
+
+        
+
+
+
+
+
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
             $('#incoming').append('<li>' + username + ': ' + data + '</li>');
@@ -62,6 +70,9 @@ var myRoomID = null;
                 $('#incoming').append('<li>'+ msg +'</li>')
             });
         })
+
+        var currentUser = user.username;
+        var chatPartner = 'random user';
 
         //update the user list
         socket.on('updateUsers', function(data){

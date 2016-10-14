@@ -27,7 +27,6 @@ module.exports = new TwitterStrategy({
 
                 var newUser = new User ();
                 newUser.email = String;
-                newUser.username = profile.username;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
                 newUser.provider = 'twitter';

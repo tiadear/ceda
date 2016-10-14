@@ -149,9 +149,5 @@ exports.strategy = function(passport) {
 			}
 		});
 	}
-
-
-
-
 }
 

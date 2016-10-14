@@ -27,7 +27,6 @@ module.exports = new GoogleStrategy({
 
                 var newUser = new User ();
                 newUser.email = profile.emails[0].value;
-                newUser.username = profile.displayName;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
                 newUser.provider = 'google';

@@ -1,0 +1,9 @@
+extends layout
+block content
+
+	form#deleteUser(role='form', method='post', action='/delete')
+		.form-group
+			p Are you sure you want to delete your account?
+		button.btn.btn-default(type='submit') Yes, delete my account
+		a(href="/")
+			button.btn.btn-primary(type="button") No, I want to stay

@@ -13,18 +13,24 @@ block content
 			br
 			a(href="/auth/google") Login via Google
 		if (user)
-			p You are currently logged in as #{user.username}
-			a(href="/logout") Logout
-			div.dashoption
-				div#option1
-					a(href="/chat") Chat
-				div#option2
-					a(href="/settings") Settings
-				div#option3
-					a(href="/forum") Forum
-			.fb
-				p id: #{user.id}
-				p oauth ID #{user.oauthID}
-				p email: #{user.email}
-				p username: #{user.username}
-				p first name: #{user.firstName}
+			if (user.username)
+				p You are currently logged in as #{user.username}
+				a(href="/logout") Logout
+				a(href='/deleteaccount') Delete my account
+				div.dashoption
+					div#option1
+						a(href="/chat") Chat
+					div#option2
+						a(href="/settings") Settings
+					div#option3
+						a(href="/forum") Forum
+			else
+				form.usernameRequest(role='form', method='post', action='/username')
+					.form-group
+						p Plesae provide a username
+						p Remember ceda is anonymous so choose a username that won't reveal any details about you
+						p So don't choose your twitter handle
+						input.form-control#username(type='text', name='username', placeholder='Username')
+						input(type='hidden', name='email', value='#{user.email}')
+					button.btn.btn-default(type='submit') Submit
+

@@ -1,0 +1,18 @@
+extends layout
+block content
+	.chatRoom
+		h1 Hi #{user.username} you are talking to ??
+		#chatWrap
+			p Incoming Messages
+			ul#incoming
+			br
+			input#outgoing(type='text');
+		#videosWrap
+			#videoDisplay
+				video#localVideo
+				video#remoteVideo
+				.videoButtons
+					button.btn.btn-primary#startButton(type='button') Start
+					button.btn.btn-primary#callButton(type='button') Call
+					button.btn.btn-primary#hangupButton(type='button') Hang Up
+					button.btn.btn-primary#muteButton(type='button') Mute

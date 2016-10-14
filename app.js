@@ -5,7 +5,6 @@ const   path = require('path'),
         server = require('http').createServer(app),
         port = 3000,
         io = require('socket.io').listen(server),
-        Room = require('./room.js'),
         passport = require('passport'),
         nodemailer = require('nodemailer'),
         expressSession = require('express-session'),
@@ -149,6 +148,10 @@ var rooms = {};
 var sockets = []; //clients
 
 
+var chatHistory = require('../models/chatHistory');
+var Room = require('../models/room.js');
+
+
 io.sockets.on('connection', function(socket){
 
     socket.on('message', function(message) {
@@ -207,7 +210,19 @@ io.sockets.on('connection', function(socket){
         var id = uuid.v4();
 
         //create the room
-        var room = new Room(id, currentuser, userselected);
+        var newRoom = new Room();
+        newRoom.roomID = id;
+        newRoom.room_type = 0;
+
+        newRoom.save(function(err){
+            if(err) {
+                console.log(err);
+                console.log('saving error')
+                return done(err);
+            } 
+            console.log('saving user');
+        });
+
 
         //add it to the array
         rooms[id] = room;
@@ -235,6 +250,7 @@ io.sockets.on('connection', function(socket){
         var userinit = users[currentuser].user_id;
         var userresp = users[userselected].user_id;
         var newroom = {user_init_id: userinit, user_resp_id: userresp, room_type: 0};
+
 
         con.query('INSERT INTO room SET ?', newroom, function(err,res){
             if(err) throw err;

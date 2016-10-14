@@ -1,9 +1,9 @@
 extends layout
 block content
 	h1 Who would you like to talk to?
-	a(href='/chat')
+	a(href='/chatprof')
 		button.chatChoice#chatProfessional(type='button') Professional
-	a(href='/chat')
+	a(href='/chatpeer')
 		button.chatChoice#chatPeer(type='button') Peer
 	if(professional)
 		ul
