@@ -1,6 +1,7 @@
 // ROUTES!!!
 
 const User = require('../models/account.js');
+const Room = require('../models/room.js');
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
@@ -74,17 +75,6 @@ router.post('/forgot', local.forgot,
     }
 );
 
-/*
-router.post('/forgot', 
-    passport.authenticate('local-forget', {
-        failureRedirect : '/forgot',
-        failureFlash: true
-    }),
-    function(req, res){
-        res.redirect('/');
-    }  
-);
-*/
 
 router.get('/reset', function(req,res) {
     passport.authenticate('local-reset', {
@@ -158,18 +148,18 @@ router.post('/username', function(req, res) {
                 }
 
                 req.session.save(function (err) {
-                        if(err){
-                            return next(err);
-                        }
-
-                        console.log('saving user');
-
-                        res.redirect('/');
+                    if(err){
+                        return next(err);
+                    }
+                    console.log('saving user');
+                    res.redirect('/');
                 });
             });
         }
     });
 });
+
+
 
 
 
@@ -189,6 +179,9 @@ router.post('/delete', function(req, res) {
 
 
 
+
+
+
 router.get('/chat', function(req, res) {
     res.render('chat', {
         user : req.user
@@ -203,7 +196,8 @@ router.get('/chatpeer', function(req, res) {
             throw err;
         }
         res.render('chatroom', {
-            user : req.user
+            user : req.user,
+            room : req.room
         });
     });
 });

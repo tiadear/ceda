@@ -36,6 +36,4 @@ userSchema.statics.random = function(cb) {
 	}.bind(this));
 }
 
-//userSchema.plugin(passportLocalMongoose);
-
 module.exports = mongoose.model('User', userSchema);

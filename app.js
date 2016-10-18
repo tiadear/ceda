@@ -264,8 +264,15 @@ io.sockets.on('connection', function(socket){
         });
     }
 
-    function existingRoom(currentuser, userselected) {
-        //get the room id
+
+
+
+
+
+
+    socket.on('joinRoom', function(roomID){
+
+       //get the room id
         var roomid = users[socket.id].room[userselected];
         var room = rooms[roomid];
 
@@ -296,24 +303,12 @@ io.sockets.on('connection', function(socket){
         });
 
         socket.emit('channelReady');
-    }
-
-    socket.on('joinRoom', function(userselected, currentuser){
-
-        //con.query('SELECT id, user_init_id, user_resp_id, room_type, room_id FROM room, users WHERE users.room_id = id AND ')
-
-        //if they have already been assigned a room with this user
-        if(users[socket.id].room[userselected] !== undefined) {
-            existingRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has joined room '+socket.room);
-        }
-
-        //if they are initiating the conversation
-        else {
-            newRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has started room '+socket.room);
-        }
     });
+
+
+
+
+
 
     socket.on('switchRoom', function(userselected, currentuser){
         socket.leave(socket.room);
