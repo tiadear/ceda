@@ -148,8 +148,8 @@ var rooms = {};
 var sockets = []; //clients
 
 
-var chatHistory = require('../models/chatHistory');
-var Room = require('../models/room.js');
+var chatHistory = require('./models/chatHistory');
+var Room = require('./models/room.js');
 
 
 io.sockets.on('connection', function(socket){
@@ -209,9 +209,16 @@ io.sockets.on('connection', function(socket){
         //assign random id number
         var id = uuid.v4();
 
+        
+
+        var userinit = users[currentuser].user_id;
+        var userresp = users[userselected].user_id;
+
         //create the room
         var newRoom = new Room();
         newRoom.roomID = id;
+        newRoom.user_init = userinit;
+        newRoom.user_resp = userresp;
         newRoom.room_type = 0;
 
         newRoom.save(function(err){

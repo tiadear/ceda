@@ -15,7 +15,7 @@ var chat = require('../chat/chat');
 
 
 router.get('/', function(req, res){
-    console.log(req.user);
+    //console.log(req.user);
 	res.render('index', {user : req.user});
 });
 
@@ -49,11 +49,9 @@ router.post('/login', passport.authenticate('local-login', {
     req.session.save(function (err) {
         if (err) {
             console.log(err);
-            console.log('login error 1');
             return next(err);
         }
         res.redirect('/');
-        console.log('login redirect');
     });
 });
 
@@ -72,7 +70,6 @@ router.post('/forgot', local.forgot,
             console.log(err);
             return next(err);
         }
-        console.log('forgot redirect');
         res.redirect('/');
     }
 );
@@ -163,7 +160,6 @@ router.post('/username', function(req, res) {
                 req.session.save(function (err) {
                         if(err){
                             return next(err);
-                            console.log('error saving username to session');
                         }
 
                         console.log('saving user');
@@ -193,15 +189,26 @@ router.post('/delete', function(req, res) {
 
 
 
+router.get('/chat', function(req, res) {
+    res.render('chat', {
+        user : req.user
+    });
+})
 
-router.get('/chatpeer', chat.pickpeer, function(req, res, next) {
-    req.session.save(function (err) {
-        if(err){
-            return next(err);
+router.get('/chatpeer', function(req, res) {
+    console.log(req.user._id);
+    User.findById(req.user._id, chat.pickpeer(req.user._id), function(err) {
+        if(err) {
+            console.log('error finding user');
+            throw err;
         }
-        res.redirect('/');
+        res.render('chatroom', {
+            user : req.user
+        });
     });
 });
+
+
 
 
 

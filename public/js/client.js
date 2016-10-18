@@ -74,6 +74,8 @@ var myRoomID = null;
         var currentUser = user.username;
         var chatPartner = 'random user';
 
+        
+
         //update the user list
         socket.on('updateUsers', function(data){
             $('#users').text("");
