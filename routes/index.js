@@ -190,7 +190,8 @@ router.get('/chat', function(req, res) {
 
 
 router.get('/chatpeer', function(req, res, next) {
-    User.findById(req.user._id, function(err) {
+
+    User.findById(req.user._id, function(err, user) {
 
         if (err) {
             console.log(err);
@@ -198,7 +199,7 @@ router.get('/chatpeer', function(req, res, next) {
         }
 
         //save current user
-        var currentUser = req._id;
+        var currentUser = user._id;
         console.log('current user is '+currentUser);
             
         // generate a random peer to chat with
@@ -228,9 +229,9 @@ router.get('/chatpeer', function(req, res, next) {
                     req.room = room;
                     req.session.save(function(err){
                                 if(err){
+                                    console.log('error saving room');
                                     return next(err);
                                 }
-                                console.log(req.room);
                                 res.render('chatroom', {
                                     room : req.room
                                 });
@@ -254,9 +255,9 @@ router.get('/chatpeer', function(req, res, next) {
                         req.room = room;
                         req.session.save(function(err){
                                 if(err){
+                                    console.log('error saving room');
                                     return next(err);
                                 }
-                                console.log(req.room);
                                 res.render('chatroom', {
                                     room : req.room
                                 });
@@ -282,9 +283,9 @@ router.get('/chatpeer', function(req, res, next) {
                             req.room = room;
                             req.session.save(function(err){
                                 if(err){
+                                    console.log('error saving room');
                                     return next(err);
                                 }
-                                console.log(req.room);
                                 res.render('chatroom', {
                                     room : req.room
                                 });
