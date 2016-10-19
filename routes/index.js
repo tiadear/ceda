@@ -186,21 +186,121 @@ router.get('/chat', function(req, res) {
     res.render('chat', {
         user : req.user
     });
-})
+});
 
-router.get('/chatpeer', function(req, res) {
-    console.log(req.user._id);
-    User.findById(req.user._id, chat.pickpeer(req.user._id), function(err) {
-        if(err) {
-            console.log('error finding user');
-            throw err;
+
+router.get('/chatpeer', function(req, res, next) {
+    User.findById(req.user._id, function(err) {
+
+        if (err) {
+            console.log(err);
+            next(err);
         }
-        res.render('chatroom', {
-            user : req.user,
-            room : req.room
+
+        //save current user
+        var currentUser = req._id;
+        console.log('current user is '+currentUser);
+            
+        // generate a random peer to chat with
+        User.random(function(err, user) {
+            if (err) {
+                console.log(err);
+                next(err);
+            }
+            
+            console.log('within function, random peer is ' +user._id);
+            var randomPeer = user._id;
+
+            Room.findOne({user_init : currentUser, user_resp : randomPeer}, function (err, room) {
+                console.log('chat pickpeer point 1');
+
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+
+                if(room) {
+                    //room was found 
+                    console.log('room was found with '+ currentUser+' as user_init and '+randomPeer +' as user_resp');
+
+                    console.log('roomID: '+ room.roomID);
+                    console.log('room._id: '+ room.id);
+                    req.room = room;
+                    req.session.save(function(err){
+                                if(err){
+                                    return next(err);
+                                }
+                                console.log(req.room);
+                                res.render('chatroom', {
+                                    room : req.room
+                                });
+                            });
+                } 
+
+                //no room was found
+                console.log('chat pickpeer point 2')
+
+                //check if the users were the other way around
+                Room.findOne({user_resp : currentUser, user_init : randomPeer}, function (err, room) {
+                    if (err) {
+                        console.log('no room found');
+                        next(err);
+                    }
+                    if(room) {
+                        console.log('room was found with '+ currentUser+' as user_respand '+ randomPeer + 'as user_init');
+
+                        console.log('roomID: '+ room.roomID);
+                        console.log('room._id: '+ room.id);
+                        req.room = room;
+                        req.session.save(function(err){
+                                if(err){
+                                    return next(err);
+                                }
+                                console.log(req.room);
+                                res.render('chatroom', {
+                                    room : req.room
+                                });
+                            });
+                    } 
+
+                    console.log('no room found');
+
+                    // create a new room!
+                    var newRoom = new Room();
+                    newRoom.roomID = uuid.v4();
+                    newRoom.user_init = currentUser;
+                    newRoom.user_resp = randomPeer;
+                    newRoom.room_type = 0;
+
+                    newRoom.save(function(err){
+                        if(err) {
+                            console.log(err);
+                            console.log('saving error')
+                            next(err);
+                        } else {
+                            console.log('saving user');
+                            req.room = room;
+                            req.session.save(function(err){
+                                if(err){
+                                    return next(err);
+                                }
+                                console.log(req.room);
+                                res.render('chatroom', {
+                                    room : req.room
+                                });
+                            });
+                        }
+                    });
+                        
+                });
+                    
+            });
+
         });
     });
 });
+
+
 
 
 

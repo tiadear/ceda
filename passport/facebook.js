@@ -4,6 +4,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const mongoose = require('mongoose');
 const config = require('../oauth');
 const User = require('../models/account.js');
+var passport = require('passport');
 
 
 module.exports = new FacebookStrategy({

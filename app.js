@@ -67,7 +67,10 @@ app.use(flash());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/', routes);
+
+
 
 
 
@@ -101,7 +104,6 @@ passport.use(google);
 
 
 
-
 // connect to db
 mongoose.connect(db.url);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
@@ -116,8 +118,6 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
-
-
 
 
 

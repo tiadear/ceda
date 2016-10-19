@@ -34,7 +34,7 @@ var myRoomID = null;
 
         if(room) {
           console.log('there is a room');
-          //socket.emit('joinRoom', roomID);
+          //ssocket.emit('joinRoom', roomID);
         }
 
         // For todays date;

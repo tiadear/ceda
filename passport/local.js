@@ -21,7 +21,7 @@ exports.strategy = function(passport) {
 		passwordField: 'password', 
 		passReqToCallback: true
 		},
-		function(req, email, password, done) {
+		function(req, res, done) {
 			process.nextTick(function(){
 				User.findOne({email : email}, function(err, user){
 					if(err) {
