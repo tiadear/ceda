@@ -1,0 +1,12 @@
+extends layout
+block content
+	h1 #{user.username} Who would you like to talk to?
+	a(href='/chatprof')
+		button.chatChoice#chatProfessional(type='button') Professional
+	a(href='/chatpeer')
+		button.chatChoice#chatPeer(type='button') Peer
+	if(professional)
+		ul
+			li
+			li
+			li

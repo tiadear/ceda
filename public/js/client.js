@@ -32,6 +32,11 @@ var myRoomID = null;
 
     $(function(){
 
+        if(room) {
+          console.log('there is a room');
+          //ssocket.emit('joinRoom', roomID);
+        }
+
         // For todays date;
         Date.prototype.today = function () { 
             return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
@@ -43,6 +48,14 @@ var myRoomID = null;
         }
 
         var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
+
+
+
+        
+
+
+
+
 
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
@@ -62,6 +75,11 @@ var myRoomID = null;
                 $('#incoming').append('<li>'+ msg +'</li>')
             });
         })
+
+        var currentUser = user.username;
+        var chatPartner = 'random user';
+
+        
 
         //update the user list
         socket.on('updateUsers', function(data){

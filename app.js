@@ -1,67 +1,139 @@
 
-const path = require('path')  
-var express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    port = 3000,
-    io = require('socket.io').listen(server),
-    Room = require('./room.js'),
+const   path = require('path'),
+        express = require('express'),
+        app = express(),
+        server = require('http').createServer(app),
+        port = 3000,
+        io = require('socket.io').listen(server),
+        passport = require('passport'),
+        nodemailer = require('nodemailer'),
+        expressSession = require('express-session'),
+        mongoose = require('mongoose'),
+        db = require('./db.js'),
+        User = require('./models/account.js');
+
+var favicon = require('static-favicon'),
+    logger = require('morgan');
+    cookieParser = require('cookie-parser');
+    bodyParser = require('body-parser');
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
-    mysql = require('mysql'),
-    passport = require('passport'),
-    expressSession = require('express-session'),
-    dbConfig = require('./db.js'),
-    mongoose = require('mongoose'),
+    flash = require('connect-flash'),
+    debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
-app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res){
-    res.sendFile('index');
-});
 
+
+// connect to port
 server.listen(port, function(){
     console.log('listening on *:3000');
 });
 
 
 
+module.exports = app;
 
 
-mongoose.connect('dbConfig.url');
-app.use(expressSession({secret: 'mySecretKey'}));
+
+
+// routes
+var routes = require('./routes/index');
+
+
+
+
+// set up views
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+
+
+
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'mustardmanforpresident',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
+app.use(flash());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
 
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
+
+app.use('/', routes);
+
+
+
+
+
+
+// passport strategies
+var local = require('./passport/local');
+var facebook = require('./passport/facebook');
+var twitter = require('./passport/twitter');
+var google = require('./passport/google');
+
+
+
+
+
+// passport config
+passport.serializeUser(function(user, done){
+    return done(null, user.id);
+});
+passport.deserializeUser(function(id, done){
+    User.findById(id, function(err, user){
+        return done(err,user);
+    });
 });
 
-passport.deserializeUser(function(id, done){
-    User.findyId(id, function(err, user){
-        done(err, user);
+passport.use(local, 'local-signup');
+passport.use(local, 'local-login');
+passport.use(facebook);
+passport.use(twitter);
+passport.use(google);
+
+
+
+
+// connect to db
+mongoose.connect(db.url);
+mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
+mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
+
+
+
+
+// 404
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
     });
 });
 
 
 
 
-// First you need to create a connection to the db
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "ceda"
-});
-
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
-});
 
 
 
@@ -70,11 +142,14 @@ con.connect(function(err){
 
 
 
-
-
+// socket stuff
 var users = {}; //people
 var rooms = {};
 var sockets = []; //clients
+
+
+var chatHistory = require('./models/chatHistory');
+var Room = require('./models/room.js');
 
 
 io.sockets.on('connection', function(socket){
@@ -134,8 +209,27 @@ io.sockets.on('connection', function(socket){
         //assign random id number
         var id = uuid.v4();
 
+        
+
+        var userinit = users[currentuser].user_id;
+        var userresp = users[userselected].user_id;
+
         //create the room
-        var room = new Room(id, currentuser, userselected);
+        var newRoom = new Room();
+        newRoom.roomID = id;
+        newRoom.user_init = userinit;
+        newRoom.user_resp = userresp;
+        newRoom.room_type = 0;
+
+        newRoom.save(function(err){
+            if(err) {
+                console.log(err);
+                console.log('saving error')
+                return done(err);
+            } 
+            console.log('saving user');
+        });
+
 
         //add it to the array
         rooms[id] = room;
@@ -164,13 +258,21 @@ io.sockets.on('connection', function(socket){
         var userresp = users[userselected].user_id;
         var newroom = {user_init_id: userinit, user_resp_id: userresp, room_type: 0};
 
+
         con.query('INSERT INTO room SET ?', newroom, function(err,res){
             if(err) throw err;
         });
     }
 
-    function existingRoom(currentuser, userselected) {
-        //get the room id
+
+
+
+
+
+
+    socket.on('joinRoom', function(roomID){
+
+       //get the room id
         var roomid = users[socket.id].room[userselected];
         var room = rooms[roomid];
 
@@ -201,24 +303,12 @@ io.sockets.on('connection', function(socket){
         });
 
         socket.emit('channelReady');
-    }
-
-    socket.on('joinRoom', function(userselected, currentuser){
-
-        //con.query('SELECT id, user_init_id, user_resp_id, room_type, room_id FROM room, users WHERE users.room_id = id AND ')
-
-        //if they have already been assigned a room with this user
-        if(users[socket.id].room[userselected] !== undefined) {
-            existingRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has joined room '+socket.room);
-        }
-
-        //if they are initiating the conversation
-        else {
-            newRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has started room '+socket.room);
-        }
     });
+
+
+
+
+
 
     socket.on('switchRoom', function(userselected, currentuser){
         socket.leave(socket.room);
