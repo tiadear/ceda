@@ -2,9 +2,9 @@ extends layout
 block content
 	.chatRoom
 		if (room)
-			h1 #{room.user_init}
+			h1 #{usersInRoom[0]}
 			br
-			h1 #{room.user_resp}
+			h1 #{usersInRoom[1]}
 			#chatWrap
 				p Incoming Messages
 				ul#incoming
