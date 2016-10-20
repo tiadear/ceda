@@ -163,10 +163,11 @@ io.sockets.on('connection', function(socket){
     });
 
 
-    socket.on('addUser', function(username, callback){
+    socket.on('addUser', function(user1, username, callback){
         console.log('adding user');
         //attach username to socket
         socket.username = username;
+        socket.userID = user1;
 
         //send connection msg to user who connected
         socket.emit('updateChat', username, 'you have connected');

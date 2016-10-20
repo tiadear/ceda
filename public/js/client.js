@@ -42,7 +42,7 @@ var myRoomID = null;
 
         if(roomID) {
             socket.emit('joinRoom', roomID, user1username, user2username);
-            socket.emit('addUser', user1username, function(data){
+            socket.emit('addUser', user1, user1username, function(data){
                 if(data) {
                     console.log(user1username + ' has been added');
                     msgSubmit.disabled = false;
@@ -87,8 +87,12 @@ var myRoomID = null;
 
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
-                $('#incoming').prepend('<li>' + pastItem.timesent +  '</li>');
-                $('#incoming').prepend('<li>' + pastItem.user + ' : ' + pastItem.message +  '</li>');
+                if(pastItem.user == user1username) {
+                  $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.user + ': ' + pastItem.message + '</li>');
+                } else {
+                  $('#incoming').prepend('<li class="incomingMessage" id="user2msg">' + pastItem.user + ': ' + pastItem.message + '</li>');
+                }
+                $('#incoming').prepend('<li class="msgtime">'+ pastItem.timesent +'</li>');
             });
         });
 
@@ -106,22 +110,26 @@ var myRoomID = null;
 
         var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
 
+
+
+
+
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-            $('#incoming').append('<li>' + datetime +  '</li>');
-            $('#incoming').append('<li>' + username + ': ' + data + '</li>');
+          $('#incoming').append('<li class="msgtime">'+ datetime +'</li>');
+          if(username == user1username) {
+            $('#incoming').append('<li class="incomingMessage" id="user1msg">' + username + ': ' + data + '</li>');
+          } else {
+            $('#incoming').append('<li class="incomingMessage" id="user2msg">' + username + ': ' + data + '</li>');
+          }
             socket.emit('message', data);
         });
 
-        socket.on('updateHistory', function(data){
 
-            // handle saving to schema
 
-            $('#incoming').append('<li><b>ealier messages</b></li>')
-            $.each(data, function(data, msg) {
-                $('#incoming').append('<li>'+ msg +'</li>')
-            });
-        })
+
+
+
 
         var typing = false;
         var timeout = undefined;

@@ -3,27 +3,26 @@ block content
 	script.
 		roomID = '#{room._id}';
 		//user 1 is current user
+		user1 = '#{userIDs[0]}';
 		user1username = '#{usersInRoom[0]}';
 		// user 2 is peer
 		user2username = '#{usersInRoom[1]}';
-	.chatRoom
-		if (room)
-			var 
-			h1#user1 #{usersInRoom[0]}
-			br
-			h1#user2 #{usersInRoom[1]}
-			#chatWrap
-				p Incoming Messages
-				ul#incoming
-				br
-				input#outgoing(type='text')
-				button.btn.btn-primary#outgoingSubmit(type='submit') Submit
-			#videosWrap
-				#videoDisplay
-					video#localVideo
-					video#remoteVideo
-					.videoButtons
-						button.btn.btn-primary#startButton(type='button') Start
-						button.btn.btn-primary#callButton(type='button') Call
-						button.btn.btn-primary#hangupButton(type='button') Hang Up
-						button.btn.btn-primary#muteButton(type='button') Mute
+	.container
+		include includes/nav.jade
+		.chatRoom
+			if (room)
+				h1#user2 #{usersInRoom[1]}
+				.displayMessagesWrap
+					ul#incoming
+				.sendMessagesWrap
+					input#outgoing(type='text')
+					button.btn.btn-primary#outgoingSubmit(type='submit') Submit
+				#videosWrap
+					#videoDisplay
+						video#localVideo
+						video#remoteVideo
+						.videoButtons
+							button.btn.btn-primary#startButton(type='button') Start
+							button.btn.btn-primary#callButton(type='button') Call
+							button.btn.btn-primary#hangupButton(type='button') Hang Up
+							button.btn.btn-primary#muteButton(type='button') Mute

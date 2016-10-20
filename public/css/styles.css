@@ -22,22 +22,37 @@ a {
   a:hover {
     color: #213e64; }
 
-button, .container .open .social-login .social-btn {
+button, .container .open .social-login .social-btn, .container .chatChoiceWrap .chatChoices .chatChoice {
   border: none;
   background-color: #ea5455;
   border-radius: 5px;
   color: #ffffff;
-  cursor: pointer; }
-
-h1 {
+  cursor: pointer;
   font-family: "Questrial", sans-serif;
-  font-size: 2em;
-  color: #ea5455;
+  font-size: 1em; }
+  button:hover, .container .open .social-login .social-btn:hover, .container .chatChoiceWrap .chatChoices .chatChoice:hover {
+    background-color: #213e64;
+    border: solid 2px #213e64; }
+
+.htags, h1, h2 {
+  font-family: "Questrial", sans-serif;
   font-weight: 300;
   -webkit-margin-before: 0px;
   -webkit-margin-after: 0px;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px; }
+
+h1 {
+  font-size: 1.8em;
+  color: #ea5455; }
+
+h2 {
+  font-size: 1.2em;
+  color: #213e64; }
+
+ul {
+  -webkit-padding-start: 0px;
+  margin: 0; }
 
 form {
   padding: 20px;
@@ -117,9 +132,7 @@ form {
     height: 50px;
     width: 100%; }
     .container nav ul {
-      width: 100%;
-      -webkit-padding-start: 0px;
-      margin: 0; }
+      width: 100%; }
       .container nav ul li {
         background-color: #ea5455;
         list-style-type: none;
@@ -135,53 +148,76 @@ form {
   .container .logout {
     padding-top: 85vh;
     text-align: right; }
-
-#chooseuserWrap {
-  display: none; }
-  #chooseuserWrap #usersList li {
-    cursor: pointer; }
-
-#contentWrap {
-  display: none; }
-  #contentWrap #userDisplay {
-    float: left;
-    height: 100vh;
-    width: 20%;
-    border-right: solid 1px #000000;
-    padding: 10px; }
-    #contentWrap #userDisplay #users li {
-      cursor: pointer; }
-  #contentWrap #chatWrap {
-    float: left;
-    height: 100vh;
-    width: 30%;
-    padding: 10px; }
-  #contentWrap #videosWrap {
-    float: left;
-    height: 100vh;
-    border-left: solid 1px #000000;
-    width: 50%;
-    padding: 10px; }
-    #contentWrap #videosWrap #videoDisplay video {
-      max-width: 100%;
-      width: 320px; }
-    #contentWrap #videosWrap #videoDisplay button, #contentWrap #videosWrap #videoDisplay .container .open .social-login .social-btn, .container .open .social-login #contentWrap #videosWrap #videoDisplay .social-btn {
-      width: 50px;
-      background-color: #ea5455;
-      cursor: pointer;
-      text-align: center;
-      margin: 0 auto;
-      border: 1px solid #ea5455;
-      color: #ffffff;
-      border-radius: 5px; }
-    #contentWrap #videosWrap #swaptovideo {
-      background-color: #ea5455;
-      cursor: pointer;
-      width: 200px;
-      text-align: center;
-      margin: 0 auto;
-      padding: 5px 10px;
-      border: 1px solid #ea5455;
-      border-radius: 5px; }
+  .container .chatWraps, .container .chatChoiceWrap, .container .oldCovosWrap {
+    width: 100%;
+    padding: 40px 20px 0;
+    text-align: center; }
+  .container .chatChoiceWrap .chatChoices {
+    padding: 40px 0; }
+    .container .chatChoiceWrap .chatChoices .chatChoice {
+      width: 80%;
+      max-width: 400px;
+      height: 40px;
+      margin: 10px auto; }
+  .container .chatRoom {
+    padding-top: 20px; }
+    .container .chatRoom h1 {
+      text-align: center; }
+    .container .chatRoom .displayMessagesWrap {
+      width: 100%;
+      padding: 20px;
+      text-align: left; }
+      .container .chatRoom .displayMessagesWrap #incoming li {
+        list-style-type: none;
+        padding: 10px;
+        margin: 5px; }
+      .container .chatRoom .displayMessagesWrap #incoming #user1msg {
+        background-color: #ffffff;
+        color: #213e64;
+        border: solid 1px #ffffff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        border-radius: 5px; }
+      .container .chatRoom .displayMessagesWrap #incoming #user2msg {
+        background-color: #213e64;
+        color: #ffffff;
+        border: solid 1px #213e64;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        border-radius: 5px; }
+    .container .chatRoom .sendMessagesWrap {
+      width: 100%;
+      text-align: left; }
+      .container .chatRoom .sendMessagesWrap #outgoing {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        border: none; }
+    .container .chatRoom #videosWrap {
+      width: 100%;
+      padding: 10px; }
+      .container .chatRoom #videosWrap #videoDisplay video {
+        max-width: 100%;
+        width: 320px; }
+      .container .chatRoom #videosWrap #videoDisplay button, .container .chatRoom #videosWrap #videoDisplay .open .social-login .social-btn, .container .open .social-login .chatRoom #videosWrap #videoDisplay .social-btn, .container .chatRoom #videosWrap #videoDisplay .chatChoiceWrap .chatChoices .chatChoice, .container .chatChoiceWrap .chatChoices .chatRoom #videosWrap #videoDisplay .chatChoice {
+        width: 50px;
+        background-color: #ea5455;
+        cursor: pointer;
+        text-align: center;
+        margin: 0 auto;
+        border: 1px solid #ea5455;
+        color: #ffffff;
+        border-radius: 5px; }
+      .container .chatRoom #videosWrap #swaptovideo {
+        background-color: #ea5455;
+        cursor: pointer;
+        width: 200px;
+        text-align: center;
+        margin: 0 auto;
+        padding: 5px 10px;
+        border: 1px solid #ea5455;
+        border-radius: 5px; }
 
 /*# sourceMappingURL=styles.css.map */

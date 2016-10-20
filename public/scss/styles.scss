@@ -39,17 +39,39 @@ button {
     border-radius: (5px);
     color: $white;
     cursor: pointer;
+    font-family: $sans;
+    font-size: 1em;
+
+    &:hover {
+        background-color: $blue;
+        border: solid 2px $blue;
+    }
 }
 
-h1 {
+.htags {
     font-family: $sans;
-    font-size: 2em;
-    color: $red;
     font-weight: 300;
     -webkit-margin-before: 0px;
     -webkit-margin-after: 0px;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
+}
+
+h1 {
+    @extend .htags;
+    font-size: 1.8em;
+    color: $red;
+}
+
+h2 {
+    @extend .htags;
+    font-size: 1.2em;
+    color: $blue;
+}
+
+ul {
+    -webkit-padding-start: 0px;
+    margin: 0;
 }
 
 
@@ -176,8 +198,6 @@ form {
 
         ul {
             width: 100%;
-            -webkit-padding-start: 0px;
-            margin: 0;
 
             li {
                 background-color: $red;
@@ -209,88 +229,115 @@ form {
         text-align: right;
     }
 
-} // end of container
+    .chatWraps {
+        width: 100%;
+        padding: $pad*2 $pad 0;
+        text-align: center;
+    }
 
+    .chatChoiceWrap {
+        @extend .chatWraps;
 
+        .chatChoices {
+            padding: $pad*2 0;
 
-#usernameWrap {
-    #userform {
-        #username{
-
+            .chatChoice {
+                @extend button;
+                width: 80%;
+                max-width: 400px;
+                height: 40px;
+                margin: $pad/2 auto;
+            }
         }
     }
-}
 
-#chooseuserWrap{
-    display: none;
-
-    #usersList {
-
-        li {
-            cursor: pointer;
-        }
+    .oldCovosWrap {
+        @extend .chatWraps;
     }
-}
 
-#contentWrap {
-    display: none;
-
-    #userDisplay {
-        float: left;
-        height: 100vh;
-        width: 20%;
-        border-right: solid 1px $black;
-        padding: 10px;
+    .chatRoom {
+        padding-top: $pad;
         
-        #users{
-            li {
-                cursor: pointer;
+        h1 {
+            text-align: center;
+        }
+
+        .displayMessagesWrap {
+            width: 100%;
+            padding: $pad;
+            text-align: left;
+
+            #incoming {
+                li {
+                    list-style-type: none;
+                    padding: $pad/2;
+                    margin: $pad/4;
+                }
+
+                #user1msg {
+                    background-color: $white;
+                    color: $blue;
+                    border: solid 1px $white;
+                    @include border-radius(5px);
+
+                }
+
+                #user2msg {
+                    background-color: $blue;
+                    color: $white;
+                    border: solid 1px $blue;
+                    @include border-radius(5px);
+                }
             }
         }
-    }
 
-    #chatWrap {
-        float: left;
-        height: 100vh;
-        width: 30%;
-        padding: 10px;
-    }
+        .sendMessagesWrap {
+            width: 100%;
+            text-align: left;
 
-    #videosWrap {
-        float: left;
-        height: 100vh;
-        border-left: solid 1px $black;
-        width: 50%;
-        padding: 10px;
+            #outgoing {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                border: none;
+            }
+        }
 
-        #videoDisplay {
-            video {
-                //display: none;
-                max-width: 100%;
-                width: 320px;
+        #videosWrap {
+            width: 100%;
+            padding: 10px;
+
+            #videoDisplay {
+                video {
+                    //display: none;
+                    max-width: 100%;
+                    width: 320px;
+                }
+
+                button {
+                    width: 50px;
+                    background-color: $red;
+                    cursor: pointer;
+                    text-align: center;
+                    margin: 0 auto;
+                    border: 1px solid $red;
+                    color: $white;
+                    border-radius: 5px;
+                }
             }
 
-            button {
-                width: 50px;
+            #swaptovideo {
                 background-color: $red;
                 cursor: pointer;
+                width: 200px;
                 text-align: center;
                 margin: 0 auto;
+                padding: 5px 10px;
                 border: 1px solid $red;
-                color: $white;
                 border-radius: 5px;
             }
         }
-
-        #swaptovideo {
-            background-color: $red;
-            cursor: pointer;
-            width: 200px;
-            text-align: center;
-            margin: 0 auto;
-            padding: 5px 10px;
-            border: 1px solid $red;
-            border-radius: 5px;
-        }
     }
-}
+
+} // end of container
+
