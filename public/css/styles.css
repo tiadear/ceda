@@ -113,7 +113,8 @@ form {
         height: 40px;
         margin: 0 20px; }
         .container .open .social-login .social-btn:hover {
-          background-color: #213e64; }
+          background-color: #213e64;
+          border: none; }
       .container .open .social-login #login-fb img {
         height: 70%;
         padding-top: 25%;

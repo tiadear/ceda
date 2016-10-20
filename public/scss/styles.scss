@@ -157,6 +157,7 @@ form {
 
                 &:hover {
                     background-color: $blue;
+                    border: none;
                 }
             }
 
@@ -257,7 +258,7 @@ form {
 
     .chatRoom {
         padding-top: $pad;
-        
+
         h1 {
             text-align: center;
         }
