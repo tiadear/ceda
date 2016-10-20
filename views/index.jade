@@ -1,11 +1,10 @@
 extends layout
-
 block content
 	.container
-		.open
-			.logo
-				img#logo(src='/images/ceda2.png')
-			if (!user)
+		if (!user)
+			.open
+				.logo
+					img#logo(src='/images/ceda2.png')
 				h1 Login
 				.social-login
 					a(href="/auth/facebook")
@@ -25,25 +24,20 @@ block content
 				.notamember
 					p Not a member? 
 					a.signup(href="/signup") Sign Up
-			if (user)
-				if (user.username)
-					h1 Hi #{user.username}
+		if (user)
+			include includes/nav.jade
+			if (user.username)
+				h1 Hi #{user.username}
+				.logout
 					a(href="/logout") Logout
+					br
 					a(href='/deleteaccount') Delete my account
-					div.dashoption
-						div#option1
-							a(href="/chat") Chat
-						div#option2
-							a(href="/settings") Settings
-						div#option3
-							a(href="/forum") Forum
-				else
-					form.usernameRequest(role='form', method='post', action='/username')
-						.form-group
-							p Plesae provide a username
-							p Remember ceda is anonymous so choose a username that won't reveal any details about you
-							p So don't choose your twitter handle
-							input.form-control#username(type='text', name='username', placeholder='Username')
-							input(type='hidden', name='email', value='#{user.email}')
-						button.btn.btn-default(type='submit') Submit
+			else
+				form.usernameRequest(role='form', method='post', action='/username')
+					p Plesae provide a username
+					p Remember ceda is anonymous so choose a username that won't reveal any details about you
+					p So don't choose your twitter handle
+					input.form-input(type='text', name='username', placeholder='Username')
+					input(type='hidden', name='email', value='#{user.email}')
+					button.form-submit(type="submit") Submit
 

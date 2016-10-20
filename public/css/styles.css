@@ -3,7 +3,8 @@
 
 body {
   font-family: "Questrial", sans-serif;
-  background-color: #ebebeb; }
+  background-color: #ebebeb;
+  margin: 0; }
 
 header {
   background-color: #ea5455; }
@@ -50,12 +51,14 @@ form {
     font-size: 1em;
     padding: 5px;
     margin: 5px auto;
-    color: #ea5455;
     border: solid 2px #ea5455;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     border-radius: 5px; }
+  form .form-input:focus {
+    border: solid 2px #213e64;
+    outline: none; }
   form .form-submit {
     color: #ffffff; }
     form .form-submit:hover {
@@ -63,12 +66,11 @@ form {
       border: solid 2px #213e64; }
 
 .container {
-  padding: 20px;
   width: 100%; }
   .container .open {
     width: 100%;
     margin: 100px auto;
-    padding: 20px;
+    padding: 40px;
     background-color: #ffffff;
     text-align: center;
     -webkit-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
@@ -111,6 +113,28 @@ form {
         margin: 0 auto; }
     .container .open .notamember {
       padding-top: 60px; }
+  .container nav {
+    height: 50px;
+    width: 100%; }
+    .container nav ul {
+      width: 100%;
+      -webkit-padding-start: 0px;
+      margin: 0; }
+      .container nav ul li {
+        background-color: #ea5455;
+        list-style-type: none;
+        width: 25%;
+        height: 100%;
+        display: inline-block;
+        padding-bottom: 7px; }
+        .container nav ul li:hover {
+          background-color: #213e64; }
+        .container nav ul li a .navoption img {
+          height: 30px;
+          margin: 10px auto 0 auto; }
+  .container .logout {
+    padding-top: 85vh;
+    text-align: right; }
 
 #chooseuserWrap {
   display: none; }

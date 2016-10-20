@@ -8,6 +8,7 @@
 body {
     font-family: $sans;
     background-color: $grey;
+    margin: 0;
 }
 
 header {
@@ -66,13 +67,17 @@ form {
         font-size: 1em;
         padding: $pad/4;
         margin: $pad/4 auto;
-        color: $red;
         border: solid 2px $red;
         @include border-radius(5px);
     }
 
     .form-input {
         @extend .inputs;
+
+        &:focus {
+            border: solid 2px $blue;
+            outline: none;
+        }
     }
 
     .form-submit {
@@ -87,13 +92,12 @@ form {
 }
 
 .container {
-    padding: $pad;
     width: 100%;
 
     .open {
         width: 100%;
         margin: 100px auto;
-        padding: $pad;
+        padding: $pad *2;
         background-color: $white;
         text-align: center;
         @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
@@ -164,6 +168,47 @@ form {
 
         }
     } // end of open
+
+
+    nav {
+        height: 50px;
+        width: 100%;
+
+        ul {
+            width: 100%;
+            -webkit-padding-start: 0px;
+            margin: 0;
+
+            li {
+                background-color: $red;
+                list-style-type: none;
+                width: 25%;
+                height: 100%;
+                display: inline-block;
+                padding-bottom: 7px;
+
+                &:hover {
+                    background-color: $blue;
+                }
+
+                a {
+                    .navoption {
+
+                        img {
+                            height: 30px;
+                            margin: 10px auto 0 auto;
+                        }
+                    }
+                }
+            }
+        }
+    } // end of nav
+
+    .logout {
+        padding-top: 85vh;
+        text-align: right;
+    }
+
 } // end of container
 
 
