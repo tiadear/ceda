@@ -58,6 +58,9 @@ form {
     border-radius: 5px; }
   form .form-submit {
     color: #ffffff; }
+    form .form-submit:hover {
+      background-color: #213e64;
+      border: solid 2px #213e64; }
 
 .container {
   padding: 20px;

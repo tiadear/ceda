@@ -78,6 +78,11 @@ form {
     .form-submit {
         @extend .inputs;
         color: $white;
+
+        &:hover {
+            background-color: $blue;
+            border: solid 2px $blue;
+        }
     }
 }
 
