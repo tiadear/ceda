@@ -1,15 +1,23 @@
 extends layout
 block content
+	script.
+		roomID = '#{room._id}';
+		//user 1 is current user
+		user1username = '#{usersInRoom[0]}';
+		// user 2 is peer
+		user2username = '#{usersInRoom[1]}';
 	.chatRoom
 		if (room)
-			h1 #{room.user_init}
+			var 
+			h1#user1 #{usersInRoom[0]}
 			br
-			h1 #{room.user_resp}
+			h1#user2 #{usersInRoom[1]}
 			#chatWrap
 				p Incoming Messages
 				ul#incoming
 				br
 				input#outgoing(type='text')
+				button.btn.btn-primary#outgoingSubmit(type='submit') Submit
 			#videosWrap
 				#videoDisplay
 					video#localVideo

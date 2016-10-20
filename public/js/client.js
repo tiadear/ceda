@@ -1,4 +1,4 @@
-'use strict';
+
 
 var isChannelReady = false;
 var isInitiator = false;
@@ -27,15 +27,72 @@ var sdpConstraints = {
 ////////////////////////////////////////////////////////////////////////////////
 // SOCKET STUFF
 
+
 var socket = io.connect();
 var myRoomID = null;
 
     $(function(){
+        var msgSubmit = document.getElementById('outgoingSubmit');
+        msgSubmit.disabled = true;
 
-        if(room) {
-          console.log('there is a room');
-          //ssocket.emit('joinRoom', roomID);
+        $('#outgoing').keypress(function(e) {
+            e.preventDefault();
+        });
+
+
+        if(roomID) {
+            socket.emit('joinRoom', roomID, user1username, user2username);
+            socket.emit('addUser', user1username, function(data){
+                if(data) {
+                    console.log(user1username + ' has been added');
+                    msgSubmit.disabled = false;
+
+                    $('#outgoing').unbind('keypress');
+
+                    //when something is entered into the outgoing message box
+                    $('#outgoing').keypress(function(e) {
+
+                        //if enter has not been hit
+                        if(e.which != 13) {
+                            if(typing === false && myRoomID !== null && $('#outgoing').is(':focus')) {
+                                typing = true;
+                                socket.emit('userTyping', true);
+                            } else {
+                                clearTimeout(timeout);
+                                timeout = setTimeout(timeoutFunction, 5000);
+                            }
+                        }
+
+                        //if enter has been hit
+                        if(e.which == 13) {
+                            e.preventDefault();
+                            
+                            //emit the message from the outgoing chat
+                            socket.emit('sendChat', $('#outgoing').val());
+
+                            //reset the outgoing chat to null
+                            $('#outgoing').val('');
+                        } 
+                    });
+                }
+
+          });
         }
+
+        socket.on('alertPeer', function(peerToBeAlerted, chatInitiator){
+            //send notification
+
+            console.log(chatInitiator + ' has sent a message to ' + peerToBeAlerted);
+        });
+
+        socket.on('addHistory', function(past) {
+            past.forEach(function(pastItem) {
+                $('#incoming').prepend('<li>' + pastItem.timesent +  '</li>');
+                $('#incoming').prepend('<li>' + pastItem.user + ' : ' + pastItem.message +  '</li>');
+            });
+        });
+
+
 
         // For todays date;
         Date.prototype.today = function () { 
@@ -49,92 +106,22 @@ var myRoomID = null;
 
         var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
 
-
-
-        
-
-
-
-
-
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-            $('#incoming').append('<li>' + username + ': ' + data + '</li>');
             $('#incoming').append('<li>' + datetime +  '</li>');
+            $('#incoming').append('<li>' + username + ': ' + data + '</li>');
             socket.emit('message', data);
         });
 
-        function sendMessage(message) {
-            console.log('Client sending message: ', message);
-            socket.emit('message', message);
-        }
-
         socket.on('updateHistory', function(data){
+
+            // handle saving to schema
+
             $('#incoming').append('<li><b>ealier messages</b></li>')
             $.each(data, function(data, msg) {
                 $('#incoming').append('<li>'+ msg +'</li>')
             });
         })
-
-        var currentUser = user.username;
-        var chatPartner = 'random user';
-
-        
-
-        //update the user list
-        socket.on('updateUsers', function(data){
-            $('#users').text("");
-            $('#usersList').text("");
-
-            if (!jQuery.isEmptyObject(data.users)) {
-
-                $.each(data.users, function(id, user){
-
-                    var currentuser = '/#'+socket.id;
-                    var userlistid = id;
-                    
-                    //if the current user does not match anyone in the list the list all the usernames
-                    if(currentuser != userlistid) {
-                        $('#users').append('<li id='+ id +'>' + user.username + '</li>');
-                        $('#usersList').append('<li id='+ id +'>' + user.username + '</li>');
-                    }
-
-                    $('#usersList li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
-
-                        socket.emit('joinRoom', userselected, currentuser);
-          
-                        $('#chooseuserWrap').hide();
-                        $('#contentWrap').show();
-                    });
-
-                    $('#users li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
-
-                        socket.emit('joinRoom', userselected, currentuser);
-                    });
-
-                });
-            }
-        });
-    
-        //update the room ID
-        socket.on('sendRoomID', function(data) {
-            myRoomID = data.id;
-        });
-
-        socket.on('createdRoom', function() {
-            console.log('room ready');
-            isChannelReady = true;
-            isInitiator = true;
-        });
-
-        socket.on('channelReady', function() {
-            console.log('channelReady ready');
-            isChannelReady = true;
-        });
 
         var typing = false;
         var timeout = undefined;
@@ -143,32 +130,6 @@ var myRoomID = null;
             typing = false;
             socket.emit("isTyping", false);
         }
-
-        //when something is entered into the outgoing message box
-        $('#outgoing').keypress(function(e) {
-
-            //if enter has not been hit
-            if(e.which != 13) {
-                if(typing === false && myRoomID !== null && $('#outgoing').is(':focus')) {
-                    typing = true;
-                    socket.emit('userTyping', true);
-                } else {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(timeoutFunction, 5000);
-                }
-            }
-
-            //if enter has been hit
-            if(e.which == 13) {
-                e.preventDefault();
-                
-                //emit the message from the outgoing chat
-                socket.emit('sendChat', $('#outgoing').val());
-
-                //reset the outgoing chat to null
-                $('#outgoing').val('');
-            } 
-        });
 
         //If a user is typing
         socket.on('isTyping', function(data){
@@ -182,25 +143,38 @@ var myRoomID = null;
             }
         });
 
-        //on username submit
-        $('#userform').submit(function(e){
-            e.preventDefault();
 
-            var name = $('#username').val();
 
-            //emit the username and clear the previous value and then display the actual chat window
-            socket.emit('addUser', name, function(data){
-                $('#usernameWrap').hide();
-                $('#chooseuserWrap').show();
 
-            });
-            $('#username').val('');
-        });
 
         //swap to video chat
         $('#swaptovideo').on('click', function(){
             console.log('is anything happening?');
             $('#videoDisplay').show();
+        });
+
+
+
+
+
+
+        /*
+        socket.on('createdRoom', function() {
+            console.log('room ready');
+            isChannelReady = true;
+            isInitiator = true;
+        });
+        */
+
+        function sendMessage(message) {
+            console.log('Client sending message: ', message);
+            socket.emit('message', message);
+        }
+
+        socket.on('channelReady', function() {
+            console.log('channelReady ready');
+            isChannelReady = true;
+            isInitiator = true;
         });
 
         socket.on('message', function(message) {
@@ -224,16 +198,6 @@ var myRoomID = null;
                 handleRemoteHangup();
             }
         });
-
-
-
-
-
-
-
-
-
-
 
         /////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////

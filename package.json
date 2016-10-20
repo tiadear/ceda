@@ -9,6 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "angular": "^1.5.8",
+    "async": "^2.1.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "connect-flash": "^0.1.1",
