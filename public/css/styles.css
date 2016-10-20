@@ -14,14 +14,29 @@ header {
       height: 100%; }
 
 a {
-  text-decoration: none; }
+  text-decoration: none;
+  padding-top: 10px;
+  text-align: center;
+  color: #ea5455; }
+  a:hover {
+    color: #213e64; }
 
-button {
+button, .container .open .social-login .social-btn {
   border: none;
   background-color: #ea5455;
   border-radius: 5px;
   color: #ffffff;
   cursor: pointer; }
+
+h1 {
+  font-family: "Questrial", sans-serif;
+  font-size: 2em;
+  color: #ea5455;
+  font-weight: 300;
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px; }
 
 form {
   padding: 20px;
@@ -66,19 +81,32 @@ form {
     .container .open .form-login {
       max-width: 400px; }
       .container .open .form-login .forgot {
-        display: block;
-        padding-top: 20px;
-        text-align: center;
-        color: #213e64; }
-        .container .open .form-login .forgot:hover {
-          color: #ea5455; }
+        display: block; }
     .container .open .social-login {
       width: 100%;
+      padding-top: 60px;
       text-align: center; }
       .container .open .social-login .social-btn {
+        display: inline-block;
         width: 40px;
         height: 40px;
-        margin: 0 10px; }
+        margin: 0 20px; }
+        .container .open .social-login .social-btn:hover {
+          background-color: #213e64; }
+      .container .open .social-login #login-fb img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+      .container .open .social-login #login-tw img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+      .container .open .social-login #login-go img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+    .container .open .notamember {
+      padding-top: 60px; }
 
 #chooseuserWrap {
   display: none; }
@@ -109,7 +137,7 @@ form {
     #contentWrap #videosWrap #videoDisplay video {
       max-width: 100%;
       width: 320px; }
-    #contentWrap #videosWrap #videoDisplay button {
+    #contentWrap #videosWrap #videoDisplay button, #contentWrap #videosWrap #videoDisplay .container .open .social-login .social-btn, .container .open .social-login #contentWrap #videosWrap #videoDisplay .social-btn {
       width: 50px;
       background-color: #ea5455;
       cursor: pointer;

@@ -23,6 +23,13 @@ header {
 
 a {
     text-decoration: none;
+    padding-top: $pad/2;             
+    text-align: center;
+    color: $red;
+
+    &:hover {
+        color: $blue;
+    }
 }
 
 button {
@@ -31,6 +38,17 @@ button {
     border-radius: (5px);
     color: $white;
     cursor: pointer;
+}
+
+h1 {
+    font-family: $sans;
+    font-size: 2em;
+    color: $red;
+    font-weight: 300;
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
 }
 
 
@@ -90,34 +108,53 @@ form {
 
             .forgot {
                 display: block;
-                padding-top: $pad;                
-                text-align: center;
-                color: $blue;
-
-                &:hover {
-                    color: $red;
-                }
             }
         }
 
         .social-login {
             width: 100%;
+            padding-top: $pad *3;
             text-align: center;
 
             .social-btn {
+                @extend button;
+                display: inline-block;
                 width: 40px;
                 height: 40px;
-                margin: 0 $pad/2;
+                margin: 0 $pad;
+
+                &:hover {
+                    background-color: $blue;
+                }
             }
 
-            #login-fb {}
+            #login-fb {
+                img {
+                    height: 70%;
+                    padding-top: 25%;
+                    margin: 0 auto;
+                }
+            }
 
-            #login-tw {}
+            #login-tw {
+                img {
+                    height: 70%;
+                    padding-top: 25%;
+                    margin: 0 auto;
+                }
+            }
 
-            #login-go {}
+            #login-go {
+                img {
+                    height: 70%;
+                    padding-top: 25%;
+                    margin: 0 auto
+                }
+            }
         }
 
         .notamember {
+            padding-top: $pad * 3;
 
         }
     } // end of open

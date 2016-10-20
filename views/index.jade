@@ -6,24 +6,28 @@ block content
 			.logo
 				img#logo(src='/images/ceda2.png')
 			if (!user)
+				h1 Login
+				.social-login
+					a(href="/auth/facebook")
+						.social-btn#login-fb
+							img(src='/images/facebook.png')
+					a(href="/auth/twitter")
+						.social-btn#login-tw
+							img(src='/images/twitter.png')
+					a(href="/auth/google")
+						.social-btn#login-go
+							img(src='/images/googleplus.png')
 				form.form-login(role='form', action="/login", method="POST")
 					input.form-input(type="text", name="email", placeholder="Email")
 					input.form-input(type="password", name="password", placeholder="Password")
 					button.form-submit(type="submit") Submit
 					a.forgot(href="forgot") I forgot my password
-				.social-login
-					a(href="/auth/facebook")
-						button.social-btn#login-fb(type='button')
-					a(href="/auth/twitter")
-						button.social-btn#login-tw(type='button')
-					a(href="/auth/google")
-						button.social-btn#login-go(type='button')
 				.notamember
-					p not a member? 
-					a(href="/signup") Sign Up
+					p Not a member? 
+					a.signup(href="/signup") Sign Up
 			if (user)
 				if (user.username)
-					p You are currently logged in as #{user.username}
+					h1 Hi #{user.username}
 					a(href="/logout") Logout
 					a(href='/deleteaccount') Delete my account
 					div.dashoption
