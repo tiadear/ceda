@@ -2,10 +2,83 @@
   box-sizing: border-box; }
 
 body {
-  font-family: "Questrial", sans-serif; }
+  font-family: "Questrial", sans-serif;
+  background-color: #ebebeb; }
 
 header {
   background-color: #ea5455; }
+  header .logo {
+    height: 30px;
+    width: auto; }
+    header .logo img {
+      height: 100%; }
+
+a {
+  text-decoration: none; }
+
+button {
+  border: none;
+  background-color: #ea5455;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer; }
+
+form {
+  padding: 20px;
+  margin: 0 auto;
+  font-size: 1em;
+  text-align: left; }
+  form .inputs, form .form-input, form .form-submit {
+    width: 100%;
+    height: 40px;
+    font-family: "Questrial", sans-serif;
+    padding: 5px;
+    margin: 5px auto;
+    color: #ea5455;
+    border: solid 2px #ea5455;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px; }
+  form .form-submit {
+    color: #ffffff; }
+
+.container {
+  padding: 20px;
+  width: 100%; }
+  .container .open {
+    width: 100%;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    text-align: center;
+    -webkit-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1); }
+    .container .open .logo {
+      height: 50px;
+      margin: 20px 0 50px 0; }
+      .container .open .logo img {
+        height: 100%;
+        width: auto;
+        margin: 0 auto; }
+    .container .open .form-login {
+      max-width: 400px; }
+      .container .open .form-login .forgot {
+        display: block;
+        padding-top: 20px;
+        text-align: center;
+        color: #213e64; }
+        .container .open .form-login .forgot:hover {
+          color: #ea5455; }
+    .container .open .social-login {
+      width: 100%;
+      text-align: center; }
+      .container .open .social-login .social-btn {
+        width: 40px;
+        height: 40px;
+        margin: 0 10px; }
 
 #chooseuserWrap {
   display: none; }

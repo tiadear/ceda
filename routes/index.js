@@ -19,8 +19,10 @@ local.strategy(passport);
 
 
 router.get('/', function(req, res){
-    //console.log(req.user);
-	res.render('index', {user : req.user});
+	res.render('index', {
+        user : req.user,
+        title : 'ceda'
+    });
 });
 
 
@@ -41,11 +43,11 @@ router.post('/signup', passport.authenticate('local-signup', { failureRedirect: 
 );
 
 
-
+/*
 router.get('/login', function(req, res) {
     res.render('login', { user : req.user, error : req.flash('error')});
 });
-
+*/
 router.post('/login', passport.authenticate('local-login', { 
     failureRedirect: '/login', 
     failureFlash: true 

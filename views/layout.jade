@@ -3,10 +3,9 @@ html
   head
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
     link(rel='stylesheet', href='/css/styles.css')
-    link(rel='stylesheet', href='/css/formstyle.css')
   body
+    include includes/head.jade
     if (error && error.length > 0)
       br
       h4.error-msg= error
@@ -14,6 +13,6 @@ html
     block content
     script(src='/socket.io/socket.io.js')
     script(src='http://code.jquery.com/jquery.js')
-    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
     script(src='/js/lib/adapter.js')
     script(src='/js/client.js')
+    include includes/foot.jade

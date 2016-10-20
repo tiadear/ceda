@@ -7,11 +7,122 @@
 
 body {
     font-family: $sans;
+    background-color: $grey;
 }
 
 header {
     background-color: $red;
+    .logo {
+        height: 30px;
+        width: auto;
+        img {
+            height: 100%;
+        }
+    }
 }
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    background-color: $red;
+    border-radius: (5px);
+    color: $white;
+    cursor: pointer;
+}
+
+
+
+form {
+    padding: $pad;
+    margin: 0 auto;
+    font-size: 1em;
+    text-align: left;
+
+    .inputs {
+        width: 100%;
+        height: 40px;
+        font-family: $sans;
+        padding: $pad/4;
+        margin: $pad/4 auto;
+        color: $red;
+        border: solid 2px $red;
+        @include border-radius(5px);
+    }
+
+    .form-input {
+        @extend .inputs;
+    }
+
+    .form-submit {
+        @extend .inputs;
+        color: $white;
+    }
+}
+
+.container {
+    padding: $pad;
+    width: 100%;
+
+    .open {
+        width: 100%;
+        margin: 100px auto;
+        padding: $pad;
+        background-color: $white;
+        text-align: center;
+        @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+        
+        .logo {
+            height: 50px;
+            margin: 20px 0 50px 0;
+            
+            img {
+                height: 100%;
+                width: auto;
+                margin: 0 auto;
+            }
+        }
+
+        .form-login {
+            max-width: 400px;
+
+            .forgot {
+                display: block;
+                padding-top: $pad;                
+                text-align: center;
+                color: $blue;
+
+                &:hover {
+                    color: $red;
+                }
+            }
+        }
+
+        .social-login {
+            width: 100%;
+            text-align: center;
+
+            .social-btn {
+                width: 40px;
+                height: 40px;
+                margin: 0 $pad/2;
+            }
+
+            #login-fb {}
+
+            #login-tw {}
+
+            #login-go {}
+        }
+
+        .notamember {
+
+        }
+    } // end of open
+} // end of container
+
 
 
 #usernameWrap {
