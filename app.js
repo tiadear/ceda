@@ -162,15 +162,6 @@ io.sockets.on('connection', function(socket){
         socket.emit('message', message);
     });
 
-    function updateUsers(){
-        //update the user list
-        socket.emit('updateUsers', {users: users});
-        socket.broadcast.emit('updateUsers', {users: users});
-    }
-
-
-
-
 
     socket.on('addUser', function(username, callback){
         console.log('adding user');
@@ -183,57 +174,40 @@ io.sockets.on('connection', function(socket){
         //send connection msg to everyone else
         socket.broadcast.emit('updateChat', username, 'is now online');
 
-        //populate the clients array with the client object
-        //sockets.push(socket);
         callback(true);
     });
 
 
-
     socket.on('joinRoom', function(roomID, currentuser, randomuser){
-
-        //room id stuff
-        //var roomid = users[socket.id].room[userselected];
-        //var room = rooms[roomid];
 
         //name the room
         socket.room = roomID;
 
-        //add the person in the room.js file
-        //room.addPerson(socket.id);
-
-        //socket.room = room.id;
-
         //add person to the room
         socket.join(socket.room);
-        console.log('added ' + currentuser + ' to room: ' + roomID)
-
-        //assign the room id to the current room
-        //users[socket.id].currentroom = room.id;
-
+        console.log('added ' + currentuser + ' to room: ' + roomID);
 
         //let everyone in the room know
-        io.sockets.in(socket.room).emit("updateChat", currentuser, 'is now chatting with '+randomuser);
+        io.sockets.in(socket.room).emit("updateChat", currentuser, 'is online');
 
         socket.emit('channelReady');
+
+        socket.emit('alertPeer', randomuser, currentuser);
+
+        chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
+            if(err) throw err;
+            if(history) {
+                socket.emit('addHistory', history);
+            }
+            //new convo
+        });
     });
 
-    socket.on('switchRoom', function(userselected, currentuser){
+
+    socket.on('leaveRoom', function(userselected, currentuser){
         socket.leave(socket.room);
-        //console.log(users[socket.id].username+' has left room '+socket.room)
-
-        //if they have already been assigned a room with this user
-        if(users[socket.id].room[userselected] !== undefined) {
-            existingRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has joined room '+socket.room);
-        } 
-
-        //if they are initiating the conversation
-        else {
-            newRoom(currentuser, userselected);
-            //console.log(users[socket.id].username+' has started room '+socket.room);
-        }
     });
+
 
     socket.on('disconnect', function(data){
         if(typeof users[socket.id] !== 'undefined') {
@@ -247,17 +221,33 @@ io.sockets.on('connection', function(socket){
         }
     });
 
+
     socket.on('userTyping', function(data) {
         if(typeof users[socket.id] !== 'undefined') {
             io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: users[socket.id].username});
         }
     });
 
+
     socket.on('sendChat', function(data) {
         //send a msg
         if(socket.room !== undefined){
             io.sockets.in(socket.room).emit("updateChat", socket.username, data);
             socket.emit("isTyping", false);
+
+            var newChatHistory = new chatHistory();
+            newChatHistory.user = socket.username;
+            newChatHistory.room = socket.room;
+            newChatHistory.message = data;
+
+            newChatHistory.save(function(err){
+                if (err) {
+                    console.log(err);
+                    throw err;
+                } else {
+                    console.log('saving chat history');
+                }
+            });
 
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
