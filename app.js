@@ -43,6 +43,9 @@ var routes = require('./routes/index');
 
 
 
+
+
+
 // set up views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -156,7 +159,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('message', function(message) {
         // for a real app, would be room-only (not broadcast)
-        socket.broadcast.emit('message', message);
+        socket.emit('message', message);
     });
 
     function updateUsers(){
@@ -270,37 +273,32 @@ io.sockets.on('connection', function(socket){
 
 
 
-    socket.on('joinRoom', function(roomID){
+    socket.on('joinRoom', function(roomID, currentuser, randomuser){
 
-       //get the room id
-        var roomid = users[socket.id].room[userselected];
-        var room = rooms[roomid];
+        //room id stuff
+        //var roomid = users[socket.id].room[userselected];
+        //var room = rooms[roomid];
 
         //name the room
-        socket.room = roomid;
+        socket.room = roomID;
 
         //add the person in the room.js file
-        room.addPerson(socket.id);
+        //room.addPerson(socket.id);
 
-        socket.room = room.id;
+        //socket.room = room.id;
 
         //add person to the room
         socket.join(socket.room);
+        console.log('added users ' + currentuser + ' and ' + randomuser + ' to room: ' + roomID);
 
         //assign the room id to the current room
-        users[socket.id].currentroom = room.id;
+        //users[socket.id].currentroom = room.id;
 
         //update the room id on the client
-        socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
+        socket.emit('sendRoomID', {id: socket.room});
 
         //let everyone in the room know
-        io.sockets.in(socket.room).emit("updateChat", users[currentuser].username, 'is now chatting with '+users[userselected].username);
-
-        con.query('SELECT id, user_id, message, timestamp FROM chat_history WHERE room_id = ?', socket.room ,function(err,res){
-            if(err) throw err;
-            socket.emit('updateHistory', res);
-            console.log(res);
-        });
+        io.sockets.in(socket.room).emit("updateChat", currentuser, 'is now chatting with '+randomuser);
 
         socket.emit('channelReady');
     });

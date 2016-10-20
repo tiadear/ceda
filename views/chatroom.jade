@@ -1,10 +1,15 @@
 extends layout
 block content
+	script.
+		roomID = '#{room._id}';
+		user1username = '#{usersInRoom[0]}';
+		user2username = '#{usersInRoom[1]}';
 	.chatRoom
 		if (room)
-			h1 #{usersInRoom[0]}
+			var 
+			h1#user1 #{usersInRoom[0]}
 			br
-			h1 #{usersInRoom[1]}
+			h1#user2 #{usersInRoom[1]}
 			#chatWrap
 				p Incoming Messages
 				ul#incoming

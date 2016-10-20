@@ -1,4 +1,4 @@
-'use strict';
+
 
 var isChannelReady = false;
 var isInitiator = false;
@@ -27,14 +27,13 @@ var sdpConstraints = {
 ////////////////////////////////////////////////////////////////////////////////
 // SOCKET STUFF
 
+
 var socket = io.connect();
 var myRoomID = null;
 
     $(function(){
-
-        if(room) {
-          console.log('there is a room');
-          //ssocket.emit('joinRoom', roomID);
+        if(roomID) {
+          socket.emit('joinRoom', roomID, user1username, user2username);
         }
 
         // For todays date;
@@ -48,14 +47,6 @@ var myRoomID = null;
         }
 
         var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
-
-
-
-        
-
-
-
-
 
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
@@ -76,8 +67,6 @@ var myRoomID = null;
             });
         })
 
-        var currentUser = user.username;
-        var chatPartner = 'random user';
 
         
 
