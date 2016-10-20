@@ -32,9 +32,56 @@ var socket = io.connect();
 var myRoomID = null;
 
     $(function(){
+        var msgSubmit = document.getElementById('outgoingSubmit');
+        msgSubmit.disabled = true;
+
+        $('#outgoing').keypress(function(e) {
+            e.preventDefault();
+        });
+
+
         if(roomID) {
-          socket.emit('joinRoom', roomID, user1username, user2username);
+            socket.emit('joinRoom', roomID, user1username, user2username);
+            socket.emit('addUser', user1username, function(data){
+                if(data) {
+                    console.log(user1username + ' has been added');
+                    msgSubmit.disabled = false;
+
+                    $('#outgoing').unbind('keypress');
+
+                    //when something is entered into the outgoing message box
+                    $('#outgoing').keypress(function(e) {
+
+                        //if enter has not been hit
+                        if(e.which != 13) {
+                            if(typing === false && myRoomID !== null && $('#outgoing').is(':focus')) {
+                                typing = true;
+                                socket.emit('userTyping', true);
+                            } else {
+                                clearTimeout(timeout);
+                                timeout = setTimeout(timeoutFunction, 5000);
+                            }
+                        }
+
+                        //if enter has been hit
+                        if(e.which == 13) {
+                            e.preventDefault();
+                            
+                            //emit the message from the outgoing chat
+                            socket.emit('sendChat', $('#outgoing').val());
+
+                            //reset the outgoing chat to null
+                            $('#outgoing').val('');
+                        } 
+                    });
+                }
+
+          });
         }
+
+
+
+
 
         // For todays date;
         Date.prototype.today = function () { 
@@ -67,52 +114,6 @@ var myRoomID = null;
             });
         })
 
-
-        
-
-        //update the user list
-        socket.on('updateUsers', function(data){
-            $('#users').text("");
-            $('#usersList').text("");
-
-            if (!jQuery.isEmptyObject(data.users)) {
-
-                $.each(data.users, function(id, user){
-
-                    var currentuser = '/#'+socket.id;
-                    var userlistid = id;
-                    
-                    //if the current user does not match anyone in the list the list all the usernames
-                    if(currentuser != userlistid) {
-                        $('#users').append('<li id='+ id +'>' + user.username + '</li>');
-                        $('#usersList').append('<li id='+ id +'>' + user.username + '</li>');
-                    }
-
-                    $('#usersList li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
-
-                        socket.emit('joinRoom', userselected, currentuser);
-          
-                        $('#chooseuserWrap').hide();
-                        $('#contentWrap').show();
-                    });
-
-                    $('#users li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
-
-                        socket.emit('joinRoom', userselected, currentuser);
-                    });
-
-                });
-            }
-        });
-    
-        //update the room ID
-        socket.on('sendRoomID', function(data) {
-            myRoomID = data.id;
-        });
 
         socket.on('createdRoom', function() {
             console.log('room ready');

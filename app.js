@@ -168,19 +168,12 @@ io.sockets.on('connection', function(socket){
         socket.broadcast.emit('updateUsers', {users: users});
     }
 
+
+
+
+
     socket.on('addUser', function(username, callback){
-        if (Object.getOwnPropertyNames(users).length > 0) {
-            //console.log('there are other users');
-            callback(false);
-        } else {
-            //console.log('users is empty');
-            callback(true);
-        }
-
-        console.log('username: ' + username);
-
-        roomID = null;
-
+        console.log('adding user');
         //attach username to socket
         socket.username = username;
 
@@ -191,85 +184,9 @@ io.sockets.on('connection', function(socket){
         socket.broadcast.emit('updateChat', username, 'is now online');
 
         //populate the clients array with the client object
-        sockets.push(socket);
-
-            var newuser = {username: username, user_type: 0};
-            con.query('INSERT INTO users SET ?', newuser, function(err,res){
-                if(err) throw err;
-
-                var lastinsertID = res.insertId;
-
-                //push username into array
-                users[socket.id] = {"username" : username, "user_id" : lastinsertID, "room" : {"id" : roomID}, currentroom : null};
-
-                updateUsers();
-            });
-        
-        
+        //sockets.push(socket);
+        callback(true);
     });
-
-    function newRoom(currentuser, userselected){
-        //assign random id number
-        var id = uuid.v4();
-
-        
-
-        var userinit = users[currentuser].user_id;
-        var userresp = users[userselected].user_id;
-
-        //create the room
-        var newRoom = new Room();
-        newRoom.roomID = id;
-        newRoom.user_init = userinit;
-        newRoom.user_resp = userresp;
-        newRoom.room_type = 0;
-
-        newRoom.save(function(err){
-            if(err) {
-                console.log(err);
-                console.log('saving error')
-                return done(err);
-            } 
-            console.log('saving user');
-        });
-
-
-        //add it to the array
-        rooms[id] = room;
-
-        //name the room
-        socket.room = id;
-
-        //auto join the creator of the room
-        socket.join(socket.room);
-
-        //add creator to room obj
-        room.addPerson(socket.id);
-
-         //update the room id on the client
-        socket.emit('sendRoomID', {id: socket.room, roomowner: room.userinit, roomresp: room.useresp});
-
-        //add the room id to both users array
-        users[currentuser].room[userselected] = id;
-        users[currentuser].currentroom = id;
-        users[userselected].room[currentuser] = id;
-
-        socket.emit('createdRoom');
-
-        //Insert into db
-        var userinit = users[currentuser].user_id;
-        var userresp = users[userselected].user_id;
-        var newroom = {user_init_id: userinit, user_resp_id: userresp, room_type: 0};
-
-
-        con.query('INSERT INTO room SET ?', newroom, function(err,res){
-            if(err) throw err;
-        });
-    }
-
-
-
-
 
 
 
@@ -289,24 +206,17 @@ io.sockets.on('connection', function(socket){
 
         //add person to the room
         socket.join(socket.room);
-        console.log('added users ' + currentuser + ' and ' + randomuser + ' to room: ' + roomID);
+        console.log('added ' + currentuser + ' to room: ' + roomID)
 
         //assign the room id to the current room
         //users[socket.id].currentroom = room.id;
 
-        //update the room id on the client
-        socket.emit('sendRoomID', {id: socket.room});
 
         //let everyone in the room know
         io.sockets.in(socket.room).emit("updateChat", currentuser, 'is now chatting with '+randomuser);
 
         socket.emit('channelReady');
     });
-
-
-
-
-
 
     socket.on('switchRoom', function(userselected, currentuser){
         socket.leave(socket.room);
@@ -333,7 +243,7 @@ io.sockets.on('connection', function(socket){
             //remove the username from the array
             delete users[socket.id];
 
-            updateUsers();;
+            updateUsers();
         }
     });
 
@@ -348,12 +258,6 @@ io.sockets.on('connection', function(socket){
         if(socket.room !== undefined){
             io.sockets.in(socket.room).emit("updateChat", socket.username, data);
             socket.emit("isTyping", false);
-
-            var newmessage = {user_id: '1', message: data, timestamp: CURRENT_TIMESTAMP}
-
-            con.query('INSERT INTO chat_history SET ?', newmessage, function(err,res){
-                if(err) throw err;
-            });
 
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
@@ -379,10 +283,4 @@ Array.prototype.contains = function(k, callback) {
 
 
 
-//con.end(function(err) {
-  // The connection is terminated gracefully
-  // Ensures all previously enqueued queries are still
-  // before sending a COM_QUIT packet to the MySQL server.
-//});
- 
 

@@ -2,7 +2,9 @@ extends layout
 block content
 	script.
 		roomID = '#{room._id}';
+		//user 1 is current user
 		user1username = '#{usersInRoom[0]}';
+		// user 2 is peer
 		user2username = '#{usersInRoom[1]}';
 	.chatRoom
 		if (room)
@@ -15,6 +17,7 @@ block content
 				ul#incoming
 				br
 				input#outgoing(type='text')
+				button.btn.btn-primary#outgoingSubmit(type='submit') Submit
 			#videosWrap
 				#videoDisplay
 					video#localVideo
