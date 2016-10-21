@@ -250,13 +250,48 @@ form {
           .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img {
             height: 30px;
             width: auto; }
-    .container .chatRoom #videosWrap {
+    .container .chatRoom .videoWrap {
       display: none;
       width: 100%;
-      padding: 10px; }
-      .container .chatRoom #videosWrap #videoDisplay video {
-        display: none;
-        max-width: 100%;
-        width: 320px; }
+      height: 75vh;
+      padding-top: 20px; }
+      .container .chatRoom .videoWrap .videoDisplay {
+        width: 100%;
+        height: 100%; }
+        .container .chatRoom .videoWrap .videoDisplay #remoteVideo {
+          width: 100%;
+          position: relative;
+          background-color: #000000;
+          height: 100%; }
+        .container .chatRoom .videoWrap .videoDisplay #localVideo {
+          width: 40%;
+          position: relative;
+          bottom: 120px;
+          float: right;
+          border: solid 4px #ea5455;
+          -webkit-border-radius: 20px;
+          -moz-border-radius: 20px;
+          -ms-border-radius: 20px;
+          border-radius: 20px;
+          margin-right: 20px; }
+        .container .chatRoom .videoWrap .videoDisplay .videoOptions {
+          width: 100%;
+          height: 40px;
+          position: fixed;
+          bottom: 0; }
+          .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn {
+            background-color: #ea5455;
+            color: #ffffff;
+            width: 25%;
+            height: 100%;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            vertical-align: top; }
+            .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn:hover {
+              background-color: #213e64; }
+            .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn img {
+              height: 30px;
+              width: auto; }
 
 /*# sourceMappingURL=styles.css.map */

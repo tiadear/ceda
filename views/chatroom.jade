@@ -24,13 +24,13 @@ block content
 						.chat-btn#chat-btn-block
 							img(src='/images/icon-video-btn-block.png')
 						button.chat-btn#outgoingSubmit(type='submit') Submit
-				#videosWrap
-					#videoDisplay
-						video#localVideo
+				.videoWrap
+					.videoDisplay
 						video#remoteVideo
+						video#localVideo
 						.videoOptions
-							.chat-btn#startButton
-								img(src='/images/icon-video-btn-start.png')
+							.chat-btn#switchToChat
+								img(src='/images/icon-video-btn-chat.png')
 							.chat-btn#callButton
 								img(src='/images/icon-video-btn-call.png')
 							.chat-btn#muteButton

@@ -292,6 +292,7 @@ router.get('/chatpeer', function(req, res) {
 
 
 
+
 router.get('/account', ensureAuthenticated, function(req, res){
   res.render('account');
 });

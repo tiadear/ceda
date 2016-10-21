@@ -172,9 +172,13 @@ var myRoomID = null;
 
 
         //swap to video chat
-        $('#swaptovideo').on('click', function(){
-            console.log('is anything happening?');
-            $('#videoDisplay').show();
+        $('#chat-btn-video').on('click touch', function(){
+          var videomode = true;
+          start();
+          console.log('switching to video');
+          $('.displayMessagesWrap').hide();
+          $('.sendMessagesWrap').hide();
+          $('.videoWrap').show();
         });
 
 
@@ -230,15 +234,15 @@ var myRoomID = null;
         var localVideo = document.querySelector('#localVideo');
         var remoteVideo = document.querySelector('#remoteVideo');
 
-        var startButton = document.getElementById('startButton');
+        var chatButton = document.getElementById('switchToChat');
         var callButton = document.getElementById('callButton');
         var hangupButton = document.getElementById('hangupButton');
         var muteButton = document.getElementById('muteButton');
 
+        chatButton.disabled = false;
         callButton.disabled = true;
         muteButton.disabled = true;
         hangupButton.disabled = true;
-        startButton.onclick = start;
         callButton.onclick = call;
         hangupButton.onclick = hangup;
 
@@ -253,7 +257,6 @@ var myRoomID = null;
         }
 
         function start() {
-            startButton.disabled = true;
             muteButton.disabled = false;
             navigator.mediaDevices.getUserMedia({
                 audio: false,
