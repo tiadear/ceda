@@ -26,9 +26,8 @@ var favicon = require('static-favicon'),
 
 
 // connect to port
-server.listen(port, function(){
-    console.log('listening on *:3000');
-});
+var port_number = server.listen(process.enc.PORT || 3000);
+app.listen(port_number);
 
 
 
