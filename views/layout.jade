@@ -4,6 +4,9 @@ html
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/css/styles.css')
+    script(src='/socket.io/socket.io.js')
+    script(src='js/jquery-3.1.1.min.js')
+    script(src='/js/lib/adapter.js')
   body
     include includes/head.jade
     if (error && error.length > 0)
@@ -11,8 +14,4 @@ html
       h4.error-msg= error
       br
     block content
-    script(src='/socket.io/socket.io.js')
-    script(src='js/jquery-3.1.1.min.js')
-    script(src='/js/lib/adapter.js')
-    script(src='/js/client.js')
     include includes/foot.jade

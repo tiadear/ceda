@@ -83,6 +83,10 @@ form {
 
 .container {
   width: 100%; }
+  @media screen and (min-width: 700px) {
+    .container {
+      width: 500px;
+      margin: 0 auto; } }
   .container .open {
     width: 95%;
     margin: 100px auto;
@@ -178,7 +182,7 @@ form {
       padding: 20px;
       text-align: left; }
       .container .chatRoom .displayMessagesWrap #incoming {
-        padding: none; }
+        padding-bottom: 80px; }
         .container .chatRoom .displayMessagesWrap #incoming li {
           list-style-type: none; }
         .container .chatRoom .displayMessagesWrap #incoming .msgtime {
@@ -227,6 +231,10 @@ form {
       width: 100%;
       position: fixed;
       bottom: 0; }
+      @media screen and (min-width: 700px) {
+        .container .chatRoom .sendMessagesWrap {
+          width: 500px;
+          margin: 0 auto; } }
       .container .chatRoom .sendMessagesWrap #outgoing {
         height: 40px;
         width: 100%;
@@ -244,12 +252,14 @@ form {
           display: inline-block;
           border: none;
           cursor: pointer;
-          vertical-align: top; }
+          vertical-align: top;
+          text-align: center; }
           .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn:hover {
             background-color: #213e64; }
           .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img {
-            height: 30px;
-            width: auto; }
+            height: 38px;
+            width: auto;
+            margin: 0 auto; }
     .container .chatRoom .videoWrap {
       display: none;
       width: 100%;
@@ -279,6 +289,10 @@ form {
           height: 40px;
           position: fixed;
           bottom: 0; }
+          @media screen and (min-width: 700px) {
+            .container .chatRoom .videoWrap .videoDisplay .videoOptions {
+              width: 500px;
+              margin: 0 auto; } }
           .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn {
             background-color: #ea5455;
             color: #ffffff;
@@ -287,11 +301,13 @@ form {
             display: inline-block;
             border: none;
             cursor: pointer;
-            vertical-align: top; }
+            vertical-align: top;
+            text-align: center; }
             .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn:hover {
               background-color: #213e64; }
             .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn img {
-              height: 30px;
-              width: auto; }
+              height: 38px;
+              width: auto;
+              margin: 0 auto; }
 
 /*# sourceMappingURL=styles.css.map */

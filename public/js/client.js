@@ -1,3 +1,6 @@
+$(window).on('load', function() {
+  window.scrollTo(0,document.body.scrollHeight);
+});
 
 
 var isChannelReady = false;
@@ -32,6 +35,7 @@ var socket = io.connect();
 var myRoomID = null;
 
     $(function(){
+
         var msgSubmit = document.getElementById('outgoingSubmit');
         msgSubmit.disabled = true;
 

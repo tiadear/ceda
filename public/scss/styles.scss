@@ -44,7 +44,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
 
-.container { width: 100%;
+.container { width: 100%; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
 
     // opening app
     .open { width: 95%; margin: 100px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
@@ -117,7 +117,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         h1 { text-align: center; }
         .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
-                padding: none;
+                padding-bottom: $pad * 4;
                 li { list-style-type: none; }
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px;}
                 .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;}
@@ -131,12 +131,12 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                 }
             }
         }
-        .sendMessagesWrap { width: 100%; position: fixed; bottom: 0;
+        .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
             #outgoing { height: 40px; width: 100%; border: none; padding: 0 $pad; font-family: $sans;}
             .chatOptions {width: 100%; height: 40px;
-                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top;
+                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                     &:hover {background-color:$blue;}
-                    img {height: 30px; width: auto; }
+                    img {height: 38px; width: auto; margin: 0 auto;}
                 }
             }
         }
@@ -145,10 +145,10 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .videoDisplay { width: 100%; height: 100%;
                 #remoteVideo { width: 100%; position: relative; background-color: $black; height: 100%}
                 #localVideo { width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;}
-                .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0;
-                    .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top;
+                .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+                    .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                         &:hover {background-color:$blue;}
-                        img {height: 30px; width: auto; }
+                        img {height: 38px; width: auto; margin: 0 auto;}
                     }
                 }
             }
