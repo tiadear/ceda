@@ -163,32 +163,19 @@ io.sockets.on('connection', function(socket){
     });
 
 
-    socket.on('addUser', function(username, callback){
+    socket.on('addUser', function(user1, username, callback){
         console.log('adding user');
         //attach username to socket
         socket.username = username;
-
-        //send connection msg to user who connected
-        socket.emit('updateChat', username, 'you have connected');
-
-        //send connection msg to everyone else
-        socket.broadcast.emit('updateChat', username, 'is now online');
-
+        socket.userID = user1;
         callback(true);
     });
 
 
     socket.on('joinRoom', function(roomID, currentuser, randomuser){
-
-        //name the room
         socket.room = roomID;
-
-        //add person to the room
         socket.join(socket.room);
         console.log('added ' + currentuser + ' to room: ' + roomID);
-
-        //let everyone in the room know
-        io.sockets.in(socket.room).emit("updateChat", currentuser, 'is online');
 
         socket.emit('channelReady');
 
