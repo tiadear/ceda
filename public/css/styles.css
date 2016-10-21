@@ -171,7 +171,13 @@ form {
       .container .chatRoom .displayMessagesWrap #incoming li {
         list-style-type: none;
         padding: 10px;
-        margin: 5px; }
+        margin: 5px 0; }
+      .container .chatRoom .displayMessagesWrap #incoming .msgtime {
+        width: 100%;
+        display: block; }
+      .container .chatRoom .displayMessagesWrap #incoming .incomingMessage {
+        width: 92%;
+        display: inline-block; }
       .container .chatRoom .displayMessagesWrap #incoming #user1msg {
         background-color: #ffffff;
         color: #213e64;
@@ -188,6 +194,22 @@ form {
         -moz-border-radius: 5px;
         -ms-border-radius: 5px;
         border-radius: 5px; }
+      .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 {
+        width: 40px;
+        display: inline-block;
+        margin-left: -10px;
+        position: relative;
+        bottom: -15px; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 img {
+          width: 100%; }
+      .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 {
+        width: 40px;
+        display: inline-block;
+        margin-right: -10px;
+        position: relative;
+        bottom: -15px; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 img {
+          width: 100%; }
     .container .chatRoom .sendMessagesWrap {
       width: 100%;
       text-align: left; }
@@ -200,25 +222,8 @@ form {
       width: 100%;
       padding: 10px; }
       .container .chatRoom #videosWrap #videoDisplay video {
+        /*display: none;*/
         max-width: 100%;
         width: 320px; }
-      .container .chatRoom #videosWrap #videoDisplay button, .container .chatRoom #videosWrap #videoDisplay .open .social-login .social-btn, .container .open .social-login .chatRoom #videosWrap #videoDisplay .social-btn, .container .chatRoom #videosWrap #videoDisplay .chatChoiceWrap .chatChoices .chatChoice, .container .chatChoiceWrap .chatChoices .chatRoom #videosWrap #videoDisplay .chatChoice {
-        width: 50px;
-        background-color: #ea5455;
-        cursor: pointer;
-        text-align: center;
-        margin: 0 auto;
-        border: 1px solid #ea5455;
-        color: #ffffff;
-        border-radius: 5px; }
-      .container .chatRoom #videosWrap #swaptovideo {
-        background-color: #ea5455;
-        cursor: pointer;
-        width: 200px;
-        text-align: center;
-        margin: 0 auto;
-        padding: 5px 10px;
-        border: 1px solid #ea5455;
-        border-radius: 5px; }
 
 /*# sourceMappingURL=styles.css.map */

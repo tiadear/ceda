@@ -88,9 +88,9 @@ var myRoomID = null;
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
                 if(pastItem.user == user1username) {
-                  $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.user + ': ' + pastItem.message + '</li>');
+                  $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.user + ': ' + pastItem.message + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
                 } else {
-                  $('#incoming').prepend('<li class="incomingMessage" id="user2msg">' + pastItem.user + ': ' + pastItem.message + '</li>');
+                  $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem.user + ': ' + pastItem.message + '</li>');
                 }
                 $('#incoming').prepend('<li class="msgtime">'+ pastItem.timesent +'</li>');
             });
@@ -118,9 +118,9 @@ var myRoomID = null;
         socket.on('updateChat', function(username, data) {
           $('#incoming').append('<li class="msgtime">'+ datetime +'</li>');
           if(username == user1username) {
-            $('#incoming').append('<li class="incomingMessage" id="user1msg">' + username + ': ' + data + '</li>');
+            $('#incoming').append('<li class="incomingMessage" id="user1msg">' + username + ': ' + data + '</li><div class="speechbubble1>"<img src="/images/speechtail_white.png"></div>');
           } else {
-            $('#incoming').append('<li class="incomingMessage" id="user2msg">' + username + ': ' + data + '</li>');
+            $('#incoming').append('<div class="speechbubble2>"<img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + username + ': ' + data + '</li>');
           }
             socket.emit('message', data);
         });

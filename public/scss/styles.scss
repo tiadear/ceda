@@ -1,341 +1,141 @@
 @import 'vars';
 @import 'mixins';
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: $sans;
-    background-color: $grey;
-    margin: 0;
-}
-
-header {
-    background-color: $red;
-    .logo {
-        height: 30px;
-        width: auto;
-        img {
-            height: 100%;
-        }
+* { box-sizing: border-box;}
+body { font-family: $sans; background-color: $grey; margin: 0;}
+header { background-color: $red; 
+    .logo { height: 30px; width: auto;
+        img { height: 100%; }
     }
 }
 
-a {
-    text-decoration: none;
-    padding-top: $pad/2;             
-    text-align: center;
-    color: $red;
 
-    &:hover {
-        color: $blue;
+
+
+
+a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $red;
+    &:hover { color: $blue; }
+}
+button { border: none; background-color: $red; border-radius: (5px); color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
+    &:hover { background-color: $blue; border: solid 2px $blue; }
+}
+.htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
+h1 { @extend .htags; font-size: 1.8em; color: $red; }
+h2 { @extend .htags; font-size: 1.2em; color: $blue; }
+ul { -webkit-padding-start: 0px; margin: 0; }
+
+
+
+
+
+
+form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
+    .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; border: solid 2px $red; @include border-radius(5px); }
+    .form-input { @extend .inputs;
+        &:focus { border: solid 2px $blue; outline: none; }
+    }
+    .form-submit { @extend .inputs; color: $white;
+        &:hover { background-color: $blue; border: solid 2px $blue; }
     }
 }
 
-button {
-    border: none;
-    background-color: $red;
-    border-radius: (5px);
-    color: $white;
-    cursor: pointer;
-    font-family: $sans;
-    font-size: 1em;
-
-    &:hover {
-        background-color: $blue;
-        border: solid 2px $blue;
-    }
-}
-
-.htags {
-    font-family: $sans;
-    font-weight: 300;
-    -webkit-margin-before: 0px;
-    -webkit-margin-after: 0px;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-}
-
-h1 {
-    @extend .htags;
-    font-size: 1.8em;
-    color: $red;
-}
-
-h2 {
-    @extend .htags;
-    font-size: 1.2em;
-    color: $blue;
-}
-
-ul {
-    -webkit-padding-start: 0px;
-    margin: 0;
-}
 
 
 
-form {
-    padding: $pad;
-    margin: 0 auto;
-    font-size: 1em;
-    text-align: left;
 
-    .inputs {
-        width: 100%;
-        height: 40px;
-        font-family: $sans;
-        font-size: 1em;
-        padding: $pad/4;
-        margin: $pad/4 auto;
-        border: solid 2px $red;
-        @include border-radius(5px);
-    }
+.container { width: 100%;
 
-    .form-input {
-        @extend .inputs;
-
-        &:focus {
-            border: solid 2px $blue;
-            outline: none;
+    // opening app
+    .open { width: 100%; margin: 100px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+        .logo { height: 50px; margin: 20px 0 50px 0;
+            img { height: 100%; width: auto; margin: 0 auto; }
         }
-    }
-
-    .form-submit {
-        @extend .inputs;
-        color: $white;
-
-        &:hover {
-            background-color: $blue;
-            border: solid 2px $blue;
+        .form-login { max-width: 400px;
+            .forgot { display: block;}
         }
-    }
-}
-
-.container {
-    width: 100%;
-
-    .open {
-        width: 100%;
-        margin: 100px auto;
-        padding: $pad *2;
-        background-color: $white;
-        text-align: center;
-        @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
-        
-        .logo {
-            height: 50px;
-            margin: 20px 0 50px 0;
-            
-            img {
-                height: 100%;
-                width: auto;
-                margin: 0 auto;
+        .social-login { width: 100%; padding-top: $pad *3; text-align: center;
+            .social-btn { @extend button; display: inline-block; width: 40px; height: 40px; margin: 0 $pad;
+                &:hover { background-color: $blue; border: none; }
             }
+            #login-fb { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
+            #login-tw { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
+            #login-go { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
         }
-
-        .form-login {
-            max-width: 400px;
-
-            .forgot {
-                display: block;
-            }
-        }
-
-        .social-login {
-            width: 100%;
-            padding-top: $pad *3;
-            text-align: center;
-
-            .social-btn {
-                @extend button;
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-                margin: 0 $pad;
-
-                &:hover {
-                    background-color: $blue;
-                    border: none;
-                }
-            }
-
-            #login-fb {
-                img {
-                    height: 70%;
-                    padding-top: 25%;
-                    margin: 0 auto;
-                }
-            }
-
-            #login-tw {
-                img {
-                    height: 70%;
-                    padding-top: 25%;
-                    margin: 0 auto;
-                }
-            }
-
-            #login-go {
-                img {
-                    height: 70%;
-                    padding-top: 25%;
-                    margin: 0 auto
-                }
-            }
-        }
-
-        .notamember {
-            padding-top: $pad * 3;
-
-        }
+        .notamember { padding-top: $pad * 3; }
     } // end of open
 
 
-    nav {
-        height: 50px;
-        width: 100%;
 
-        ul {
-            width: 100%;
 
-            li {
-                background-color: $red;
-                list-style-type: none;
-                width: 25%;
-                height: 100%;
-                display: inline-block;
-                padding-bottom: 7px;
 
-                &:hover {
-                    background-color: $blue;
-                }
 
-                a {
-                    .navoption {
-
-                        img {
-                            height: 30px;
-                            margin: 10px auto 0 auto;
-                        }
-                    }
+    // nav display
+    nav { height: 50px; width: 100%;
+        ul { width: 100%;
+            li { background-color: $red; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
+                &:hover { background-color: $blue; }
+                a { 
+                    .navoption { 
+                        img { height: 30px; margin: 10px auto 0 auto; } 
+                    } 
                 }
             }
         }
     } // end of nav
 
-    .logout {
-        padding-top: 85vh;
-        text-align: right;
-    }
 
-    .chatWraps {
-        width: 100%;
-        padding: $pad*2 $pad 0;
-        text-align: center;
-    }
 
-    .chatChoiceWrap {
-        @extend .chatWraps;
 
-        .chatChoices {
-            padding: $pad*2 0;
 
-            .chatChoice {
-                @extend button;
-                width: 80%;
-                max-width: 400px;
-                height: 40px;
-                margin: $pad/2 auto;
-            }
+
+    // dash
+    .logout { padding-top: 85vh; text-align: right; }
+    .chatWraps { width: 100%; padding: $pad*2 $pad 0; text-align: center; }
+
+
+
+
+
+
+    // choose who to chat with
+    .chatChoiceWrap { @extend .chatWraps;
+        .chatChoices { padding: $pad*2 0;
+            .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; }
         }
     }
+    .oldCovosWrap { @extend .chatWraps; }
 
-    .oldCovosWrap {
-        @extend .chatWraps;
-    }
 
-    .chatRoom {
-        padding-top: $pad;
 
-        h1 {
-            text-align: center;
-        }
 
-        .displayMessagesWrap {
-            width: 100%;
-            padding: $pad;
-            text-align: left;
 
+
+
+    // actual chat room
+    .chatRoom { padding-top: $pad;
+        h1 { text-align: center; }
+        .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
-                li {
-                    list-style-type: none;
-                    padding: $pad/2;
-                    margin: $pad/4;
+                li { list-style-type: none; padding: $pad/2; margin: $pad/4 0;}
+                .msgtime { width: 100%; display: block}
+                .incomingMessage { width: 92%; display: inline-block;}
+                #user1msg { background-color: $white; color: $blue; border: solid 1px $white; @include border-radius(5px); }
+                #user2msg { background-color: $blue; color: $white; border: solid 1px $blue; @include border-radius(5px); }
+                .speechbubble1 { width: 40px; display: inline-block; margin-left: -10px; position: relative; bottom: -15px;
+                    img {width: 100%;}
                 }
-
-                #user1msg {
-                    background-color: $white;
-                    color: $blue;
-                    border: solid 1px $white;
-                    @include border-radius(5px);
-
-                }
-
-                #user2msg {
-                    background-color: $blue;
-                    color: $white;
-                    border: solid 1px $blue;
-                    @include border-radius(5px);
+                .speechbubble2 { width: 40px; display: inline-block; margin-right: -10px; position: relative; bottom: -15px;
+                    img {width: 100%;}
                 }
             }
         }
-
-        .sendMessagesWrap {
-            width: 100%;
-            text-align: left;
-
-            #outgoing {
-                width: 100%;
-                position: fixed;
-                bottom: 0;
-                border: none;
-            }
+        .sendMessagesWrap { width: 100%; text-align: left;
+            #outgoing { width: 100%; position: fixed; bottom: 0; border: none; }
         }
 
-        #videosWrap {
-            width: 100%;
-            padding: 10px;
-
+        #videosWrap { width: 100%; padding: 10px;
             #videoDisplay {
-                video {
-                    //display: none;
-                    max-width: 100%;
-                    width: 320px;
-                }
-
-                button {
-                    width: 50px;
-                    background-color: $red;
-                    cursor: pointer;
-                    text-align: center;
-                    margin: 0 auto;
-                    border: 1px solid $red;
-                    color: $white;
-                    border-radius: 5px;
-                }
-            }
-
-            #swaptovideo {
-                background-color: $red;
-                cursor: pointer;
-                width: 200px;
-                text-align: center;
-                margin: 0 auto;
-                padding: 5px 10px;
-                border: 1px solid $red;
-                border-radius: 5px;
+                video { /*display: none;*/ max-width: 100%; width: 320px; }
             }
         }
     }
