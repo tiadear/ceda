@@ -16,13 +16,24 @@ block content
 					ul#incoming
 				.sendMessagesWrap
 					input#outgoing(type='text')
-					button.btn.btn-primary#outgoingSubmit(type='submit') Submit
+					.chatOptions
+						.chat-btn#chat-btn-image
+							img(src='/images/icon-video-btn-image.png')
+						.chat-btn#chat-btn-video
+							img(src='/images/icon-video-btn-video.png')
+						.chat-btn#chat-btn-block
+							img(src='/images/icon-video-btn-block.png')
+						button.chat-btn#outgoingSubmit(type='submit') Submit
 				#videosWrap
 					#videoDisplay
 						video#localVideo
 						video#remoteVideo
-						.videoButtons
-							button.btn.btn-primary#startButton(type='button') Start
-							button.btn.btn-primary#callButton(type='button') Call
-							button.btn.btn-primary#hangupButton(type='button') Hang Up
-							button.btn.btn-primary#muteButton(type='button') Mute
+						.videoOptions
+							.chat-btn#startButton
+								img(src='/images/icon-video-btn-start.png')
+							.chat-btn#callButton
+								img(src='/images/icon-video-btn-call.png')
+							.chat-btn#muteButton
+								img(src='/images/icon-video-btn-mute.png')
+							.chat-btn#hangupButton
+								img(src='/images/icon-video-btn-hangup.png')

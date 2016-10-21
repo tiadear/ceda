@@ -205,13 +205,23 @@ router.get('/chatpeer', function(req, res) {
             });
         },
         function(user1, user1name, callback) {
-            User.random(function(err, user) {
-                if (err) throw err;
-                var randomPeer = user._id;
-                var randomUsername = user.username;
-                console.log('user 2 is: ' + randomUsername);
-                callback(null, user1, user1name, randomPeer, randomUsername);
-            });
+
+            function returnRandom(currentuser) {
+
+                User.random(function(err, user) {
+                    if (err) throw err;
+                    if(String(user._id) != String(currentuser)) {
+                        var randomPeer = user._id;
+                        var randomUsername = user.username;
+                        console.log('user 2 is: ' + randomUsername);
+                        callback(null, user1, user1name, randomPeer, randomUsername);
+                    } else {
+                       console.log('random user is the same as current user');
+                       returnRandom(user._id);
+                    }
+                });
+            }
+            returnRandom(user1);
         },
         function(user1, user1name, user2, user2name, callback) {
             console.log('looking for a room...');

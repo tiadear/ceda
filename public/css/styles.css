@@ -25,7 +25,6 @@ a {
 button, .container .open .social-login .social-btn, .container .chatChoiceWrap .chatChoices .chatChoice {
   border: none;
   background-color: #ea5455;
-  border-radius: 5px;
   color: #ffffff;
   cursor: pointer;
   font-family: "Questrial", sans-serif;
@@ -33,6 +32,8 @@ button, .container .open .social-login .social-btn, .container .chatChoiceWrap .
   button:hover, .container .open .social-login .social-btn:hover, .container .chatChoiceWrap .chatChoices .chatChoice:hover {
     background-color: #213e64;
     border: solid 2px #213e64; }
+  button:focus, .container .open .social-login .social-btn:focus, .container .chatChoiceWrap .chatChoices .chatChoice:focus {
+    outline: none; }
 
 .htags, h1, h2 {
   font-family: "Questrial", sans-serif;
@@ -83,7 +84,7 @@ form {
 .container {
   width: 100%; }
   .container .open {
-    width: 100%;
+    width: 95%;
     margin: 100px auto;
     padding: 40px;
     background-color: #ffffff;
@@ -111,7 +112,11 @@ form {
         display: inline-block;
         width: 40px;
         height: 40px;
-        margin: 0 20px; }
+        margin: 0 20px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        border-radius: 5px; }
         .container .open .social-login .social-btn:hover {
           background-color: #213e64;
           border: none; }
@@ -141,7 +146,7 @@ form {
         height: 100%;
         display: inline-block;
         padding-bottom: 7px; }
-        .container nav ul li:hover {
+        .container nav ul li:hover, .container nav ul li:focus {
           background-color: #213e64; }
         .container nav ul li a .navoption img {
           height: 30px;
@@ -159,7 +164,11 @@ form {
       width: 80%;
       max-width: 400px;
       height: 40px;
-      margin: 10px auto; }
+      margin: 10px auto;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px; }
   .container .chatRoom {
     padding-top: 20px; }
     .container .chatRoom h1 {
@@ -168,61 +177,85 @@ form {
       width: 100%;
       padding: 20px;
       text-align: left; }
-      .container .chatRoom .displayMessagesWrap #incoming li {
-        list-style-type: none;
-        padding: 10px;
-        margin: 5px 0; }
-      .container .chatRoom .displayMessagesWrap #incoming .msgtime {
-        width: 100%;
-        display: block; }
-      .container .chatRoom .displayMessagesWrap #incoming .incomingMessage {
-        width: 92%;
-        display: inline-block; }
-      .container .chatRoom .displayMessagesWrap #incoming #user1msg {
-        background-color: #ffffff;
-        color: #213e64;
-        border: solid 1px #ffffff;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        -ms-border-radius: 5px;
-        border-radius: 5px; }
-      .container .chatRoom .displayMessagesWrap #incoming #user2msg {
-        background-color: #213e64;
-        color: #ffffff;
-        border: solid 1px #213e64;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        -ms-border-radius: 5px;
-        border-radius: 5px; }
-      .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 {
-        width: 40px;
-        display: inline-block;
-        margin-left: -10px;
-        position: relative;
-        bottom: -15px; }
-        .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 img {
-          width: 100%; }
-      .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 {
-        width: 40px;
-        display: inline-block;
-        margin-right: -10px;
-        position: relative;
-        bottom: -15px; }
-        .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 img {
-          width: 100%; }
+      .container .chatRoom .displayMessagesWrap #incoming {
+        padding: none; }
+        .container .chatRoom .displayMessagesWrap #incoming li {
+          list-style-type: none; }
+        .container .chatRoom .displayMessagesWrap #incoming .msgtime {
+          width: 100%;
+          display: block;
+          font-size: 0.6em;
+          margin-bottom: -10px; }
+        .container .chatRoom .displayMessagesWrap #incoming .incomingMessage {
+          width: 92%;
+          display: inline-block;
+          padding: 10px;
+          margin-bottom: 20px; }
+        .container .chatRoom .displayMessagesWrap #incoming #user1msg {
+          background-color: #ffffff;
+          color: #213e64;
+          border: solid 1px #ffffff;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          border-radius: 5px; }
+        .container .chatRoom .displayMessagesWrap #incoming #user2msg {
+          background-color: #213e64;
+          color: #ffffff;
+          border: solid 1px #213e64;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          border-radius: 5px; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 {
+          width: 40px;
+          display: inline-block;
+          margin-left: -10px;
+          position: relative;
+          bottom: -15px; }
+          .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 img {
+            width: 100%; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 {
+          width: 40px;
+          display: inline-block;
+          margin-right: -10px;
+          position: relative;
+          bottom: -15px; }
+          .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 img {
+            width: 100%; }
     .container .chatRoom .sendMessagesWrap {
       width: 100%;
-      text-align: left; }
+      position: fixed;
+      bottom: 0; }
       .container .chatRoom .sendMessagesWrap #outgoing {
+        height: 40px;
         width: 100%;
-        position: fixed;
-        bottom: 0;
-        border: none; }
+        border: none;
+        padding: 0 20px;
+        font-family: "Questrial", sans-serif; }
+      .container .chatRoom .sendMessagesWrap .chatOptions {
+        width: 100%;
+        height: 40px; }
+        .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn {
+          background-color: #ea5455;
+          color: #ffffff;
+          width: 25%;
+          height: 100%;
+          display: inline-block;
+          border: none;
+          cursor: pointer;
+          vertical-align: top; }
+          .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn:hover {
+            background-color: #213e64; }
+          .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img {
+            height: 30px;
+            width: auto; }
     .container .chatRoom #videosWrap {
+      display: none;
       width: 100%;
       padding: 10px; }
       .container .chatRoom #videosWrap #videoDisplay video {
-        /*display: none;*/
+        display: none;
         max-width: 100%;
         width: 320px; }
 

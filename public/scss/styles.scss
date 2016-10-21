@@ -16,8 +16,9 @@ header { background-color: $red;
 a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $red;
     &:hover { color: $blue; }
 }
-button { border: none; background-color: $red; border-radius: (5px); color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
+button { border: none; background-color: $red; color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
     &:hover { background-color: $blue; border: solid 2px $blue; }
+    &:focus { outline: none;}
 }
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
 h1 { @extend .htags; font-size: 1.8em; color: $red; }
@@ -46,7 +47,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 .container { width: 100%;
 
     // opening app
-    .open { width: 100%; margin: 100px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+    .open { width: 95%; margin: 100px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
         .logo { height: 50px; margin: 20px 0 50px 0;
             img { height: 100%; width: auto; margin: 0 auto; }
         }
@@ -54,7 +55,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .forgot { display: block;}
         }
         .social-login { width: 100%; padding-top: $pad *3; text-align: center;
-            .social-btn { @extend button; display: inline-block; width: 40px; height: 40px; margin: 0 $pad;
+            .social-btn { @extend button; display: inline-block; width: 40px; height: 40px; margin: 0 $pad; @include border-radius(5px);
                 &:hover { background-color: $blue; border: none; }
             }
             #login-fb { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
@@ -73,7 +74,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
     nav { height: 50px; width: 100%;
         ul { width: 100%;
             li { background-color: $red; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
-                &:hover { background-color: $blue; }
+                &:hover, &:focus { background-color: $blue; }
                 a { 
                     .navoption { 
                         img { height: 30px; margin: 10px auto 0 auto; } 
@@ -100,7 +101,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
     // choose who to chat with
     .chatChoiceWrap { @extend .chatWraps;
         .chatChoices { padding: $pad*2 0;
-            .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; }
+            .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
     .oldCovosWrap { @extend .chatWraps; }
@@ -116,9 +117,10 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         h1 { text-align: center; }
         .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
-                li { list-style-type: none; padding: $pad/2; margin: $pad/4 0;}
-                .msgtime { width: 100%; display: block}
-                .incomingMessage { width: 92%; display: inline-block;}
+                padding: none;
+                li { list-style-type: none; }
+                .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px;}
+                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;}
                 #user1msg { background-color: $white; color: $blue; border: solid 1px $white; @include border-radius(5px); }
                 #user2msg { background-color: $blue; color: $white; border: solid 1px $blue; @include border-radius(5px); }
                 .speechbubble1 { width: 40px; display: inline-block; margin-left: -10px; position: relative; bottom: -15px;
@@ -129,13 +131,19 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                 }
             }
         }
-        .sendMessagesWrap { width: 100%; text-align: left;
-            #outgoing { width: 100%; position: fixed; bottom: 0; border: none; }
+        .sendMessagesWrap { width: 100%; position: fixed; bottom: 0;
+            #outgoing { height: 40px; width: 100%; border: none; padding: 0 $pad; font-family: $sans;}
+            .chatOptions {width: 100%; height: 40px;
+                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top;
+                    &:hover {background-color:$blue;}
+                    img {height: 30px; width: auto; }
+                }
+            }
         }
 
-        #videosWrap { width: 100%; padding: 10px;
+        #videosWrap { display: none; width: 100%; padding: 10px;
             #videoDisplay {
-                video { /*display: none;*/ max-width: 100%; width: 320px; }
+                video { display: none; max-width: 100%; width: 320px; }
             }
         }
     }
