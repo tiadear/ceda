@@ -1,45 +1,43 @@
 extends layout
-
 block content
 	.container
-		.open
-			.logo
-				img#logo(src='/images/ceda2.png')
-			if (!user)
+		if (!user)
+			.open
+				.logo
+					img#logo(src='/images/ceda2.png')
+				h1 Login
+				.social-login
+					a(href="/auth/facebook")
+						.social-btn#login-fb
+							img(src='/images/facebook.png')
+					a(href="/auth/twitter")
+						.social-btn#login-tw
+							img(src='/images/twitter.png')
+					a(href="/auth/google")
+						.social-btn#login-go
+							img(src='/images/googleplus.png')
 				form.form-login(role='form', action="/login", method="POST")
 					input.form-input(type="text", name="email", placeholder="Email")
 					input.form-input(type="password", name="password", placeholder="Password")
 					button.form-submit(type="submit") Submit
 					a.forgot(href="forgot") I forgot my password
-				.social-login
-					a(href="/auth/facebook")
-						button.social-btn#login-fb(type='button')
-					a(href="/auth/twitter")
-						button.social-btn#login-tw(type='button')
-					a(href="/auth/google")
-						button.social-btn#login-go(type='button')
 				.notamember
-					p not a member? 
-					a(href="/signup") Sign Up
-			if (user)
-				if (user.username)
-					p You are currently logged in as #{user.username}
+					p Not a member? 
+					a.signup(href="/signup") Sign Up
+		if (user)
+			include includes/nav.jade
+			if (user.username)
+				h1 Hi #{user.username}
+				.logout
 					a(href="/logout") Logout
+					br
 					a(href='/deleteaccount') Delete my account
-					div.dashoption
-						div#option1
-							a(href="/chat") Chat
-						div#option2
-							a(href="/settings") Settings
-						div#option3
-							a(href="/forum") Forum
-				else
-					form.usernameRequest(role='form', method='post', action='/username')
-						.form-group
-							p Plesae provide a username
-							p Remember ceda is anonymous so choose a username that won't reveal any details about you
-							p So don't choose your twitter handle
-							input.form-control#username(type='text', name='username', placeholder='Username')
-							input(type='hidden', name='email', value='#{user.email}')
-						button.btn.btn-default(type='submit') Submit
+			else
+				form.usernameRequest(role='form', method='post', action='/username')
+					p Plesae provide a username
+					p Remember ceda is anonymous so choose a username that won't reveal any details about you
+					p So don't choose your twitter handle
+					input.form-input(type='text', name='username', placeholder='Username')
+					input(type='hidden', name='email', value='#{user.email}')
+					button.form-submit(type="submit") Submit
 

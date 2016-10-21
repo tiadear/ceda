@@ -205,13 +205,23 @@ router.get('/chatpeer', function(req, res) {
             });
         },
         function(user1, user1name, callback) {
-            User.random(function(err, user) {
-                if (err) throw err;
-                var randomPeer = user._id;
-                var randomUsername = user.username;
-                console.log('user 2 is: ' + randomUsername);
-                callback(null, user1, user1name, randomPeer, randomUsername);
-            });
+
+            function returnRandom(currentuser) {
+
+                User.random(function(err, user) {
+                    if (err) throw err;
+                    if(String(user._id) != String(currentuser)) {
+                        var randomPeer = user._id;
+                        var randomUsername = user.username;
+                        console.log('user 2 is: ' + randomUsername);
+                        callback(null, user1, user1name, randomPeer, randomUsername);
+                    } else {
+                       console.log('random user is the same as current user');
+                       returnRandom(user._id);
+                    }
+                });
+            }
+            returnRandom(user1);
         },
         function(user1, user1name, user2, user2name, callback) {
             console.log('looking for a room...');
@@ -221,7 +231,8 @@ router.get('/chatpeer', function(req, res) {
                     console.log('room was found');
                     req.room = room;
                     req.usersInRoom = [user1name, user2name];
-                    callback(null, req.room, req.usersInRoom);
+                    req.userIDs = [user1, user2];
+                    callback(null, req.room, req.usersInRoom, req.userIDs);
                 } else {
                     console.log('room was not found, looking again...')
                     Room.findOne({user_init : user2, user_resp : user1}, function(err, room) {
@@ -229,8 +240,9 @@ router.get('/chatpeer', function(req, res) {
                         if (room) {
                             console.log('room was found');
                             req.room = room;
-                                    req.usersInRoom = [user1name, user2name];
-                                    callback(null, req.room, req.usersInRoom);
+                            req.usersInRoom = [user1name, user2name];
+                            req.userIDs = [user1, user2];
+                            callback(null, req.room, req.usersInRoom, req.userIDs);
                         } else {
                             console.log('no room found');
                             // create a new room!
@@ -248,7 +260,8 @@ router.get('/chatpeer', function(req, res) {
                                     console.log('saving user');
                                     req.room = newRoom;
                                     req.usersInRoom = [user1name, user2name];
-                                    callback(null, req.room, req.usersInRoom);
+                                    req.userIDs = [user1, user2];
+                                    callback(null, req.room, req.usersInRoom, req.userIDs);
                                 }
                             });
                         }
@@ -268,7 +281,8 @@ router.get('/chatpeer', function(req, res) {
             }
             res.render('chatroom', {
                 room : req.room,
-                usersInRoom : req.usersInRoom
+                usersInRoom : req.usersInRoom,
+                userIDs : req.userIDs
             });
         });
     });

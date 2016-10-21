@@ -3,7 +3,8 @@
 
 body {
   font-family: "Questrial", sans-serif;
-  background-color: #ebebeb; }
+  background-color: #ebebeb;
+  margin: 0; }
 
 header {
   background-color: #ea5455; }
@@ -14,14 +15,45 @@ header {
       height: 100%; }
 
 a {
-  text-decoration: none; }
+  text-decoration: none;
+  padding-top: 10px;
+  text-align: center;
+  color: #ea5455; }
+  a:hover {
+    color: #213e64; }
 
-button {
+button, .container .open .social-login .social-btn, .container .chatChoiceWrap .chatChoices .chatChoice {
   border: none;
   background-color: #ea5455;
-  border-radius: 5px;
   color: #ffffff;
-  cursor: pointer; }
+  cursor: pointer;
+  font-family: "Questrial", sans-serif;
+  font-size: 1em; }
+  button:hover, .container .open .social-login .social-btn:hover, .container .chatChoiceWrap .chatChoices .chatChoice:hover {
+    background-color: #213e64;
+    border: solid 2px #213e64; }
+  button:focus, .container .open .social-login .social-btn:focus, .container .chatChoiceWrap .chatChoices .chatChoice:focus {
+    outline: none; }
+
+.htags, h1, h2 {
+  font-family: "Questrial", sans-serif;
+  font-weight: 300;
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px; }
+
+h1 {
+  font-size: 1.8em;
+  color: #ea5455; }
+
+h2 {
+  font-size: 1.2em;
+  color: #213e64; }
+
+ul {
+  -webkit-padding-start: 0px;
+  margin: 0; }
 
 form {
   padding: 20px;
@@ -32,24 +64,29 @@ form {
     width: 100%;
     height: 40px;
     font-family: "Questrial", sans-serif;
+    font-size: 1em;
     padding: 5px;
     margin: 5px auto;
-    color: #ea5455;
     border: solid 2px #ea5455;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     border-radius: 5px; }
+  form .form-input:focus {
+    border: solid 2px #213e64;
+    outline: none; }
   form .form-submit {
     color: #ffffff; }
+    form .form-submit:hover {
+      background-color: #213e64;
+      border: solid 2px #213e64; }
 
 .container {
-  padding: 20px;
   width: 100%; }
   .container .open {
-    width: 100%;
+    width: 95%;
     margin: 100px auto;
-    padding: 20px;
+    padding: 40px;
     background-color: #ffffff;
     text-align: center;
     -webkit-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
@@ -66,66 +103,160 @@ form {
     .container .open .form-login {
       max-width: 400px; }
       .container .open .form-login .forgot {
-        display: block;
-        padding-top: 20px;
-        text-align: center;
-        color: #213e64; }
-        .container .open .form-login .forgot:hover {
-          color: #ea5455; }
+        display: block; }
     .container .open .social-login {
       width: 100%;
+      padding-top: 60px;
       text-align: center; }
       .container .open .social-login .social-btn {
+        display: inline-block;
         width: 40px;
         height: 40px;
-        margin: 0 10px; }
-
-#chooseuserWrap {
-  display: none; }
-  #chooseuserWrap #usersList li {
-    cursor: pointer; }
-
-#contentWrap {
-  display: none; }
-  #contentWrap #userDisplay {
-    float: left;
-    height: 100vh;
-    width: 20%;
-    border-right: solid 1px #000000;
-    padding: 10px; }
-    #contentWrap #userDisplay #users li {
-      cursor: pointer; }
-  #contentWrap #chatWrap {
-    float: left;
-    height: 100vh;
-    width: 30%;
-    padding: 10px; }
-  #contentWrap #videosWrap {
-    float: left;
-    height: 100vh;
-    border-left: solid 1px #000000;
-    width: 50%;
-    padding: 10px; }
-    #contentWrap #videosWrap #videoDisplay video {
-      max-width: 100%;
-      width: 320px; }
-    #contentWrap #videosWrap #videoDisplay button {
-      width: 50px;
-      background-color: #ea5455;
-      cursor: pointer;
-      text-align: center;
-      margin: 0 auto;
-      border: 1px solid #ea5455;
-      color: #ffffff;
+        margin: 0 20px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        border-radius: 5px; }
+        .container .open .social-login .social-btn:hover {
+          background-color: #213e64;
+          border: none; }
+      .container .open .social-login #login-fb img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+      .container .open .social-login #login-tw img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+      .container .open .social-login #login-go img {
+        height: 70%;
+        padding-top: 25%;
+        margin: 0 auto; }
+    .container .open .notamember {
+      padding-top: 60px; }
+  .container nav {
+    height: 50px;
+    width: 100%; }
+    .container nav ul {
+      width: 100%; }
+      .container nav ul li {
+        background-color: #ea5455;
+        list-style-type: none;
+        width: 25%;
+        height: 100%;
+        display: inline-block;
+        padding-bottom: 7px; }
+        .container nav ul li:hover, .container nav ul li:focus {
+          background-color: #213e64; }
+        .container nav ul li a .navoption img {
+          height: 30px;
+          margin: 10px auto 0 auto; }
+  .container .logout {
+    padding-top: 85vh;
+    text-align: right; }
+  .container .chatWraps, .container .chatChoiceWrap, .container .oldCovosWrap {
+    width: 100%;
+    padding: 40px 20px 0;
+    text-align: center; }
+  .container .chatChoiceWrap .chatChoices {
+    padding: 40px 0; }
+    .container .chatChoiceWrap .chatChoices .chatChoice {
+      width: 80%;
+      max-width: 400px;
+      height: 40px;
+      margin: 10px auto;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
       border-radius: 5px; }
-    #contentWrap #videosWrap #swaptovideo {
-      background-color: #ea5455;
-      cursor: pointer;
-      width: 200px;
-      text-align: center;
-      margin: 0 auto;
-      padding: 5px 10px;
-      border: 1px solid #ea5455;
-      border-radius: 5px; }
+  .container .chatRoom {
+    padding-top: 20px; }
+    .container .chatRoom h1 {
+      text-align: center; }
+    .container .chatRoom .displayMessagesWrap {
+      width: 100%;
+      padding: 20px;
+      text-align: left; }
+      .container .chatRoom .displayMessagesWrap #incoming {
+        padding: none; }
+        .container .chatRoom .displayMessagesWrap #incoming li {
+          list-style-type: none; }
+        .container .chatRoom .displayMessagesWrap #incoming .msgtime {
+          width: 100%;
+          display: block;
+          font-size: 0.6em;
+          margin-bottom: -10px; }
+        .container .chatRoom .displayMessagesWrap #incoming .incomingMessage {
+          width: 92%;
+          display: inline-block;
+          padding: 10px;
+          margin-bottom: 20px; }
+        .container .chatRoom .displayMessagesWrap #incoming #user1msg {
+          background-color: #ffffff;
+          color: #213e64;
+          border: solid 1px #ffffff;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          border-radius: 5px; }
+        .container .chatRoom .displayMessagesWrap #incoming #user2msg {
+          background-color: #213e64;
+          color: #ffffff;
+          border: solid 1px #213e64;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          border-radius: 5px; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 {
+          width: 40px;
+          display: inline-block;
+          margin-left: -10px;
+          position: relative;
+          bottom: -15px; }
+          .container .chatRoom .displayMessagesWrap #incoming .speechbubble1 img {
+            width: 100%; }
+        .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 {
+          width: 40px;
+          display: inline-block;
+          margin-right: -10px;
+          position: relative;
+          bottom: -15px; }
+          .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 img {
+            width: 100%; }
+    .container .chatRoom .sendMessagesWrap {
+      width: 100%;
+      position: fixed;
+      bottom: 0; }
+      .container .chatRoom .sendMessagesWrap #outgoing {
+        height: 40px;
+        width: 100%;
+        border: none;
+        padding: 0 20px;
+        font-family: "Questrial", sans-serif; }
+      .container .chatRoom .sendMessagesWrap .chatOptions {
+        width: 100%;
+        height: 40px; }
+        .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn {
+          background-color: #ea5455;
+          color: #ffffff;
+          width: 25%;
+          height: 100%;
+          display: inline-block;
+          border: none;
+          cursor: pointer;
+          vertical-align: top; }
+          .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn:hover {
+            background-color: #213e64; }
+          .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img {
+            height: 30px;
+            width: auto; }
+    .container .chatRoom #videosWrap {
+      display: none;
+      width: 100%;
+      padding: 10px; }
+      .container .chatRoom #videosWrap #videoDisplay video {
+        display: none;
+        max-width: 100%;
+        width: 320px; }
 
 /*# sourceMappingURL=styles.css.map */

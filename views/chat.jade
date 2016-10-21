@@ -1,14 +1,14 @@
 extends layout
 block content
-	h1 #{user.username} Who would you like to talk to?
-	a(href='/chatprof')
-		button.chatChoice#chatProfessional(type='button') Professional
-	a(href='/chatpeer')
-		button.chatChoice#chatPeer(type='button') Peer
-	if(professional)
-		ul
-			li
-			li
-			li
-	.oldCovosWrap
-		ul#oldConvos
+	.container
+		include includes/nav.jade
+		.chatChoiceWrap
+			h1 Chat
+			.chatChoices
+				a(href='/chatprof')
+					button.chatChoice#chatProfessional(type='button') Talk to a professional
+				a(href='/chatpeer')
+					button.chatChoice#chatPeer(type='button') Talk to a stranger
+		.oldCovosWrap
+			h2 History
+			ul#oldConvos
