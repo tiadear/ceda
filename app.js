@@ -27,7 +27,7 @@ var favicon = require('static-favicon'),
 
 // connect to port
 var port = process.env.PORT || 3000;
-app.listen(port, function(){
+server.listen(port, function() {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
