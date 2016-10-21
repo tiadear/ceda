@@ -3,7 +3,6 @@ const   path = require('path'),
         express = require('express'),
         app = express(),
         server = require('http').createServer(app),
-        port = 3000,
         io = require('socket.io').listen(server),
         passport = require('passport'),
         nodemailer = require('nodemailer'),
@@ -26,7 +25,7 @@ var favicon = require('static-favicon'),
 
 
 // connect to port
-var port_number = server.listen(process.enc.PORT || 3000);
+var port_number = server.listen(process.env.PORT || 3000);
 app.listen(port_number);
 
 
