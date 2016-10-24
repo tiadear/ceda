@@ -185,6 +185,17 @@ var myRoomID = null;
           $('.videoWrap').show();
         });
 
+        //swap to video chat
+        $('#switchToChat').on('click touch', function(){
+          var videomode = false;
+          hangup();
+          stop();
+          console.log('switching to chat');
+          $('.displayMessagesWrap').show();
+          $('.sendMessagesWrap').show();
+          $('.videoWrap').hide();
+        });
+
 
 
 
