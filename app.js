@@ -26,8 +26,9 @@ var favicon = require('static-favicon'),
 
 
 // connect to port
-const PORT = process.env.PORT || 0.0.0.0;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+console.log(PORT);
+app.listen(PORT, function() {
     console.log('Our app is running on port ${ PORT }');
 });
 
