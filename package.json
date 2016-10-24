@@ -1,7 +1,8 @@
 {
   "name": "ceda",
   "version": "1.0.0",
-  "engines" : {
+  "main": "app.js",
+  "engines": {
     "node" : "4.2.4"
     },
   "scripts": {
