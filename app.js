@@ -1,4 +1,4 @@
-console.log('something');
+
 const   path = require('path'),
         express = require('express'),
         app = express(),
