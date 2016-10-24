@@ -1,4 +1,5 @@
 
  module.exports = {
-  'url' : 'mongodb://tiadear:Seventy3#limes@ds035796.mlab.com:35796/ceda'
+  'url' : 'mongodb://egghead:Seventy3#limes@ds031167.mlab.com:31167/heroku_s3jmfw6n
+'
 }
