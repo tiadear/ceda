@@ -23,7 +23,7 @@ var favicon = require('static-favicon'),
 
 
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 // connect to port
 app.listen(process.env.PORT || 3000, function(){
@@ -42,7 +42,7 @@ var routes = require('./routes/index');
 
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // set up views
