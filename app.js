@@ -42,7 +42,7 @@ var routes = require('./routes/index');
 
 
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // set up views
@@ -67,7 +67,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(flash());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 app.use('/', routes);
