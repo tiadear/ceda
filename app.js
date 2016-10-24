@@ -1,4 +1,4 @@
-
+console.log('something');
 const   path = require('path'),
         express = require('express'),
         app = express(),
@@ -26,12 +26,9 @@ var favicon = require('static-favicon'),
 
 
 // connect to port
-const PORT = process.env.PORT || 3000;
-console.log(PORT);
-app.listen(PORT, function() {
-    console.log('Our app is running on port ${ PORT }');
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
-
 
 
 module.exports = app;
