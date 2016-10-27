@@ -32,6 +32,7 @@ module.exports = new FacebookStrategy({
                 newUser.provider = 'facebook';
                 newUser.facebook =  profile._json;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {

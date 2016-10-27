@@ -7,6 +7,7 @@ var userSchema = mongoose.Schema({
 	username: String,
 	password: String,
 	email: String,
+	userType: Boolean,
 	resetPasswordToken: String,
 	resetPasswordExpires: Date,
 	firstName: String,

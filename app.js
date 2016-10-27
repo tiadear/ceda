@@ -21,16 +21,19 @@ var favicon = require('static-favicon'),
     debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
+app.use(express.static(__dirname + '/public'));
 
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 // connect to port
-app.listen(process.env.PORT || 3000, function(){
+server.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
 
+
+
+// module exports
 module.exports = app;
 
 
@@ -38,9 +41,7 @@ module.exports = app;
 
 // routes
 var routes = require('./routes/index');
-
-
-
+var chat = require('./routes/chat');
 
 
 
@@ -67,12 +68,14 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(flash());
 app.use(passport.session());
+//app.use(express.static(path.join(__dirname, 'public')));
 
 
 
+
+// general
 app.use('/', routes);
-
-
+app.use('/chat', chat);
 
 
 
@@ -145,14 +148,10 @@ app.use(function(err, req, res, next) {
 
 
 // socket stuff
-var users = {}; //people
-var rooms = {};
-var sockets = []; //clients
 
-
+var numClients = {};
 var chatHistory = require('./models/chatHistory');
 var Room = require('./models/room.js');
-
 
 io.sockets.on('connection', function(socket){
 
@@ -160,7 +159,6 @@ io.sockets.on('connection', function(socket){
         // for a real app, would be room-only (not broadcast)
         socket.emit('message', message);
     });
-
 
     socket.on('addUser', function(user1, username, callback){
         console.log('adding user');
@@ -170,15 +168,24 @@ io.sockets.on('connection', function(socket){
         callback(true);
     });
 
-
     socket.on('joinRoom', function(roomID, currentuser, randomuser){
         socket.room = roomID;
-        socket.join(socket.room);
-        console.log('added ' + currentuser + ' to room: ' + roomID);
+        
+        console.log('numClients: '+numClients[socket.room]);
 
-        socket.emit('channelReady');
-
-        socket.emit('alertPeer', randomuser, currentuser);
+        if(numClients[socket.room] === undefined || (numClients[socket.room] = 0)) {
+            numClients[socket.room] = 1;
+            console.log('added ' + currentuser + ' to room: ' + roomID);
+            socket.join(socket.room);
+            socket.emit('roomOpened', socket.room, socket.id);
+            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
+        } else {
+            numClients[socket.room]++;
+            console.log('added ' + currentuser + ' to room: ' + roomID);
+            socket.join(socket.room);
+            socket.emit('channelReady', socket.room, socket.id);
+            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
+        }
 
         chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
             if(err) throw err;
@@ -189,31 +196,15 @@ io.sockets.on('connection', function(socket){
         });
     });
 
-
     socket.on('leaveRoom', function(userselected, currentuser){
         socket.leave(socket.room);
     });
 
-
-    socket.on('disconnect', function(data){
-        if(typeof users[socket.id] !== 'undefined') {
-            //let everyone know they left
-            socket.broadcast.emit('updateChat', socket.username, ' has disconnected');
-
-            //remove the username from the array
-            delete users[socket.id];
-
-            updateUsers();
-        }
-    });
-
-
     socket.on('userTyping', function(data) {
-        if(typeof users[socket.id] !== 'undefined') {
-            io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: users[socket.id].username});
-        }
-    });
 
+            io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: socket.username});
+        
+    });
 
     socket.on('sendChat', function(data) {
         //send a msg
@@ -238,6 +229,10 @@ io.sockets.on('connection', function(socket){
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
         }
+    });
+
+    socket.on('disconnect', function() {
+        numClients[socket.room]--;
     });
 
 });
