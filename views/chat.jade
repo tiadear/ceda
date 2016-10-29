@@ -12,7 +12,8 @@ block content
 		if (history)
 			.oldCovosWrap
 				h2 History
-				p #{history}
 				ul#oldConvos
 					for item in history
-						li item
+						for i in item
+							li
+								p=i

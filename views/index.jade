@@ -28,10 +28,20 @@ block content
 			include includes/nav.jade
 			if (user.username)
 				h1 Hi #{user.username}
-				.logout
-					a(href="/logout") Logout
-					br
-					a(href='/deleteaccount') Delete my account
+				.circle
+				.history
+					ul.recentHistory
+						li.historyItem
+							.subject
+								p #{history}
+							.time
+							.icon
+								img(src='images/icon-phone.png')
+				.base
+					.logout
+						a(href="/logout") Logout
+						br
+						a(href='/deleteaccount') Delete my account
 			else
 				form.usernameRequest(role='form', method='post', action='/username')
 					p Plesae provide a username

@@ -89,6 +89,22 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
 
+    .history {width: 100%; height: auto; padding-top: $pad*2;
+        ul { width: 100%;
+            li { width: 100%; background-color: $white; padding: 5px $pad; color: $blue; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+                .subject { font-size: 1em; }
+                .time {  font-size: 0.8em; }
+                .icon { float: right; }
+            }
+        }
+    }
+
+
+
+
+
+
+
     // dash
     .logout { padding-top: 85vh; text-align: right; }
     .chatWraps { width: 100%; padding: $pad*2 $pad 0; text-align: center; }
