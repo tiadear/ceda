@@ -1,3 +1,6 @@
+$(window).on('load', function() {
+  window.scrollTo(0,document.body.scrollHeight);
+});
 
 
 var isChannelReady = false;
@@ -32,6 +35,7 @@ var socket = io.connect();
 var myRoomID = null;
 
     $(function(){
+
         var msgSubmit = document.getElementById('outgoingSubmit');
         msgSubmit.disabled = true;
 
@@ -39,15 +43,18 @@ var myRoomID = null;
             e.preventDefault();
         });
 
-
         if(roomID) {
             socket.emit('joinRoom', roomID, user1username, user2username);
-            socket.emit('addUser', user1username, function(data){
+            socket.emit('addUser', user1, user1username, function(data){
                 if(data) {
                     console.log(user1username + ' has been added');
                     msgSubmit.disabled = false;
 
                     $('#outgoing').unbind('keypress');
+
+                    $('#outgoing').on('click touch', function() {
+
+                    });
 
                     //when something is entered into the outgoing message box
                     $('#outgoing').keypress(function(e) {
@@ -85,10 +92,27 @@ var myRoomID = null;
             console.log(chatInitiator + ' has sent a message to ' + peerToBeAlerted);
         });
 
+        function formatDate(d) {
+          var day = d.getDate();
+          var month = d.getMonth();
+          var year = d.getFullYear();
+          var hour = d.getHours();
+          var minutes = d.getMinutes();
+          return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+        }
+
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
-                $('#incoming').prepend('<li>' + pastItem.timesent +  '</li>');
-                $('#incoming').prepend('<li>' + pastItem.user + ' : ' + pastItem.message +  '</li>');
+                if(pastItem.user == user1username) {
+                  $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.message + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                } else {
+                  $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem.message + '</li>');
+                }
+
+                var date = new Date(pastItem.timesent);
+                var dateformat = formatDate(date);
+                
+                $('#incoming').prepend('<li class="msgtime">'+ dateformat +'</li>');
             });
         });
 
@@ -103,25 +127,29 @@ var myRoomID = null;
         Date.prototype.timeNow = function () {
             return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
         }
+        var date = new Date().today();
+        var time = new Date().timeNow();
 
-        var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
+
+
+
 
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-            $('#incoming').append('<li>' + datetime +  '</li>');
-            $('#incoming').append('<li>' + username + ': ' + data + '</li>');
+          $('#incoming').append('<li class="msgtime">'+ time +'</li>');
+          if(username == user1username) {
+            $('#incoming').append('<li class="incomingMessage" id="user1msg">' + data + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+          } else {
+            $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + data + '</li>');
+          }
             socket.emit('message', data);
         });
 
-        socket.on('updateHistory', function(data){
 
-            // handle saving to schema
 
-            $('#incoming').append('<li><b>ealier messages</b></li>')
-            $.each(data, function(data, msg) {
-                $('#incoming').append('<li>'+ msg +'</li>')
-            });
-        })
+
+
+
 
         var typing = false;
         var timeout = undefined;
@@ -148,9 +176,24 @@ var myRoomID = null;
 
 
         //swap to video chat
-        $('#swaptovideo').on('click', function(){
-            console.log('is anything happening?');
-            $('#videoDisplay').show();
+        $('#chat-btn-video').on('click touch', function(){
+          var videomode = true;
+          start();
+          console.log('switching to video');
+          $('.displayMessagesWrap').hide();
+          $('.sendMessagesWrap').hide();
+          $('.videoWrap').show();
+        });
+
+        //swap to video chat
+        $('#switchToChat').on('click touch', function(){
+          var videomode = false;
+          hangup();
+          stop();
+          console.log('switching to chat');
+          $('.displayMessagesWrap').show();
+          $('.sendMessagesWrap').show();
+          $('.videoWrap').hide();
         });
 
 
@@ -206,15 +249,15 @@ var myRoomID = null;
         var localVideo = document.querySelector('#localVideo');
         var remoteVideo = document.querySelector('#remoteVideo');
 
-        var startButton = document.getElementById('startButton');
+        var chatButton = document.getElementById('switchToChat');
         var callButton = document.getElementById('callButton');
         var hangupButton = document.getElementById('hangupButton');
         var muteButton = document.getElementById('muteButton');
 
+        chatButton.disabled = false;
         callButton.disabled = true;
         muteButton.disabled = true;
         hangupButton.disabled = true;
-        startButton.onclick = start;
         callButton.onclick = call;
         hangupButton.onclick = hangup;
 
@@ -229,7 +272,6 @@ var myRoomID = null;
         }
 
         function start() {
-            startButton.disabled = true;
             muteButton.disabled = false;
             navigator.mediaDevices.getUserMedia({
                 audio: false,
