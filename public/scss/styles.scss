@@ -24,8 +24,8 @@ button { border: none; background-color: $red; color: $white; cursor: pointer; f
 h1 { @extend .htags; font-size: 1.8em; color: $red; }
 h2 { @extend .htags; font-size: 1.2em; color: $blue; }
 ul { -webkit-padding-start: 0px; margin: 0; }
-
-
+li { list-style-type: none; }
+p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px;}
 
 
 
@@ -88,27 +88,9 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
 
-
-    .history {width: 100%; height: auto; padding-top: $pad*2;
-        ul { width: 100%;
-            li { width: 100%; background-color: $white; padding: 5px $pad; color: $blue; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
-                .subject { font-size: 1em; }
-                .time {  font-size: 0.8em; }
-                .icon { float: right; }
-            }
-        }
-    }
-
-
-
-
-
-
-
     // dash
     .logout { padding-top: 85vh; text-align: right; }
     .chatWraps { width: 100%; padding: $pad*2 $pad 0; text-align: center; }
-
 
 
 
@@ -120,10 +102,20 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
-    .oldCovosWrap { @extend .chatWraps; }
-
-
-
+    .history, .forumWrap {@extend .chatWraps;
+        ul { width: 100%; padding: $pad*2 0;
+            li { width: 100%; position: relative;
+                a {
+                    ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
+                        .user {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
+                        .message {padding: $pad/2 0;}
+                        .time {font-size: 0.6em; padding: $pad/2 0;}
+                        .icon { float: right; }
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -166,6 +158,20 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                         &:hover {background-color:$blue;}
                         img {height: 38px; width: auto; margin: 0 auto;}
                     }
+                }
+            }
+        }
+    }
+
+
+
+
+    // forum
+    .forumWrap { @extend .chatWraps;
+        .addPost { float: right; padding: $pad;
+            a {
+                .add {  width: 50px; height: auto;
+                    img {width: 100%;}
                 }
             }
         }

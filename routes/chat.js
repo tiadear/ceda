@@ -28,44 +28,104 @@ router.get('/', function(req, res){
 
             var arr1 = [];
 
-            for(j = 0; j < rooms.length; j++){
-                id = rooms[j]._id;
+            function lastuser(currentuser, user1, user2, historyuser, historymsg, historytime){
+                var lastusertomsg = new Promise(
+                    function(resolve, reject) {
 
-                arr1[id] = [];
+                        if(historyuser === currentuser) {
+                            console.log('you were the last person to send a message');
 
-    			chatHistory.find({room : id}, function(err, history) {
+                            // if you are the user_init
+                            if(String(req.user._id) === String(user1)) {
 
-                    for(i = 0; i < history.length; i++) {       
-                        arr1[id][i] = [];
-                        arr1[id][i].push(history[i].user, history[i].message, history[i].timesent);
-                            console.log('i: '+ i);
-                            console.log('number of rooms: '+rooms.length);
-                            console.log('history length: '+history.length);
-                            console.log('arr[id] length: '+arr1[id].length);
-                            console.log('arr length: '+arr1.length);
-                            
-                            // THIS IS A SHODDY METHOD FOR TESTING
-                            //should be comparing to room length right?
-                            
-                            if(arr1[id].length === history.length) {
-                                req.history = arr1[id];
-                                callback(null, req.history);
+                                //then your convo partner is the user_resp
+                                User.findById(user2, function(err, partner) {
+                                    if (err) throw err;
+                                    console.log('convo partner is: ' + partner.username);
+                                    resolve(partner.username);
+                                });
+
                             }
+
+                            // then you are the user_resp
+                            else {
+
+                                // and your convo partner MUST be the user_init
+                                User.findById(user1, function(err, partner) {
+                                    if (err) throw err;
+                                    console.log('convo partner is: ' + partner.username);
+                                    resolve(partner.username);
+                                });
+                            }
+                        }
+                        else {
+                            resolve(historyuser);
+                        }
+                    }
+                );
+
+                lastusertomsg.then(
+                    function(val) {
+                        //make the array for that room the last item
+                        arr1[id] = [val, historymsg, historytime];
+                        //push the history array into an overall history array
+                        arr2.push(arr1[id]);
+                        //if the number of arrays is equal to the number of rooms
+                        // ie. we have looped through every room
+                        if(arr2.length == rooms.length) {
+                            //send it to the callback
+                            req.history = arr2;
+                            callback(null, req.history);
+                        }
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('convo partner promise rejected for' + reason);
+                    }
+                );
+            }
+
+            function formatDate(d) {
+                var day = d.getDate();
+                var month = d.getMonth();
+                var year = d.getFullYear();
+                var hour = d.getHours();
+                var minutes = d.getMinutes();
+                return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+            }
+
+            for(j = 0; j < rooms.length; j++){
+
+                var id = rooms[j]._id;
+                var _user1 = rooms[j].user_init;
+                var _user2 = rooms[j].user_resp;
+                var _currentuser = req.user.username;
+                arr1[id] = [];
+                var arr2 = [];
+
+                chatHistory.find({room : id}, function(err, history) {
+
+                    //loop through all history items for that room
+                    for(i = 0; i < history.length; i++) {
+
+                        //stop on the last item
+                        if(i === ((history.length)-1)) {
+
+                            var date = new Date(history[i].timesent);
+                            var dateformat = formatDate(date);
+
+                            lastuser(_currentuser, _user1, _user2, history[i].user, history[i].message, dateformat);
+                        }
                     }
 
-                    
-
-
-                    
-
-    			});
+                });
 			}
-            
 		}
 
 
 	], function(err, result){
-		console.log('result: ' + result);
+		//console.log('result: ' + result);
         req.session.save(function(err){
             if (err) {
                 console.log(err);
@@ -81,9 +141,12 @@ router.get('/', function(req, res){
 });
 
 
-router.get('/chatpeer', function(req, res) {
+
+
+router.get('/chatpeer*', function(req, res) {
     async.waterfall([
         function(callback) {
+
             User.findById(req.user._id, function(err, user) {
                 if(err) throw err;
                 var currentUser = user._id;
@@ -92,10 +155,10 @@ router.get('/chatpeer', function(req, res) {
                 callback(null, currentUser, currentUsername);
             });
         },
+
         function(user1, user1name, callback) {
 
             function returnRandom(currentuser) {
-
                 User.random(function(err, user) {
                     if (err) throw err;
                     if(String(user._id) != String(currentuser)) {
@@ -109,8 +172,19 @@ router.get('/chatpeer', function(req, res) {
                     }
                 });
             }
-            returnRandom(user1);
+
+            if(req.query.user) {
+                var key = req.query.user;
+                console.log('user to talk to is: ' + key);
+                User.findOne({ username : key}, function(err, user) {
+                    if (err) throw err;
+                    callback(null, user1, user1name, user._id, key);
+                });
+            } else {
+                returnRandom(user1);
+            }
         },
+
         function(user1, user1name, user2, user2name, callback) {
             console.log('looking for a room...');
             Room.findOne({user_init : user1, user_resp : user2}, function(err, room) {

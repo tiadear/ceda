@@ -10,10 +10,17 @@ block content
 				a(href='/chat/chatpeer')
 					button.chatChoice#chatPeer(type='button') Talk to a stranger
 		if (history)
-			.oldCovosWrap
+			.history
 				h2 History
-				ul#oldConvos
-					for item in history
-						for i in item
-							li
-								p=i
+				ul.historyconvo
+					for item,i in history
+						- var z = (100) - [i];
+						li(style="z-index: #{z};")
+							a(href="/chat/chatpeer?user=#{history[i][0]}")
+								ul.historyitem
+									.user
+										p=history[i][0]
+									.message
+										p=history[i][1]
+									.time
+										p=history[i][2]

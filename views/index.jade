@@ -29,14 +29,21 @@ block content
 			if (user.username)
 				h1 Hi #{user.username}
 				.circle
-				.history
-					ul.recentHistory
-						li.historyItem
-							.subject
-								p #{history}
-							.time
-							.icon
-								img(src='images/icon-phone.png')
+				if (history)
+					.history
+						h2 History
+						ul.historyconvo
+							for item,i in history
+								- var z = (100) - [i];
+								li(style="z-index: #{z};")
+									a(href="/chat/chatpeer?user=#{history[i][0]}")
+										ul.historyitem
+											.user
+												p=history[i][0]
+											.message
+												p=history[i][1]
+											.time
+												p=history[i][2]
 				.base
 					.logout
 						a(href="/logout") Logout
