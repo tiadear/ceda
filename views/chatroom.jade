@@ -1,6 +1,5 @@
 extends layout
 block content
-	script(src='/js/client.js')
 	script.
 		roomID = '#{room._id}';
 		//user 1 is current user
@@ -8,6 +7,7 @@ block content
 		user1username = '#{usersInRoom[0]}';
 		// user 2 is peer
 		user2username = '#{usersInRoom[1]}';
+	script(src='/js/client.js')
 	.container
 		include includes/nav.jade
 		.chatRoom
@@ -27,14 +27,12 @@ block content
 						button.chat-btn#outgoingSubmit(type='submit') Submit
 				.videoWrap
 					.videoDisplay
-						video#remoteVideo
-						video#localVideo
+						video#remoteVideo(autoplay)
+						video#localVideo(autoplay muted)
 						.videoOptions
 							.chat-btn#switchToChat
 								img(src='/images/icon-switchToChat.png')
 							.chat-btn#callButton
 								img(src='/images/icon-phone.png')
 							.chat-btn#muteButton
-								img(src='/images/icon-video-btn-mute.png')
 							.chat-btn#hangupButton
-								img(src='/images/icon-video-btn-hangup.png')

@@ -32,6 +32,7 @@ module.exports = new GoogleStrategy({
                 newUser.provider = 'google';
                 newUser.google =  token;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {

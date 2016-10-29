@@ -32,6 +32,7 @@ module.exports = new TwitterStrategy({
                 newUser.provider = 'twitter';
                 newUser.twitter =  token;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {

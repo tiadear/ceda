@@ -5,10 +5,15 @@ block content
 		.chatChoiceWrap
 			h1 Chat
 			.chatChoices
-				a(href='/chatprof')
+				a(href='/chat/chatprof')
 					button.chatChoice#chatProfessional(type='button') Talk to a professional
-				a(href='/chatpeer')
+				a(href='/chat/chatpeer')
 					button.chatChoice#chatPeer(type='button') Talk to a stranger
-		.oldCovosWrap
-			h2 History
-			ul#oldConvos
+		if (history)
+			.oldCovosWrap
+				h2 History
+				ul#oldConvos
+					for item in history
+						for i in item
+							li
+								p=i

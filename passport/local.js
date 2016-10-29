@@ -41,6 +41,7 @@ exports.strategy = function(passport) {
 						newUser.firstName = req.body.firstName;
 						newUser.lastName = req.body.lastName;
 						newUser.provider = 'local';
+						newUser.userType = false;
 
 
 						newUser.save(function(err){
