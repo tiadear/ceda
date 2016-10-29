@@ -5,3 +5,8 @@ block content
 		.forumWrap
 			h1 Forum
 			.newPost
+				form.form-login(role='form', action="/form", method="POST")
+					input.form-input(type="text", name="title", placeholder="Title")
+					input.form-input(type="text", name="content", placeholder="What did you want to say?")
+					button.form-submit(type="submit") Submit
+					a.forgot(href="/") Cancel
