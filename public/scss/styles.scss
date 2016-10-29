@@ -24,7 +24,7 @@ button { border: none; background-color: $red; color: $white; cursor: pointer; f
 h1 { @extend .htags; font-size: 1.8em; color: $red; }
 h2 { @extend .htags; font-size: 1.2em; color: $blue; }
 ul { -webkit-padding-start: 0px; margin: 0; }
-
+li { list-style-type: none; }
 
 
 
@@ -89,19 +89,6 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
 
-    .history {width: 100%; height: auto; padding-top: $pad*2;
-        ul { width: 100%;
-            li { width: 100%; background-color: $white; padding: 5px $pad; color: $blue; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
-                .subject { font-size: 1em; }
-                .time {  font-size: 0.8em; }
-                .icon { float: right; }
-            }
-        }
-    }
-
-
-
-
 
 
 
@@ -120,7 +107,23 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
-    .oldCovosWrap { @extend .chatWraps; }
+    .history {@extend .chatWraps;
+        ul { width: 100%; padding: $pad*2 0; text-align: center;
+            li { width: 100%; 
+                a {
+                    ul.historyitem { width: 90%; padding: $pad/3; background-color: white; margin: $pad auto; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+                        li { 
+                            p {color: $blue;}
+                            .subject { font-size: 1em; }
+                            .time {  font-size: 0.8em; }
+                            .icon { float: right; }
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
 
 
 

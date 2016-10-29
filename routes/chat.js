@@ -29,38 +29,44 @@ router.get('/', function(req, res){
             var arr1 = [];
 
             for(j = 0; j < rooms.length; j++){
-                id = rooms[j]._id;
 
+                id = rooms[j]._id;
                 arr1[id] = [];
+                var arr2 = [];
 
     			chatHistory.find({room : id}, function(err, history) {
 
-                    for(i = 0; i < history.length; i++) {       
-                        arr1[id][i] = [];
-                        arr1[id][i].push(history[i].user, history[i].message, history[i].timesent);
-                            console.log('i: '+ i);
-                            console.log('number of rooms: '+rooms.length);
-                            console.log('history length: '+history.length);
-                            console.log('arr[id] length: '+arr1[id].length);
-                            console.log('arr length: '+arr1.length);
-                            
-                            // THIS IS A SHODDY METHOD FOR TESTING
-                            //should be comparing to room length right?
-                            
-                            if(arr1[id].length === history.length) {
-                                req.history = arr1[id];
+                    //loop through all history items for that room
+                    for(i = 0; i < history.length; i++) {
+
+                        //stop on the last item
+                        if(i = ((history.length)-1)){
+
+                            //console.log('i :'+i);
+                            //console.log('j: '+ j);
+                            //console.log('number of rooms: '+rooms.length);
+                            //console.log('history: '+history);
+                            //console.log('history length: '+history.length);
+                            //console.log('history user: '+history[i].user);
+
+                            //make the array for that room the last item
+                            arr1[id] = [history[i].user, history[i].message, history[i].timesent];
+                            //console.log('arr1[id] length: '+arr1[id].length);
+                            //console.log('arr1 length: '+arr1.length);
+                            //console.log('arr1[id] :'+arr1[id]);
+
+                            arr2.push(arr1[id]);
+                            console.log('arr2 length: '+arr2.length);
+
+                            if(arr2.length == rooms.length) {
+                                req.history = arr2;
                                 callback(null, req.history);
                             }
+                        }
                     }
-
-                    
-
-
-                    
 
     			});
 			}
-            
 		}
 
 

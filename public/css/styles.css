@@ -55,6 +55,9 @@ ul {
   -webkit-padding-start: 0px;
   margin: 0; }
 
+li {
+  list-style-type: none; }
+
 form {
   padding: 20px;
   margin: 0 auto;
@@ -155,31 +158,10 @@ form {
         .container nav ul li a .navoption img {
           height: 30px;
           margin: 10px auto 0 auto; }
-  .container .history {
-    width: 100%;
-    height: auto;
-    padding-top: 40px; }
-    .container .history ul {
-      width: 100%; }
-      .container .history ul li {
-        width: 100%;
-        background-color: #ffffff;
-        padding: 5px 20px;
-        color: #213e64;
-        -webkit-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
-        -moz-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
-        -ms-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
-        box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1); }
-        .container .history ul li .subject {
-          font-size: 1em; }
-        .container .history ul li .time {
-          font-size: 0.8em; }
-        .container .history ul li .icon {
-          float: right; }
   .container .logout {
     padding-top: 85vh;
     text-align: right; }
-  .container .chatWraps, .container .chatChoiceWrap, .container .oldCovosWrap {
+  .container .chatWraps, .container .chatChoiceWrap, .container .history {
     width: 100%;
     padding: 40px 20px 0;
     text-align: center; }
@@ -194,6 +176,29 @@ form {
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       border-radius: 5px; }
+  .container .history ul {
+    width: 100%;
+    padding: 40px 0;
+    text-align: center; }
+    .container .history ul li {
+      width: 100%; }
+      .container .history ul li a ul.historyitem {
+        width: 90%;
+        padding: 6.66667px;
+        background-color: white;
+        margin: 20px auto;
+        -webkit-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+        -ms-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1); }
+        .container .history ul li a ul.historyitem li p {
+          color: #213e64; }
+        .container .history ul li a ul.historyitem li .subject {
+          font-size: 1em; }
+        .container .history ul li a ul.historyitem li .time {
+          font-size: 0.8em; }
+        .container .history ul li a ul.historyitem li .icon {
+          float: right; }
   .container .chatRoom {
     padding-top: 20px; }
     .container .chatRoom h1 {
