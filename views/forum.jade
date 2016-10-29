@@ -1,0 +1,16 @@
+extends layout
+block content
+	.container
+		include includes/nav.jade
+		.forumWrap
+			h1 Forum
+			.addPost
+				a(href="/forum/new")
+					.add
+						img(src="/images/newpost.png")
+			ul.forumList
+				for item in thread
+					- var z = (100) - [i];
+						li(style="z-index: #{z};")
+							a(href="/forum/post?id=#{post[i][0]}")
+								ul.threaditem

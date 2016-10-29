@@ -125,7 +125,7 @@ router.get('/', function(req, res){
 
 
 	], function(err, result){
-		console.log('result: ' + result);
+		//console.log('result: ' + result);
         req.session.save(function(err){
             if (err) {
                 console.log(err);
