@@ -25,7 +25,7 @@ h1 { @extend .htags; font-size: 1.8em; color: $red; }
 h2 { @extend .htags; font-size: 1.2em; color: $blue; }
 ul { -webkit-padding-start: 0px; margin: 0; }
 li { list-style-type: none; }
-
+p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px;}
 
 
 
@@ -108,16 +108,14 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         }
     }
     .history {@extend .chatWraps;
-        ul { width: 100%; padding: $pad*2 0; text-align: center;
-            li { width: 100%; 
+        ul { width: 100%; padding: $pad*2 0;
+            li { width: 100%; position: relative;
                 a {
-                    ul.historyitem { width: 90%; padding: $pad/3; background-color: white; margin: $pad auto; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
-                        li { 
-                            p {color: $blue;}
-                            .subject { font-size: 1em; }
-                            .time {  font-size: 0.8em; }
-                            .icon { float: right; }
-                        }
+                    ul.historyitem { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
+                        .user {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
+                        .message {padding: $pad/2 0;}
+                        .time {font-size: 0.6em; padding: $pad/2 0;}
+                        .icon { float: right; }
                     }
                 }
                 

@@ -86,6 +86,15 @@ router.get('/', function(req, res){
                 );
             }
 
+            function formatDate(d) {
+                var day = d.getDate();
+                var month = d.getMonth();
+                var year = d.getFullYear();
+                var hour = d.getHours();
+                var minutes = d.getMinutes();
+                return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+            }
+
             for(j = 0; j < rooms.length; j++){
 
                 var id = rooms[j]._id;
@@ -103,19 +112,10 @@ router.get('/', function(req, res){
                         //stop on the last item
                         if(i === ((history.length)-1)) {
 
-                            lastuser(_currentuser, _user1, _user2, history[i].user, history[i].message, history[i].timesent);
+                            var date = new Date(history[i].timesent);
+                            var dateformat = formatDate(date);
 
-                            //console.log('i :'+i);
-                            //console.log('j: '+ j);
-                            //console.log('number of rooms: '+rooms.length);
-                            //console.log('history: '+history);
-                            //console.log('history length: '+history.length);
-                            //console.log('history user: '+history[i].user);
-                            //console.log('arr1[id] length: '+arr1[id].length);
-                            //console.log('arr1 length: '+arr1.length);
-                            //console.log('arr1[id] :'+arr1[id]);
-                            //console.log('arr2 length: '+arr2.length);
-
+                            lastuser(_currentuser, _user1, _user2, history[i].user, history[i].message, dateformat);
                         }
                     }
 
@@ -141,9 +141,12 @@ router.get('/', function(req, res){
 });
 
 
-router.get('/chatpeer', function(req, res) {
+
+
+router.get('/chatpeer*', function(req, res) {
     async.waterfall([
         function(callback) {
+
             User.findById(req.user._id, function(err, user) {
                 if(err) throw err;
                 var currentUser = user._id;
@@ -152,10 +155,10 @@ router.get('/chatpeer', function(req, res) {
                 callback(null, currentUser, currentUsername);
             });
         },
+
         function(user1, user1name, callback) {
 
             function returnRandom(currentuser) {
-
                 User.random(function(err, user) {
                     if (err) throw err;
                     if(String(user._id) != String(currentuser)) {
@@ -169,8 +172,19 @@ router.get('/chatpeer', function(req, res) {
                     }
                 });
             }
-            returnRandom(user1);
+
+            if(req.query.user) {
+                var key = req.query.user;
+                console.log('user to talk to is: ' + key);
+                User.findOne({ username : key}, function(err, user) {
+                    if (err) throw err;
+                    callback(null, user1, user1name, user._id, key);
+                });
+            } else {
+                returnRandom(user1);
+            }
         },
+
         function(user1, user1name, user2, user2name, callback) {
             console.log('looking for a room...');
             Room.findOne({user_init : user1, user_resp : user2}, function(err, room) {

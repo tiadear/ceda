@@ -1,5 +1,7 @@
 extends layout
 block content
+	script.
+
 	.container
 		include includes/nav.jade
 		.chatChoiceWrap
@@ -13,10 +15,14 @@ block content
 			.history
 				h2 History
 				ul.historyconvo
-					for item in history
-						li
-							a(href="")
+					for item,i in history
+						- var z = (100) - [i];
+						li(style="z-index: #{z};")
+							a(href="/chat/chatpeer?user=#{history[i][0]}")
 								ul.historyitem
-									for i in item
-										li
-											p=i
+									.user
+										p=history[i][0]
+									.message
+										p=history[i][1]
+									.time
+										p=history[i][2]
