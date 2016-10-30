@@ -167,7 +167,7 @@ form {
   .container .logout {
     padding-top: 85vh;
     text-align: right; }
-  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .forumWrap {
+  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap {
     width: 100%;
     padding: 40px 20px 0;
     text-align: center; }
@@ -182,13 +182,13 @@ form {
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       border-radius: 5px; }
-  .container .history ul, .container .forumWrap ul {
+  .container .history ul, .container .threadList ul {
     width: 100%;
     padding: 40px 0; }
-    .container .history ul li, .container .forumWrap ul li {
+    .container .history ul li, .container .threadList ul li {
       width: 100%;
       position: relative; }
-      .container .history ul li a ul, .container .forumWrap ul li a ul {
+      .container .history ul li a ul, .container .threadList ul li a ul {
         width: 90%;
         padding: 0 40px;
         background-color: white;
@@ -199,15 +199,15 @@ form {
         box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
         color: #213e64;
         text-align: left; }
-        .container .history ul li a ul .user, .container .forumWrap ul li a ul .user {
+        .container .history ul li a ul .user, .container .history ul li a ul .title, .container .threadList ul li a ul .user, .container .threadList ul li a ul .title {
           font-size: 1.2em;
           padding: 20px 0 10px 0; }
-        .container .history ul li a ul .message, .container .forumWrap ul li a ul .message {
+        .container .history ul li a ul .message, .container .history ul li a ul .postuser, .container .threadList ul li a ul .message, .container .threadList ul li a ul .postuser {
           padding: 10px 0; }
-        .container .history ul li a ul .time, .container .forumWrap ul li a ul .time {
+        .container .history ul li a ul .time, .container .threadList ul li a ul .time {
           font-size: 0.6em;
           padding: 10px 0; }
-        .container .history ul li a ul .icon, .container .forumWrap ul li a ul .icon {
+        .container .history ul li a ul .icon, .container .threadList ul li a ul .icon {
           float: right; }
   .container .chatRoom {
     padding-top: 20px; }

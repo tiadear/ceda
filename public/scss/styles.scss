@@ -102,13 +102,13 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
-    .history, .forumWrap {@extend .chatWraps;
+    .history, .threadList {@extend .chatWraps;
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
                 a {
                     ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
-                        .user {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
-                        .message {padding: $pad/2 0;}
+                        .user, .title {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
+                        .message, .postuser {padding: $pad/2 0;}
                         .time {font-size: 0.6em; padding: $pad/2 0;}
                         .icon { float: right; }
                     }
