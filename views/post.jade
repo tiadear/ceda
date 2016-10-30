@@ -1,0 +1,22 @@
+extends layout
+block content
+	.container
+		.options
+			a(href='/')
+					button.back(type='button') Back
+			button.reply(type='button') Reply
+		.forumWrap
+			h1 #{thread[1]}
+			.threadList
+				ul.threads
+					for item,i in posts
+						- var z = (100) - [i];
+						li(style="z-index: #{z};")
+							a(href="")
+								ul.threadItem
+									.title
+										p=item[2]
+									.postuser
+										p=item[4]
+									.time
+										p=item[3]

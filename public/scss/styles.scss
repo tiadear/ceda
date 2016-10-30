@@ -17,7 +17,7 @@ a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $red;
     &:hover { color: $blue; }
 }
 button { border: none; background-color: $red; color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
-    &:hover { background-color: $blue; border: solid 2px $blue; }
+    &:hover { background-color: $blue;  }
     &:focus { outline: none;}
 }
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
@@ -168,6 +168,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
     // forum
     .forumWrap { @extend .chatWraps;
+        .threadList { padding: 0 $pad}
         .addPost { float: right; padding: $pad;
             a {
                 .add {  width: 50px; height: auto;
@@ -175,6 +176,10 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                 }
             }
         }
+    }
+    .options { padding: $pad;
+        .reply { float: right; padding: $pad/4 $pad;  @include border-radius(5px)}
+        .back { width: 40px; height: 40px;  @include border-radius(20px) }
     }
 
 } // end of container

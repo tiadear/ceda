@@ -14,11 +14,11 @@ block content
 						for item,i in threads
 							- var z = (100) - [i];
 								li(style="z-index: #{z};")
-									a(href="")
+									a(href="/forum/thread?id=#{item[0]}")
 										ul.threadItem
 											.title
-												p=item[0]
+												p=item[1]
 											.postuser
-												p=item[3]
+												p=item[4]
 											.time
-												p=item[2]
+												p=item[3]

@@ -30,8 +30,7 @@ button, .container .open .social-login .social-btn, .container .chatChoiceWrap .
   font-family: "Questrial", sans-serif;
   font-size: 1em; }
   button:hover, .container .open .social-login .social-btn:hover, .container .chatChoiceWrap .chatChoices .chatChoice:hover {
-    background-color: #213e64;
-    border: solid 2px #213e64; }
+    background-color: #213e64; }
   button:focus, .container .open .social-login .social-btn:focus, .container .chatChoiceWrap .chatChoices .chatChoice:focus {
     outline: none; }
 
@@ -345,6 +344,8 @@ form {
               height: 38px;
               width: auto;
               margin: 0 auto; }
+  .container .forumWrap .threadList {
+    padding: 0 20px; }
   .container .forumWrap .addPost {
     float: right;
     padding: 20px; }
@@ -353,5 +354,21 @@ form {
       height: auto; }
       .container .forumWrap .addPost a .add img {
         width: 100%; }
+  .container .options {
+    padding: 20px; }
+    .container .options .reply {
+      float: right;
+      padding: 5px 20px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px; }
+    .container .options .back {
+      width: 40px;
+      height: 40px;
+      -webkit-border-radius: 20px;
+      -moz-border-radius: 20px;
+      -ms-border-radius: 20px;
+      border-radius: 20px; }
 
 /*# sourceMappingURL=styles.css.map */

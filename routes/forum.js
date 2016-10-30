@@ -41,19 +41,14 @@ router.get('/', function(req, res) {
                 var date = new Date(threads[i].created);
                 var dateformat = formatDate(date);
 
-                console.log('thread[i] title: '+threads[i].title);
-                arr[id] = [threads[i].title, threads[i].user, dateformat];
+                arr[id] = [id, threads[i].title, threads[i].user, dateformat];
 
 				User.findById(threads[i].user, function(err, user) {
 					if(err) throw err;
-					console.log('username: '+user.username);
-					console.log('threads length: '+threads.length);
 
 					arr[id].push(user.username);
-					console.log('arr[id]: '+arr[id]);
 
 					arr2.push(arr[id]);
-					console.log('arr2 length: '+arr2.length);
 
 					if (arr2.length === threads.length) {
 						req.threads = arr2;
@@ -129,6 +124,70 @@ router.post('/', function(req, res) {
 	});
 });
 
+
+
+router.get('/thread*', function(req, res) {
+	async.waterfall([
+		function(callback){
+
+            var key = req.query.id;
+            console.log('thread id is: ' + key);
+
+            Thread.findById(String(key), function(err, thread) {
+                if (err) throw err;
+                console.log('thread: '+thread);
+                callback(null, key, thread.title);
+            });
+		}, function(key, title, callback) {
+
+			Post.find({ threadId : key }).sort({'created' : -1}).exec(function(err, posts){
+				if(err) throw err;
+				console.log('posts: '+ posts);
+				req.posts = posts;
+				req.thread = [key, title];
+				callback(null, req.thread, req.posts);
+			});
+		}, function(thread, posts, callback) {
+
+			var arr = [];
+
+			for(i=0; i < posts.length; i++){
+
+				var id = posts[i]._id;
+				arr[id] = [];
+                var arr2 = [];
+
+                var date = new Date(posts[i].created);
+                var dateformat = formatDate(date);
+
+                arr[id] = [id, posts[i].user, posts[i].content, dateformat];
+
+				User.findById(posts[i].user, function(err, user) {
+					if(err) throw err;
+					arr[id].push(user.username);
+					arr2.push(arr[id]);
+					if (arr2.length === posts.length) {
+						req.posts = arr2;
+						req.thread = thread;
+						callback(null, req.thread, req.posts);
+					}
+				});
+			}
+		}
+	], function(err, result) {
+		if(err) throw err;
+		console.log('result: '+result);
+		req.session.save(function(err){
+			if(err) throw err;
+			res.render('post', {
+				thread: req.thread,
+				posts : req.posts,
+				user : req.user,
+				title : 'ceda'
+			});
+		});
+	});
+});
 
 
 
