@@ -370,5 +370,7 @@ form {
       -moz-border-radius: 20px;
       -ms-border-radius: 20px;
       border-radius: 20px; }
+  .container .postReply {
+    display: none; }
 
 /*# sourceMappingURL=styles.css.map */

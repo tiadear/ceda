@@ -1,8 +1,15 @@
 extends layout
 block content
+	script(type="text/javascript").
+		$(document).ready(function(){
+			$('.reply').on('click touch', function(){ 
+				console.log('button clicked'); 
+				$('.postReply').show(); 
+			});
+		});
 	.container
 		.options
-			a(href='/')
+			a(href='/forum')
 					button.back(type='button') Back
 			button.reply(type='button') Reply
 		.forumWrap
@@ -15,8 +22,13 @@ block content
 							a(href="")
 								ul.threadItem
 									.title
-										p=item[2]
-									.postuser
-										p=item[4]
-									.time
 										p=item[3]
+									.postuser
+										p=item[2]
+									.time
+										p=item[4]
+		.postReply
+			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
+				input.form-input(type="text", name="content", placeholder="Your reply")
+				button.form-submit(type="submit") Submit
+				a.forgot(href="/") Cancel

@@ -181,6 +181,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         .reply { float: right; padding: $pad/4 $pad;  @include border-radius(5px)}
         .back { width: 40px; height: 40px;  @include border-radius(20px) }
     }
+    .postReply {display :none;}
 
 } // end of container
 

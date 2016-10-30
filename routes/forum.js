@@ -113,12 +113,7 @@ router.post('/', function(req, res) {
 		console.log('result: '+result);
 		req.session.save(function (err) {
 	        if(err) throw err;
-	        res.render('forum', {
-	        	thread : req.thread,
-	        	post : req.post,
-	        	user : req.user,
-	        	title : 'ceda'
-	        });
+	        res.redirect('/');
 	    });
 
 	});
@@ -130,9 +125,11 @@ router.get('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback){
 
+			// get thread id
             var key = req.query.id;
             console.log('thread id is: ' + key);
 
+            //find the thread in the db
             Thread.findById(String(key), function(err, thread) {
                 if (err) throw err;
                 console.log('thread: '+thread);
@@ -140,9 +137,9 @@ router.get('/thread*', function(req, res) {
             });
 		}, function(key, title, callback) {
 
-			Post.find({ threadId : key }).sort({'created' : -1}).exec(function(err, posts){
+			//find all the posts in that thread
+			Post.find({ threadId : key }).sort({'created' : 1}).exec(function(err, posts){
 				if(err) throw err;
-				console.log('posts: '+ posts);
 				req.posts = posts;
 				req.thread = [key, title];
 				callback(null, req.thread, req.posts);
@@ -150,28 +147,47 @@ router.get('/thread*', function(req, res) {
 		}, function(thread, posts, callback) {
 
 			var arr = [];
+			var arr2 = [];
+
+			function findUser(userId, postID, postContent, date) {
+				var findUsername = new Promise(
+					function(resolve, reject) {
+						User.findById(userId, function(err, user) {
+							if(err) throw err;
+							var username = user.username;
+							resolve(username);
+						});
+					}
+				);
+				findUsername.then(
+					function(val) {
+						arr[id] = [postID, userId, val, postContent, dateformat];
+		                arr2.push(arr[id]);
+		                console.log('arr2 length: '+arr2.length);
+
+						if (arr2.length === posts.length) {
+							req.posts = arr2;
+							req.thread = thread;
+							callback(null, req.thread, req.posts);
+						}
+					}
+				)
+				.catch(
+					function(reason){
+                        console.log('username not found due to ' + reason);
+                    }
+				);
+				
+			}
 
 			for(i=0; i < posts.length; i++){
-
 				var id = posts[i]._id;
 				arr[id] = [];
-                var arr2 = [];
-
+                
                 var date = new Date(posts[i].created);
                 var dateformat = formatDate(date);
 
-                arr[id] = [id, posts[i].user, posts[i].content, dateformat];
-
-				User.findById(posts[i].user, function(err, user) {
-					if(err) throw err;
-					arr[id].push(user.username);
-					arr2.push(arr[id]);
-					if (arr2.length === posts.length) {
-						req.posts = arr2;
-						req.thread = thread;
-						callback(null, req.thread, req.posts);
-					}
-				});
+                findUser(posts[i].user, id, posts[i].content, dateformat);
 			}
 		}
 	], function(err, result) {
@@ -189,6 +205,42 @@ router.get('/thread*', function(req, res) {
 	});
 });
 
+
+
+router.post('/thread*', function(req, res) {
+	async.waterfall([
+		function(callback) {
+			var key = req.query.id;
+            console.log('thread id is: ' + key);
+
+            Thread.findById(String(key), function(err, thread) {
+                if (err) throw err;
+                console.log('thread: '+thread);
+                callback(null, key, thread.title);
+            });
+		}, function(key, title, callback) {
+
+			var newPost = new Post();
+			newPost.user = req.user._id,
+			newPost.threadId = key;
+			newPost.content = req.body.content;
+
+			newPost.save(function(err){
+				if(err) throw err;
+				req.post = newPost;
+				callback(null, key);
+			});
+
+		}
+	], function(err, result) {
+		if (err) throw err;
+		console.log('result: '+result);
+		req.session.save(function(err){
+			if(err) throw err;
+			res.redirect('/forum/thread?id='+result);
+		});
+	});
+});
 
 
 
