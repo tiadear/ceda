@@ -187,7 +187,7 @@ form {
     .container .history ul li, .container .threadList ul li {
       width: 100%;
       position: relative; }
-      .container .history ul li a ul, .container .threadList ul li a ul {
+      .container .history ul li ul, .container .threadList ul li ul {
         width: 90%;
         padding: 0 40px;
         background-color: white;
@@ -198,16 +198,24 @@ form {
         box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
         color: #213e64;
         text-align: left; }
-        .container .history ul li a ul .user, .container .history ul li a ul .title, .container .threadList ul li a ul .user, .container .threadList ul li a ul .title {
+        .container .history ul li ul .user, .container .history ul li ul .title, .container .threadList ul li ul .user, .container .threadList ul li ul .title {
           font-size: 1.2em;
           padding: 20px 0 10px 0; }
-        .container .history ul li a ul .message, .container .history ul li a ul .postuser, .container .threadList ul li a ul .message, .container .threadList ul li a ul .postuser {
+        .container .history ul li ul .message, .container .history ul li ul .postuser, .container .threadList ul li ul .message, .container .threadList ul li ul .postuser {
           padding: 10px 0; }
-        .container .history ul li a ul .time, .container .threadList ul li a ul .time {
+        .container .history ul li ul .time, .container .threadList ul li ul .time {
           font-size: 0.6em;
-          padding: 10px 0; }
-        .container .history ul li a ul .icon, .container .threadList ul li a ul .icon {
+          padding: 10px 0;
+          width: 50%;
+          display: inline-block; }
+        .container .history ul li ul .icon, .container .threadList ul li ul .icon {
           float: right; }
+        .container .history ul li ul .edit, .container .threadList ul li ul .edit {
+          font-size: 0.8em;
+          text-align: right;
+          padding: 10px 5px;
+          width: 50%;
+          display: inline-block; }
   .container .chatRoom {
     padding-top: 20px; }
     .container .chatRoom h1 {

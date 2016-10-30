@@ -7,6 +7,9 @@ block content
 				$('.postReply').show(); 
 			});
 		});
+		//user 1 is current user
+		currentuser = '#{user._id}';
+		postuser = '#{posts[1]}';
 	.container
 		.options
 			a(href='/forum')
@@ -19,14 +22,16 @@ block content
 					for item,i in posts
 						- var z = (100) - [i];
 						li(style="z-index: #{z};")
-							a(href="")
-								ul.threadItem
-									.title
-										p=item[3]
-									.postuser
-										p=item[2]
-									.time
-										p=item[4]
+							ul.threadItem
+								.title
+									p=item[3]
+								.postuser
+									p=item[2]
+								.time
+									p=item[4]
+								if (currentuser === postuser)
+									.edit
+										a(href="/forum/edit?id=#{item[0]}") edit
 		.postReply
 			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
 				input.form-input(type="text", name="content", placeholder="Your reply")

@@ -105,14 +105,15 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
     .history, .threadList {@extend .chatWraps;
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
-                a {
+                //a {
                     ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
                         .user, .title {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
                         .message, .postuser {padding: $pad/2 0;}
-                        .time {font-size: 0.6em; padding: $pad/2 0;}
+                        .time {font-size: 0.6em; padding: $pad/2 0; width: 50%; display: inline-block;}
                         .icon { float: right; }
+                        .edit { font-size: 0.8em; text-align: right; padding: $pad/2 $pad/4; width: 50%; display: inline-block;}
                     }
-                }
+                //}
             }
         }
     }

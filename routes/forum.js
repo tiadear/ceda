@@ -19,7 +19,7 @@ function formatDate(d) {
 
 
 
-
+//forum page
 router.get('/', function(req, res) {
 	async.waterfall([
 		function(callback) {
@@ -31,30 +31,46 @@ router.get('/', function(req, res) {
 			});
 		}, function(threads, callback) {
 			var arr = [];
+			var arr2 = [];
+
+			function findUser(userId, threadId, threadTitle, date) {
+				var findUsername = new Promise(
+					function(resolve, reject) {
+						User.findById(userId, function(err, user) {
+							if(err) throw err;
+							var username = user.username;
+							resolve(username);
+						});
+					}
+				);
+				findUsername.then(
+					function(val) {
+						arr[id] = [threadId, threadTitle, userId, val, date];
+		                arr2.push(arr[id]);
+		                console.log('arr2 length: '+arr2.length);
+
+						if (arr2.length === threads.length) {
+							req.threads = arr2;
+							callback(null, req.threads);
+						}
+					}
+				)
+				.catch(
+					function(reason){
+                        console.log('username not found due to ' + reason);
+                    }
+				);
+				
+			}
 
 			for(i = 0; i < threads.length; i++) {
-
 				var id = threads[i]._id;
 				arr[id] = [];
-                var arr2 = [];
-
+                
                 var date = new Date(threads[i].created);
                 var dateformat = formatDate(date);
 
-                arr[id] = [id, threads[i].title, threads[i].user, dateformat];
-
-				User.findById(threads[i].user, function(err, user) {
-					if(err) throw err;
-
-					arr[id].push(user.username);
-
-					arr2.push(arr[id]);
-
-					if (arr2.length === threads.length) {
-						req.threads = arr2;
-						callback(null, req.threads);
-					}
-				});
+                findUser(threads[i].user, id, threads[i].title, dateformat);
 			}
 		}
 	], function(err, result){
@@ -82,6 +98,45 @@ router.get('/new', function(req, res) {
 });
 
 
+// edit a post
+router.get('/edit*', function(req, res) {
+	async.waterfall([
+		function(callback){
+			// get thread id
+            var key = req.query.id;
+            console.log('post id is: ' + key);
+
+            Post.findById(String(key), function(err, post) {
+                if (err) throw err;
+                console.log('thread: '+post);
+                callback(null, post);
+            });
+		},
+		function(post, callback) {
+            Thread.findById(post.threadId, function(err, thread) {
+                if (err) throw err;
+                console.log('thread: '+thread);
+                req.thread = thread;
+                req.post = post;
+                callback(null, req.post, req.thread);
+            });
+		}
+	], function(err, result) {
+		if(err)throw err;
+		console.log('result: '+ result);
+		res.render('edit', {
+			thread : req.thread,
+			post : req.post,
+			user : req.user,
+			title : 'ceda'
+		});
+	});
+});
+
+
+
+
+// create a new thread and top post
 router.post('/', function(req, res) {
 	async.waterfall([
 		function(callback){
@@ -100,6 +155,7 @@ router.post('/', function(req, res) {
 			var newPost = new Post();
 			newPost.user = req.user._id,
 			newPost.threadId = thread._id;
+			newPost.top = true;
 			newPost.content = req.body.content;
 
 			newPost.save(function(err){
@@ -119,8 +175,7 @@ router.post('/', function(req, res) {
 	});
 });
 
-
-
+// view all the posts ina thread
 router.get('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback){
@@ -206,7 +261,7 @@ router.get('/thread*', function(req, res) {
 });
 
 
-
+// reply to a post in a thread
 router.post('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback) {
@@ -220,17 +275,37 @@ router.post('/thread*', function(req, res) {
             });
 		}, function(key, title, callback) {
 
-			var newPost = new Post();
-			newPost.user = req.user._id,
-			newPost.threadId = key;
-			newPost.content = req.body.content;
+			// if the post ID exists
+			// the post is being edited
+			if(req.body.postID) {
+				console.log('edit post');
 
-			newPost.save(function(err){
-				if(err) throw err;
-				req.post = newPost;
-				callback(null, key);
-			});
+				Post.update(
+					{ '_id' : req.body.postID },
+					{ $set: { "title" : req.body.title, "content" : req.body.content } },
+					function(err, post) {
+						if(err) throw err;
+						console.log('updated post: '+post);
+						callback(null, key);
+					}
+				);
+			}
+			// the post ID doesn't exist
+			// this is a reply to a post
+			else {
+				console.log('new reply');
+				var newPost = new Post();
+				newPost.user = req.user._id;
+				newPost.threadId = key;
+				newPost.top = false;
+				newPost.content = req.body.content;
 
+				newPost.save(function(err){
+					if(err) throw err;
+					req.post = newPost;
+					callback(null, key);
+				});
+			}
 		}
 	], function(err, result) {
 		if (err) throw err;
