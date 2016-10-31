@@ -206,15 +206,14 @@ form {
         .container .history ul li ul .time, .container .threadList ul li ul .time {
           font-size: 0.6em;
           padding: 10px 0;
-          width: 50%;
+          width: 70%;
           display: inline-block; }
         .container .history ul li ul .icon, .container .threadList ul li ul .icon {
           float: right; }
-        .container .history ul li ul .edit, .container .threadList ul li ul .edit {
+        .container .history ul li ul .edit, .container .history ul li ul .delete, .container .threadList ul li ul .edit, .container .threadList ul li ul .delete {
           font-size: 0.8em;
           text-align: right;
           padding: 10px 5px;
-          width: 50%;
           display: inline-block; }
   .container .chatRoom {
     padding-top: 20px; }

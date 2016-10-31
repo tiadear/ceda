@@ -32,6 +32,8 @@ block content
 								if (currentuser === postuser)
 									.edit
 										a(href="/forum/edit?id=#{item[0]}") edit
+									.delete
+										a(href="/forum/delete?id=#{item[0]}") delete
 		.postReply
 			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
 				input.form-input(type="text", name="content", placeholder="Your reply")

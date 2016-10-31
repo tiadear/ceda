@@ -29,7 +29,8 @@ router.get('/', function(req, res) {
 					callback(null, threads);
 				}
 			});
-		}, function(threads, callback) {
+		},
+		function(threads, callback) {
 			var arr = [];
 			var arr2 = [];
 
@@ -45,7 +46,30 @@ router.get('/', function(req, res) {
 				);
 				findUsername.then(
 					function(val) {
-						arr[id] = [threadId, threadTitle, userId, val, date];
+						numberOfPosts(threadId, threadTitle, userId, val, date)
+					}
+				)
+				.catch(
+					function(reason){
+                        console.log('username not found due to ' + reason);
+                    }
+				);
+				
+			}
+
+			function numberOfPosts(threadId, threadTitle, userId, username, date) {
+				var getNumberOfPosts = new Promise (
+					function(resolve, reject) {
+						Post.find({ 'threadId' : threadId }).exec(function(err, posts) {
+							if(err) throw err;
+							var postlength = posts.length;
+							resolve(postlength);
+						});
+					}
+				);
+				getNumberOfPosts.then(
+					function(val) {
+						arr[id] = [threadId, threadTitle, userId, username, date, val];
 		                arr2.push(arr[id]);
 		                console.log('arr2 length: '+arr2.length);
 
@@ -56,11 +80,10 @@ router.get('/', function(req, res) {
 					}
 				)
 				.catch(
-					function(reason){
-                        console.log('username not found due to ' + reason);
-                    }
+					function(reason) {
+						console.log('number of posts not found due to ' + reason);
+					}
 				);
-				
 			}
 
 			for(i = 0; i < threads.length; i++) {
@@ -102,7 +125,7 @@ router.get('/new', function(req, res) {
 router.get('/edit*', function(req, res) {
 	async.waterfall([
 		function(callback){
-			// get thread id
+			// get post id
             var key = req.query.id;
             console.log('post id is: ' + key);
 
@@ -204,7 +227,7 @@ router.get('/thread*', function(req, res) {
 			var arr = [];
 			var arr2 = [];
 
-			function findUser(userId, postID, postContent, date) {
+			function findUser(userId, postID, postContent, date, top) {
 				var findUsername = new Promise(
 					function(resolve, reject) {
 						User.findById(userId, function(err, user) {
@@ -216,7 +239,7 @@ router.get('/thread*', function(req, res) {
 				);
 				findUsername.then(
 					function(val) {
-						arr[id] = [postID, userId, val, postContent, dateformat];
+						arr[id] = [postID, userId, val, postContent, dateformat, top];
 		                arr2.push(arr[id]);
 		                console.log('arr2 length: '+arr2.length);
 
@@ -242,7 +265,7 @@ router.get('/thread*', function(req, res) {
                 var date = new Date(posts[i].created);
                 var dateformat = formatDate(date);
 
-                findUser(posts[i].user, id, posts[i].content, dateformat);
+                findUser(posts[i].user, id, posts[i].content, dateformat, posts[i].top);
 			}
 		}
 	], function(err, result) {
@@ -261,7 +284,7 @@ router.get('/thread*', function(req, res) {
 });
 
 
-// reply to a post in a thread
+// reply or edit to a post in a thread
 router.post('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback) {
@@ -290,7 +313,7 @@ router.post('/thread*', function(req, res) {
 					}
 				);
 			}
-			// the post ID doesn't exist
+			// the post ID doesn't exists
 			// this is a reply to a post
 			else {
 				console.log('new reply');
@@ -315,6 +338,42 @@ router.post('/thread*', function(req, res) {
 			res.redirect('/forum/thread?id='+result);
 		});
 	});
+});
+
+
+router.get('/delete*', function(req, res) {
+	
+	// get post id
+    var key = req.query.id;
+    console.log('post id is: ' + key);
+
+	Post.findById(key, function(err, post) {
+		if (err) throw err;
+
+		var thread = post.threadId;
+		console.log('top post? '+post.top);
+		console.log('thread id: '+thread);
+		
+		if(post.top === true) {
+			Thread.remove({ _id : thread }, function(err) {
+				if (err) throw err;
+				console.log('post removed');
+				req.session.save(function(err) {
+					if(err) throw err;
+					res.redirect('/forum');
+				});
+			});
+		} else {
+			Post.remove({ _id : key }, function(err) {
+				if (err) throw err;
+				console.log('post removed');
+				req.session.save(function(err) {
+					if(err) throw err;
+					res.redirect('/forum/thread?id='+thread);
+				});
+			});
+		}
+    });
 });
 
 
