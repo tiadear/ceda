@@ -106,7 +106,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
                 //a {
-                    ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
+                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $blue; text-align: left; 
                         .top {font-size: 1.4em; padding: $pad 0;}
                         .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; }
                         .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right;}
@@ -118,6 +118,8 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                             a {padding: 0 $pad/4;}
                         }
                     }
+                    ul { background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); }
+                    .postItem { background-color: none; @include box-shadow(0 rgba(0,0,0,0)); border-bottom: solid 1px darken($grey, 10%); }
                 //}
             }
         }
@@ -155,10 +157,12 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
 
-        .videoWrap { display: none; width: 100%; height: 75vh; padding-top: $pad;
-            .videoDisplay { width: 100%; height: 100%;
+        .videoWrap { display: none;// width: 100%; height: 75vh; padding-top: $pad;
+            .videoDisplay { //width: 100%; height: 100%;
                 #remoteVideo { width: 100%; position: relative; background-color: $black; height: 100%}
-                #localVideo { width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;}
+                #localVideo { //width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;
+                }
+                .videoContainer {}
                 .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
                     .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                         &:hover {background-color:$blue;}
@@ -168,7 +172,35 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
     }
-
+    .videoDisplay {
+                position: relative;
+                width: 200px;
+                height: 150px;
+            }
+            .videoDisplay video {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+            .volume {
+                position: absolute;
+                left: 15%;
+                width: 70%;
+                bottom: 5px;
+                height: 5px;
+                display: none;
+            }
+            .connectionstate {
+                position: absolute;
+                top: 0px;
+                width: 100%;
+                text-align: center;
+                color: #fff
+            }
+            #localScreenContainer {
+                display: none;
+            }
+        
 
 
 
