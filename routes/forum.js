@@ -25,8 +25,13 @@ router.get('/', function(req, res) {
 		function(callback) {
 			Thread.find().sort({'created' : -1}).exec(function(err, threads){
 				if(err) throw err;
-				if (threads) {
+				if (threads && (threads != '')) {
 					callback(null, threads);
+				}
+				else {
+					var error = 'no threads';
+					console.log(error);
+					return callback(error);
 				}
 			});
 		},
@@ -71,7 +76,7 @@ router.get('/', function(req, res) {
 					function(val) {
 						arr[id] = [threadId, threadTitle, userId, username, date, val];
 		                arr2.push(arr[id]);
-		                console.log('arr2 length: '+arr2.length);
+		                //console.log('arr2 length: '+arr2.length);
 
 						if (arr2.length === threads.length) {
 							req.threads = arr2;
@@ -97,11 +102,22 @@ router.get('/', function(req, res) {
 			}
 		}
 	], function(err, result){
-		if (err) throw err;
+		if (err) {
+			if(err === 'no threads') {
+				res.render('forum', {
+					user : req.user,
+					title : 'ceda'
+				});
+			} else {
+				console.log('error occured');
+				throw err;
+			}
+		}
 		console.log('result: '+result);
 
 		req.session.save(function(err) {
 			if(err) throw err;
+			
 			res.render('forum', {
 				threads: req.threads,
 				user : req.user,
@@ -127,18 +143,18 @@ router.get('/edit*', function(req, res) {
 		function(callback){
 			// get post id
             var key = req.query.id;
-            console.log('post id is: ' + key);
+           // console.log('post id is: ' + key);
 
             Post.findById(String(key), function(err, post) {
                 if (err) throw err;
-                console.log('thread: '+post);
+                //console.log('thread: '+post);
                 callback(null, post);
             });
 		},
 		function(post, callback) {
             Thread.findById(post.threadId, function(err, thread) {
                 if (err) throw err;
-                console.log('thread: '+thread);
+                //console.log('thread: '+thread);
                 req.thread = thread;
                 req.post = post;
                 callback(null, req.post, req.thread);
@@ -146,7 +162,7 @@ router.get('/edit*', function(req, res) {
 		}
 	], function(err, result) {
 		if(err)throw err;
-		console.log('result: '+ result);
+		//console.log('result: '+ result);
 		res.render('edit', {
 			thread : req.thread,
 			post : req.post,
@@ -173,7 +189,7 @@ router.post('/', function(req, res) {
 				callback(null, req.thread);
 			});
 		}, function(thread, callback) {
-			console.log('thread id: '+thread._id);
+			//console.log('thread id: '+thread._id);
 
 			var newPost = new Post();
 			newPost.user = req.user._id,
@@ -189,48 +205,52 @@ router.post('/', function(req, res) {
 		}
 	], 
 	function(err, result){
-		console.log('result: '+result);
+		//console.log('result: '+result);
 		req.session.save(function (err) {
 	        if(err) throw err;
-	        res.redirect('/');
+	        res.redirect('/forum');
 	    });
 
 	});
 });
 
-// view all the posts ina thread
+// view all the posts in a thread
 router.get('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback){
 
 			// get thread id
             var key = req.query.id;
-            console.log('thread id is: ' + key);
+            //console.log('thread id is: ' + key);
 
             //find the thread in the db
             Thread.findById(String(key), function(err, thread) {
                 if (err) throw err;
-                console.log('thread: '+thread);
+                //console.log('thread: '+thread);
                 callback(null, key, thread.title);
             });
 		}, function(key, title, callback) {
 
 			//find all the posts in that thread
-			Post.find({ threadId : key }).sort({'created' : 1}).exec(function(err, posts){
+			Post.find({ threadId : key }).sort({'created': 1}).exec(function(err, posts){
 				if(err) throw err;
 				req.posts = posts;
+				//console.log('posts: '+posts);
 				req.thread = [key, title];
 				callback(null, req.thread, req.posts);
 			});
 		}, function(thread, posts, callback) {
-
 			var arr = [];
 			var arr2 = [];
 
-			function findUser(userId, postID, postContent, date, top) {
+			function findUser(userId, postId, postContent, postdate) {
 				var findUsername = new Promise(
 					function(resolve, reject) {
+						console.log('function 2: '+userId+' : '+postContent);
 						User.findById(userId, function(err, user) {
+
+							// this is where it is getting out of order!!!
+							//console.log('User find: '+user.username+' : '+postContent);
 							if(err) throw err;
 							var username = user.username;
 							resolve(username);
@@ -239,12 +259,18 @@ router.get('/thread*', function(req, res) {
 				);
 				findUsername.then(
 					function(val) {
-						arr[id] = [postID, userId, val, postContent, dateformat, top];
-		                arr2.push(arr[id]);
-		                console.log('arr2 length: '+arr2.length);
+						arr[postId] = [postId, userId, val, postContent, postdate];
+						arr2.push(arr[postId]);
+						//console.log('arr2 length: '+arr2.length);
 
 						if (arr2.length === posts.length) {
+
+							arr2.sort(function(a,b){
+								return new Date(a.postdate) - (b.postdate);
+							});
+
 							req.posts = arr2;
+							//console.log('arr2: '+arr2);
 							req.thread = thread;
 							callback(null, req.thread, req.posts);
 						}
@@ -258,19 +284,18 @@ router.get('/thread*', function(req, res) {
 				
 			}
 
-			for(i=0; i < posts.length; i++){
-				var id = posts[i]._id;
+			posts.forEach(function(post, i) {
+				var id = post._id;
 				arr[id] = [];
-                
-                var date = new Date(posts[i].created);
+				var date = new Date(post.created);
                 var dateformat = formatDate(date);
 
-                findUser(posts[i].user, id, posts[i].content, dateformat, posts[i].top);
-			}
+                findUser(post.user, id, post.content, post.created);
+			});
 		}
 	], function(err, result) {
 		if(err) throw err;
-		console.log('result: '+result);
+		//console.log('result: '+result);
 		req.session.save(function(err){
 			if(err) throw err;
 			res.render('post', {
@@ -289,11 +314,11 @@ router.post('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback) {
 			var key = req.query.id;
-            console.log('thread id is: ' + key);
+            //console.log('thread id is: ' + key);
 
             Thread.findById(String(key), function(err, thread) {
                 if (err) throw err;
-                console.log('thread: '+thread);
+                //console.log('thread: '+thread);
                 callback(null, key, thread.title);
             });
 		}, function(key, title, callback) {
@@ -301,11 +326,11 @@ router.post('/thread*', function(req, res) {
 			// if the post ID exists
 			// the post is being edited
 			if(req.body.postID) {
-				console.log('edit post');
+				//console.log('edit post');
 
 				Post.update(
 					{ '_id' : req.body.postID },
-					{ $set: { "title" : req.body.title, "content" : req.body.content } },
+					{ $set: { "title" : req.body.title, "content" : req.body.content} },
 					function(err, post) {
 						if(err) throw err;
 						console.log('updated post: '+post);
@@ -332,7 +357,7 @@ router.post('/thread*', function(req, res) {
 		}
 	], function(err, result) {
 		if (err) throw err;
-		console.log('result: '+result);
+		//console.log('result: '+result);
 		req.session.save(function(err){
 			if(err) throw err;
 			res.redirect('/forum/thread?id='+result);
@@ -345,14 +370,14 @@ router.get('/delete*', function(req, res) {
 	
 	// get post id
     var key = req.query.id;
-    console.log('post id is: ' + key);
+    //console.log('post id is: ' + key);
 
 	Post.findById(key, function(err, post) {
 		if (err) throw err;
 
 		var thread = post.threadId;
-		console.log('top post? '+post.top);
-		console.log('thread id: '+thread);
+		//console.log('top post? '+post.top);
+		//console.log('thread id: '+thread);
 		
 		if(post.top === true) {
 			Thread.remove({ _id : thread }, function(err) {

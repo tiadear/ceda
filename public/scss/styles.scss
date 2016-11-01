@@ -90,7 +90,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
     // dash
     .logout { padding-top: 85vh; text-align: right; }
-    .chatWraps { width: 100%; padding: $pad*2 $pad 0; text-align: center; }
+    .chatWraps { width: 100%; padding: $pad*2 0; text-align: center; }
 
 
 
@@ -107,11 +107,16 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             li { width: 100%; position: relative;
                 //a {
                     ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
-                        .user, .title {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
-                        .message, .postuser {padding: $pad/2 0;}
-                        .time {font-size: 0.6em; padding: $pad/2 0; width: 70%; display: inline-block;}
+                        .top {font-size: 1.4em; padding: $pad 0;}
+                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; }
+                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right;}
+                        .post { padding: $pad/2 0 $pad/2; }
+                        .postnumber {font-size : 0.7em; padding-bottom: $pad/2;}
+                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;}
                         .icon { float: right; }
-                        .edit, .delete { font-size: 0.8em; text-align: right; padding: $pad/2 $pad/4; display: inline-block;}
+                        .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block;
+                            a {padding: 0 $pad/4;}
+                        }
                     }
                 //}
             }
@@ -169,7 +174,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
     // forum
     .forumWrap { @extend .chatWraps;
-        .threadList { padding: 0 $pad}
+        .threadList {  }
         .addPost { float: right; padding: $pad;
             a {
                 .add {  width: 50px; height: auto;
@@ -180,7 +185,9 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
     }
     .options { padding: $pad;
         .reply { float: right; padding: $pad/4 $pad;  @include border-radius(5px)}
-        .back { width: 40px; height: 40px;  @include border-radius(20px) }
+        .back { width: 40px; display: inline-block;
+            img {width: 100%;}
+        }
     }
     .postReply {display :none;}
 

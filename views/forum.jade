@@ -12,15 +12,19 @@ block content
 				.threadList
 					ul.threads
 						for item,i in threads
-							- var z = (100) - [i];
+							- var z = (100) - [i]
 								li(style="z-index: #{z};")
 									a(href="/forum/thread?id=#{item[0]}")
+										- var replies = item[5] -1
 										ul.threadItem
-											.title
+											.top
 												p=item[1]
 											.postnumber
-												p=item[5]
-											.postuser
-												p=item[4]
-											.time
+												if (replies === 1)
+													p [#{replies} reply]
+												else
+													p [#{replies} replies]
+											.bottom-left
 												p=item[3]
+											.bottom-right
+												p=item[4]

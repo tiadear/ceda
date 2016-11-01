@@ -4,7 +4,7 @@ block content
 		$(document).ready(function(){
 			$('.reply').on('click touch', function(){ 
 				console.log('button clicked'); 
-				$('.postReply').show(); 
+				$('.postReply').show();
 			});
 		});
 		//user 1 is current user
@@ -13,7 +13,8 @@ block content
 	.container
 		.options
 			a(href='/forum')
-					button.back(type='button') Back
+				.back
+					img(src="/images/icon-back.png")
 			button.reply(type='button') Reply
 		.forumWrap
 			h1 #{thread[1]}
@@ -23,16 +24,16 @@ block content
 						- var z = (100) - [i];
 						li(style="z-index: #{z};")
 							ul.threadItem
-								.title
-									p=item[3]
-								.postuser
+								.middle-left
 									p=item[2]
-								.time
+								.middle-right
 									p=item[4]
+								.post
+									p=item[3]
+								.bottom-left
 								if (currentuser === postuser)
-									.edit
+									.bottom-right
 										a(href="/forum/edit?id=#{item[0]}") edit
-									.delete
 										a(href="/forum/delete?id=#{item[0]}") delete
 		.postReply
 			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")

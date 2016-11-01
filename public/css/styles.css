@@ -168,7 +168,7 @@ form {
     text-align: right; }
   .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap {
     width: 100%;
-    padding: 40px 20px 0;
+    padding: 40px 0;
     text-align: center; }
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
@@ -198,23 +198,39 @@ form {
         box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
         color: #213e64;
         text-align: left; }
-        .container .history ul li ul .user, .container .history ul li ul .title, .container .threadList ul li ul .user, .container .threadList ul li ul .title {
-          font-size: 1.2em;
-          padding: 20px 0 10px 0; }
-        .container .history ul li ul .message, .container .history ul li ul .postuser, .container .threadList ul li ul .message, .container .threadList ul li ul .postuser {
-          padding: 10px 0; }
-        .container .history ul li ul .time, .container .threadList ul li ul .time {
-          font-size: 0.6em;
+        .container .history ul li ul .top, .container .threadList ul li ul .top {
+          font-size: 1.4em;
+          padding: 20px 0; }
+        .container .history ul li ul .middle-left, .container .threadList ul li ul .middle-left {
+          font-size: 0.8em;
+          padding: 20px 0 10px;
+          width: 50%;
+          display: inline-block; }
+        .container .history ul li ul .middle-right, .container .threadList ul li ul .middle-right {
+          font-size: 0.8em;
+          width: 50%;
+          display: inline-block;
+          text-align: right; }
+        .container .history ul li ul .post, .container .threadList ul li ul .post {
+          padding: 10px 0 10px; }
+        .container .history ul li ul .postnumber, .container .threadList ul li ul .postnumber {
+          font-size: 0.7em;
+          padding-bottom: 10px; }
+        .container .history ul li ul .bottom-left, .container .threadList ul li ul .bottom-left {
+          font-size: 0.8em;
           padding: 10px 0;
-          width: 70%;
+          width: 50%;
           display: inline-block; }
         .container .history ul li ul .icon, .container .threadList ul li ul .icon {
           float: right; }
-        .container .history ul li ul .edit, .container .history ul li ul .delete, .container .threadList ul li ul .edit, .container .threadList ul li ul .delete {
+        .container .history ul li ul .bottom-right, .container .threadList ul li ul .bottom-right {
           font-size: 0.8em;
+          width: 50%;
           text-align: right;
           padding: 10px 5px;
           display: inline-block; }
+          .container .history ul li ul .bottom-right a, .container .threadList ul li ul .bottom-right a {
+            padding: 0 5px; }
   .container .chatRoom {
     padding-top: 20px; }
     .container .chatRoom h1 {
@@ -351,8 +367,6 @@ form {
               height: 38px;
               width: auto;
               margin: 0 auto; }
-  .container .forumWrap .threadList {
-    padding: 0 20px; }
   .container .forumWrap .addPost {
     float: right;
     padding: 20px; }
@@ -372,11 +386,9 @@ form {
       border-radius: 5px; }
     .container .options .back {
       width: 40px;
-      height: 40px;
-      -webkit-border-radius: 20px;
-      -moz-border-radius: 20px;
-      -ms-border-radius: 20px;
-      border-radius: 20px; }
+      display: inline-block; }
+      .container .options .back img {
+        width: 100%; }
   .container .postReply {
     display: none; }
 
