@@ -203,9 +203,7 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('userTyping', function(data) {
-
-            io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: socket.username});
-        
+        io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: socket.username});
     });
 
     socket.on('sendChat', function(data) {
@@ -231,6 +229,10 @@ io.sockets.on('connection', function(socket){
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
         }
+    });
+
+    socket.on('videoReady', function(room) {
+        socket.emit('readyToCall', room);
     });
 
     socket.on('disconnect', function() {

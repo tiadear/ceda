@@ -7,6 +7,7 @@ block content
 		user1username = '#{usersInRoom[0]}';
 		// user 2 is peer
 		user2username = '#{usersInRoom[1]}';
+	script(src="https://simplewebrtc.com/latest-v2.js")
 	script(src='/js/client.js')
 	.container
 		include includes/nav.jade
@@ -27,8 +28,9 @@ block content
 						button.chat-btn#outgoingSubmit(type='submit') Submit
 				.videoWrap
 					.videoDisplay
-						video#remoteVideo(autoplay)
+						video#remoteVideos(autoplay muted)
 						video#localVideo(autoplay muted)
+						.volume
 						.videoOptions
 							.chat-btn#switchToChat
 								img(src='/images/icon-switchToChat.png')
@@ -36,3 +38,5 @@ block content
 								img(src='/images/icon-phone.png')
 							.chat-btn#muteButton
 							.chat-btn#hangupButton
+					#localScreenContainer
+					#remotes
