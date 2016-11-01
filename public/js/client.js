@@ -198,15 +198,19 @@ $(function(){
             socket.emit('videoReady', roomID);
             $('.displayMessagesWrap').hide();
             $('.sendMessagesWrap').hide();
+            $('#user2').hide();
+            $('.chatRoom').css('padding-top', '0px');
             $('.videoWrap').show();
             //socket.emit('videoReady', roomID);
         });
 
         //swap to video chat
         $('#switchToChat').on('click touch', function(){
+            $('.videoWrap').hide();
+            $('.chatRoom').css('padding-top', '20px');
             $('.displayMessagesWrap').show();
             $('.sendMessagesWrap').show();
-            $('.videoWrap').hide();
+            $('#user2').show();
             //socket.emit('switchToChat', roomID);
         });
 
@@ -253,8 +257,8 @@ $(function(){
             webrtc.on('localScreenAdded', function (video) {
                 console.log('local screen added');
                 video.onclick = function () {
-                    video.style.width = video.videoWidth + 'px';
-                    video.style.height = video.videoHeight + 'px';
+                    //video.style.width = video.videoWidth + 'px';
+                    //video.style.height = video.videoHeight + 'px';
                 };
                 document.getElementById('localScreenContainer').appendChild(video);
                 $('#localScreenContainer').show();
@@ -282,8 +286,8 @@ $(function(){
 
                     // resize the video on click
                     video.onclick = function () {
-                        container.style.width = video.videoWidth + 'px';
-                        container.style.height = video.videoHeight + 'px';
+                        //container.style.width = video.videoWidth + 'px';
+                        //container.style.height = video.videoHeight + 'px';
                     };
 
                     // show the ice connection state
