@@ -30,8 +30,7 @@ button, .container .open .social-login .social-btn, .container .chatChoiceWrap .
   font-family: "Questrial", sans-serif;
   font-size: 1em; }
   button:hover, .container .open .social-login .social-btn:hover, .container .chatChoiceWrap .chatChoices .chatChoice:hover {
-    background-color: #213e64;
-    border: solid 2px #213e64; }
+    background-color: #213e64; }
   button:focus, .container .open .social-login .social-btn:focus, .container .chatChoiceWrap .chatChoices .chatChoice:focus {
     outline: none; }
 
@@ -167,9 +166,9 @@ form {
   .container .logout {
     padding-top: 85vh;
     text-align: right; }
-  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .forumWrap {
+  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap {
     width: 100%;
-    padding: 40px 20px 0;
+    padding: 40px 0;
     text-align: center; }
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
@@ -182,33 +181,64 @@ form {
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       border-radius: 5px; }
-  .container .history ul, .container .forumWrap ul {
+  .container .history ul, .container .threadList ul {
     width: 100%;
     padding: 40px 0; }
-    .container .history ul li, .container .forumWrap ul li {
+    .container .history ul li, .container .threadList ul li {
       width: 100%;
       position: relative; }
-      .container .history ul li a ul, .container .forumWrap ul li a ul {
+      .container .history ul li ul, .container .history ul li .postItem, .container .threadList ul li ul, .container .threadList ul li .postItem {
         width: 90%;
         padding: 0 40px;
-        background-color: white;
         margin: 0 auto;
+        color: #213e64;
+        text-align: left; }
+        .container .history ul li ul .top, .container .history ul li .postItem .top, .container .threadList ul li ul .top, .container .threadList ul li .postItem .top {
+          font-size: 1.4em;
+          padding: 20px 0; }
+        .container .history ul li ul .middle-left, .container .history ul li .postItem .middle-left, .container .threadList ul li ul .middle-left, .container .threadList ul li .postItem .middle-left {
+          font-size: 0.8em;
+          padding: 20px 0 10px;
+          width: 50%;
+          display: inline-block; }
+        .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
+          font-size: 0.8em;
+          width: 50%;
+          display: inline-block;
+          text-align: right; }
+        .container .history ul li ul .post, .container .history ul li .postItem .post, .container .threadList ul li ul .post, .container .threadList ul li .postItem .post {
+          padding: 10px 0 10px; }
+        .container .history ul li ul .postnumber, .container .history ul li .postItem .postnumber, .container .threadList ul li ul .postnumber, .container .threadList ul li .postItem .postnumber {
+          font-size: 0.7em;
+          padding-bottom: 10px; }
+        .container .history ul li ul .bottom-left, .container .history ul li .postItem .bottom-left, .container .threadList ul li ul .bottom-left, .container .threadList ul li .postItem .bottom-left {
+          font-size: 0.8em;
+          padding: 10px 0;
+          width: 50%;
+          display: inline-block; }
+        .container .history ul li ul .icon, .container .history ul li .postItem .icon, .container .threadList ul li ul .icon, .container .threadList ul li .postItem .icon {
+          float: right; }
+        .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
+          font-size: 0.8em;
+          width: 50%;
+          text-align: right;
+          padding: 10px 5px;
+          display: inline-block; }
+          .container .history ul li ul .bottom-right a, .container .history ul li .postItem .bottom-right a, .container .threadList ul li ul .bottom-right a, .container .threadList ul li .postItem .bottom-right a {
+            padding: 0 5px; }
+      .container .history ul li ul, .container .threadList ul li ul {
+        background-color: white;
         -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
         -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-        box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-        color: #213e64;
-        text-align: left; }
-        .container .history ul li a ul .user, .container .forumWrap ul li a ul .user {
-          font-size: 1.2em;
-          padding: 20px 0 10px 0; }
-        .container .history ul li a ul .message, .container .forumWrap ul li a ul .message {
-          padding: 10px 0; }
-        .container .history ul li a ul .time, .container .forumWrap ul li a ul .time {
-          font-size: 0.6em;
-          padding: 10px 0; }
-        .container .history ul li a ul .icon, .container .forumWrap ul li a ul .icon {
-          float: right; }
+        box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
+      .container .history ul li .postItem, .container .threadList ul li .postItem {
+        background-color: none;
+        -webkit-box-shadow: 0 transparent;
+        -moz-box-shadow: 0 transparent;
+        -ms-box-shadow: 0 transparent;
+        box-shadow: 0 transparent;
+        border-bottom: solid 1px #d2d2d2; }
   .container .chatRoom {
     padding-top: 20px; }
     .container .chatRoom h1 {
@@ -297,54 +327,60 @@ form {
             width: auto;
             margin: 0 auto; }
     .container .chatRoom .videoWrap {
-      display: none;
-      width: 100%;
-      height: 75vh;
-      padding-top: 20px; }
-      .container .chatRoom .videoWrap .videoDisplay {
+      display: none; }
+      .container .chatRoom .videoWrap .videoDisplay #remoteVideo {
         width: 100%;
+        position: relative;
+        background-color: #000000;
         height: 100%; }
-        .container .chatRoom .videoWrap .videoDisplay #remoteVideo {
-          width: 100%;
-          position: relative;
-          background-color: #000000;
-          height: 100%; }
-        .container .chatRoom .videoWrap .videoDisplay #localVideo {
-          width: 40%;
-          position: relative;
-          bottom: 120px;
-          float: right;
-          border: solid 4px #ea5455;
-          -webkit-border-radius: 20px;
-          -moz-border-radius: 20px;
-          -ms-border-radius: 20px;
-          border-radius: 20px;
-          margin-right: 20px; }
-        .container .chatRoom .videoWrap .videoDisplay .videoOptions {
-          width: 100%;
-          height: 40px;
-          position: fixed;
-          bottom: 0; }
-          @media screen and (min-width: 700px) {
-            .container .chatRoom .videoWrap .videoDisplay .videoOptions {
-              width: 500px;
-              margin: 0 auto; } }
-          .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn {
-            background-color: #ea5455;
-            color: #ffffff;
-            width: 25%;
-            height: 100%;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            vertical-align: top;
-            text-align: center; }
-            .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn:hover {
-              background-color: #213e64; }
-            .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn img {
-              height: 38px;
-              width: auto;
-              margin: 0 auto; }
+      .container .chatRoom .videoWrap .videoDisplay .videoOptions {
+        width: 100%;
+        height: 40px;
+        position: fixed;
+        bottom: 0; }
+        @media screen and (min-width: 700px) {
+          .container .chatRoom .videoWrap .videoDisplay .videoOptions {
+            width: 500px;
+            margin: 0 auto; } }
+        .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn {
+          background-color: #ea5455;
+          color: #ffffff;
+          width: 25%;
+          height: 100%;
+          display: inline-block;
+          border: none;
+          cursor: pointer;
+          vertical-align: top;
+          text-align: center; }
+          .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn:hover {
+            background-color: #213e64; }
+          .container .chatRoom .videoWrap .videoDisplay .videoOptions .chat-btn img {
+            height: 38px;
+            width: auto;
+            margin: 0 auto; }
+  .container .videoDisplay {
+    position: relative;
+    width: 200px;
+    height: 150px; }
+  .container .videoDisplay video {
+    position: absolute;
+    width: 100%;
+    height: 100%; }
+  .container .volume {
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    bottom: 5px;
+    height: 5px;
+    display: none; }
+  .container .connectionstate {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    text-align: center;
+    color: #fff; }
+  .container #localScreenContainer {
+    display: none; }
   .container .forumWrap .addPost {
     float: right;
     padding: 20px; }
@@ -353,5 +389,21 @@ form {
       height: auto; }
       .container .forumWrap .addPost a .add img {
         width: 100%; }
+  .container .options {
+    padding: 20px; }
+    .container .options .reply {
+      float: right;
+      padding: 5px 20px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px; }
+    .container .options .back {
+      width: 40px;
+      display: inline-block; }
+      .container .options .back img {
+        width: 100%; }
+  .container .postReply {
+    display: none; }
 
 /*# sourceMappingURL=styles.css.map */

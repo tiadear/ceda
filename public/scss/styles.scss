@@ -17,7 +17,7 @@ a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $red;
     &:hover { color: $blue; }
 }
 button { border: none; background-color: $red; color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
-    &:hover { background-color: $blue; border: solid 2px $blue; }
+    &:hover { background-color: $blue;  }
     &:focus { outline: none;}
 }
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
@@ -90,7 +90,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
     // dash
     .logout { padding-top: 85vh; text-align: right; }
-    .chatWraps { width: 100%; padding: $pad*2 $pad 0; text-align: center; }
+    .chatWraps { width: 100%; padding: $pad*2 0; text-align: center; }
 
 
 
@@ -102,17 +102,25 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
-    .history, .forumWrap {@extend .chatWraps;
+    .history, .threadList {@extend .chatWraps;
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
-                a {
-                    ul { width: 90%; padding: 0 $pad*2; background-color: white; margin: 0 auto; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); color: $blue; text-align: left; 
-                        .user {font-size: 1.2em; padding: $pad 0 $pad/2 0;}
-                        .message {padding: $pad/2 0;}
-                        .time {font-size: 0.6em; padding: $pad/2 0;}
+                //a {
+                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $blue; text-align: left; 
+                        .top {font-size: 1.4em; padding: $pad 0;}
+                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; }
+                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right;}
+                        .post { padding: $pad/2 0 $pad/2; }
+                        .postnumber {font-size : 0.7em; padding-bottom: $pad/2;}
+                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;}
                         .icon { float: right; }
+                        .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block;
+                            a {padding: 0 $pad/4;}
+                        }
                     }
-                }
+                    ul { background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); }
+                    .postItem { background-color: none; @include box-shadow(0 rgba(0,0,0,0)); border-bottom: solid 1px darken($grey, 10%); }
+                //}
             }
         }
     }
@@ -149,10 +157,12 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
 
-        .videoWrap { display: none; width: 100%; height: 75vh; padding-top: $pad;
-            .videoDisplay { width: 100%; height: 100%;
+        .videoWrap { display: none;// width: 100%; height: 75vh; padding-top: $pad;
+            .videoDisplay { //width: 100%; height: 100%;
                 #remoteVideo { width: 100%; position: relative; background-color: $black; height: 100%}
-                #localVideo { width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;}
+                #localVideo { //width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;
+                }
+                .videoContainer {}
                 .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
                     .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                         &:hover {background-color:$blue;}
@@ -162,12 +172,41 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
     }
-
+    .videoDisplay {
+                position: relative;
+                width: 200px;
+                height: 150px;
+            }
+            .videoDisplay video {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+            .volume {
+                position: absolute;
+                left: 15%;
+                width: 70%;
+                bottom: 5px;
+                height: 5px;
+                display: none;
+            }
+            .connectionstate {
+                position: absolute;
+                top: 0px;
+                width: 100%;
+                text-align: center;
+                color: #fff
+            }
+            #localScreenContainer {
+                display: none;
+            }
+        
 
 
 
     // forum
     .forumWrap { @extend .chatWraps;
+        .threadList {  }
         .addPost { float: right; padding: $pad;
             a {
                 .add {  width: 50px; height: auto;
@@ -176,6 +215,13 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
     }
+    .options { padding: $pad;
+        .reply { float: right; padding: $pad/4 $pad;  @include border-radius(5px)}
+        .back { width: 40px; display: inline-block;
+            img {width: 100%;}
+        }
+    }
+    .postReply {display :none;}
 
 } // end of container
 

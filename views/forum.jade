@@ -8,9 +8,23 @@ block content
 				a(href="/forum/new")
 					.add
 						img(src="/images/newpost.png")
-			ul.forumList
-				for item in thread
-					- var z = (100) - [i];
-						li(style="z-index: #{z};")
-							a(href="/forum/post?id=#{post[i][0]}")
-								ul.threaditem
+			if (threads)
+				.threadList
+					ul.threads
+						for item,i in threads
+							- var z = (100) - [i]
+								li(style="z-index: #{z};")
+									a(href="/forum/thread?id=#{item[0]}")
+										- var replies = item[5] -1
+										ul.threadItem
+											.top
+												p=item[1]
+											.postnumber
+												if (replies === 1)
+													p [#{replies} reply]
+												else
+													p [#{replies} replies]
+											.bottom-left
+												p=item[3]
+											.bottom-right
+												p=item[4]
