@@ -238,13 +238,6 @@ $(function(){
                 }
             });
 
-            function showVolume(el, volume) {
-                if (!el) return;
-                if (volume < -45) volume = -45; // -45 to -20 is
-                if (volume > -20) volume = -20; // a good range
-                el.value = volume;
-            }
-
             // we got access to the camera
             webrtc.on('localStream', function (stream) {
                 console.log('1. local stream');
@@ -293,17 +286,8 @@ $(function(){
                         container.style.height = video.videoHeight + 'px';
                     };
 
-                    // show the remote volume
-                    var vol = document.createElement('meter');
-                    vol.id = 'volume_' + peer.id;
-                    vol.className = 'volume';
-                    vol.min = -45;
-                    vol.max = -20;
-                    vol.low = -40;
-                    vol.high = -25;
-                    container.appendChild(vol);
-
                     // show the ice connection state
+                    /*
                     if (peer && peer.pc) {
                         console.log('6. peer and peer.pc')
                         var connstate = document.createElement('div');
@@ -330,7 +314,7 @@ $(function(){
                                 break;
                             }
                         });
-                    }
+                    }*/
                     remotes.appendChild(container);
                 }
             });
@@ -342,15 +326,6 @@ $(function(){
                 if (remotes && el) {
                     remotes.removeChild(el);
                 }
-            });
-
-            // local volume has changed
-            webrtc.on('volumeChange', function (volume, treshold) {
-                showVolume(document.getElementById('localVolume'), volume);
-            });
-            // remote volume has changed
-            webrtc.on('remoteVolumeChange', function (peer, volume) {
-                showVolume(document.getElementById('volume_' + peer.id), volume);
             });
 
             // local p2p/ice failure
