@@ -1,0 +1,47 @@
+extends layout
+block content
+	script.
+		$(document).ready(function(){
+			$('#passReset').submit(function(e) { e.preventDefault(); });
+
+			$('.form-input').keypress(function(e){
+				// if all the fields have values
+				if ($('#pass0').val() != '' && $('#pass1').val() != '' && $('#pass2').val() != '' ) {
+					$('#passReset').unbind('submit');
+					$('#passSubmit').removeClass('inactive');
+					$('#passSubmit').addClass('active');	
+				} 
+				// if one of the fields is empty
+				else if ( $('#pass0').val() != '' || $('#pass1').val() != '' || $('#pass2').val() != '' ) {
+					$('#error').html('Please ensure all fields have been filled out');
+				}
+			});
+		});
+	.container
+		include includes/nav.jade
+		.settingsWrap
+			h1 Change #{field}
+			if (user)
+				if (message.length > 0)
+					.alert #{message}
+				if (field != 'password')
+					.settingsA
+						.settingsAccount
+							form(role='form', method='POST', action='change?field=#{field}')
+								input.form-input(type='text', name='update', placeholder='Please enter your new #{field}')
+								input(type='hidden', name='userId', value='#{user._id}')
+								button.form-submit(type="submit") Submit
+								a(href='/settings') Cancel
+				else
+					if (user.provider === 'local')
+						.settingsA
+							.settingsAccount
+								form#passReset(role='form', method='POST', action='change?field=#{field}')
+									#error
+									input.form-input#pass0(type='password', name='current', placeholder='current #{field}')
+									input.form-input#pass1(type='password', name='update', placeholder='new #{field}')
+									input.form-input#pass2(type='password', name='confirm', placeholder='confirm your #{field}')
+									input(type='hidden', name='userId', value='#{user._id}')
+									input(type='hidden', name='email', value='#{user.email}')
+									button.form-submit#passSubmit.inactive(type="submit") Submit
+									a(href='/settings') Cancel

@@ -7,25 +7,26 @@ block content
 			.settingsA
 				.settingsAccount
 					h2 Account
-					a(href='/settings/change')
+					a(href='/settings/change?field=username')
 						.setting
 							.settingTitle
 								p username
 							.settingInput
 								p #{user.username}	
-					a(href='/settings/change')
+					a(href='/settings/change?field=email')
 						.setting
 							.settingTitle
 								p email
 							.settingInput
 								p #{user.email}
-					a(href='/settings/change')
-						.setting
-							.settingTitle
-								p password
-							.settingInput
-								p ***********
-					a(href='/settings/change')
+					if (user.provider === 'local')
+						a(href='/settings/change?field=password')
+							.setting
+								.settingTitle
+									p password
+								.settingInput
+									p ***********
+					a(href='/deleteaccount')
 						.setting
 							.settingTitle
 								p account

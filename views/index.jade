@@ -6,6 +6,8 @@ block content
 				.logo
 					img#logo(src='/images/ceda2.png')
 				h1 Login
+				if (message.length > 0)
+					.alert #{message}
 				.social-login
 					a(href="/auth/facebook")
 						.social-btn#login-fb

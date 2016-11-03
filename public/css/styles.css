@@ -44,7 +44,7 @@ button, .container .open .social-login .social-btn, .container .chatChoiceWrap .
 
 h1 {
   font-size: 1.8em;
-  color: #ea5455; }
+  color: #213e64; }
 
 h2 {
   font-size: 1.2em;
@@ -440,6 +440,13 @@ form {
           width: 30%; }
         .container .settingsWrap .settingsA .settingsAccount .setting .settingInput, .container .settingsWrap .settingsA .settingsNotification .setting .settingInput, .container .settingsWrap .settingsN .settingsAccount .setting .settingInput, .container .settingsWrap .settingsN .settingsNotification .setting .settingInput {
           display: inline-block; }
+      .container .settingsWrap .settingsA .settingsAccount form, .container .settingsWrap .settingsA .settingsNotification form, .container .settingsWrap .settingsN .settingsAccount form, .container .settingsWrap .settingsN .settingsNotification form {
+        width: 80%;
+        margin: 0 auto; }
+        .container .settingsWrap .settingsA .settingsAccount form .inactive, .container .settingsWrap .settingsA .settingsNotification form .inactive, .container .settingsWrap .settingsN .settingsAccount form .inactive, .container .settingsWrap .settingsN .settingsNotification form .inactive {
+          pointer-events: none; }
+        .container .settingsWrap .settingsA .settingsAccount form .active, .container .settingsWrap .settingsA .settingsNotification form .active, .container .settingsWrap .settingsN .settingsAccount form .active, .container .settingsWrap .settingsN .settingsNotification form .active {
+          pointer-events: auto; }
   .container .settingsWrap .settingsA {
     z-index: 100;
     margin: 40px 0 0; }
