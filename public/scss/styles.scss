@@ -157,49 +157,26 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
 
-        .videoWrap { display: none;// width: 100%; height: 75vh; padding-top: $pad;
-            .videoDisplay { //width: 100%; height: 100%;
-                #remoteVideo { width: 100%; position: relative; background-color: $black; height: 100%}
-                #localVideo { //width: 40%; position: relative; bottom: 120px; float: right; border: solid 4px $red; @include border-radius(20px); margin-right: $pad;
-                }
-                .videoContainer {}
-                .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
-                    .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
-                        &:hover {background-color:$blue;}
-                        img {height: 38px; width: auto; margin: 0 auto;}
-                    }
+        .videoWrap { display: none; width: 100%; height: 100%; padding-top: $pad*2; background-color: $black; position: fixed;
+            #remotes { height: 100%; width: 100%;
+                .videoDisplay { position: relative; text-align: center; margin-top: 100px;
+                    video { top: 0; left: 0; @include border-radius(20px); margin: 0 auto; width: 92%;}
                 }
             }
+            .localDisplay { width: 200px; height: 150px; position: fixed; bottom: 60px; right: 0px; margin-right: $pad;
+                video { width: 100%; position: absolute; @include border-radius(20px); }
+            }
+            #localScreenContainer { display: none; }
+            .connectionstate { position: absolute; top: 0px; width: 100%; text-align: center; color: #fff }
+            .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
+                    &:hover {background-color:$blue;}
+                    img {height: 38px; width: auto; margin: 0 auto;}
+                }
+            }
+            
         }
     }
-    .videoDisplay {
-                position: relative;
-                width: 200px;
-                height: 150px;
-            }
-            .videoDisplay video {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-            }
-            .volume {
-                position: absolute;
-                left: 15%;
-                width: 70%;
-                bottom: 5px;
-                height: 5px;
-                display: none;
-            }
-            .connectionstate {
-                position: absolute;
-                top: 0px;
-                width: 100%;
-                text-align: center;
-                color: #fff
-            }
-            #localScreenContainer {
-                display: none;
-            }
         
 
 
@@ -222,6 +199,23 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         }
     }
     .postReply {display :none;}
+
+
+
+
+    .settingsWrap { @extend .chatWraps;
+        .settingsA, .settingsN {position: relative;
+            .settingsAccount, .settingsNotification { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
+                .setting { text-align: left; display: block; padding-top: $pad;
+                    .settingTitle { color: $blue; display: inline-block; width: 30%; }
+                    .settingInput { display: inline-block; }
+                }
+                input {}
+            }
+        }
+        .settingsA { z-index: 100; margin: $pad*2 0 0; }
+        .settingsN { z-index: 50; }
+    }
 
 } // end of container
 

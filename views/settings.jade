@@ -1,0 +1,44 @@
+extends layout
+block content
+	.container
+		include includes/nav.jade
+		.settingsWrap
+			h1 Settings
+			.settingsA
+				.settingsAccount
+					h2 Account
+					a(href='/settings/change')
+						.setting
+							.settingTitle
+								p username
+							.settingInput
+								p #{user.username}	
+					a(href='/settings/change')
+						.setting
+							.settingTitle
+								p email
+							.settingInput
+								p #{user.email}
+					a(href='/settings/change')
+						.setting
+							.settingTitle
+								p password
+							.settingInput
+								p ***********
+					a(href='/settings/change')
+						.setting
+							.settingTitle
+								p account
+							.settingInput
+								p delete account
+			.settingsN
+				.settingsNotification
+					h2 Notifications
+					.setting
+						.settingTitle
+							p messages
+						input.notifyChange(type='checkbox', name='notifyChat')
+					.setting
+						.settingTitle
+							p forum replies
+						input.notifyChange(type='checkbox', name='notifyForum')

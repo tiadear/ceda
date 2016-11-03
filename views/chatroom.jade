@@ -27,16 +27,14 @@ block content
 							img(src='/images/icon-block.png')
 						button.chat-btn#outgoingSubmit(type='submit') Submit
 				.videoWrap
-					.videoDisplay
-						video#remoteVideos(autoplay muted)
-						video#localVideo(autoplay muted)
-						.volume
-						.videoOptions
-							.chat-btn#switchToChat
-								img(src='/images/icon-switchToChat.png')
-							.chat-btn#callButton
-								img(src='/images/icon-phone.png')
-							.chat-btn#muteButton
-							.chat-btn#hangupButton
-					#localScreenContainer
 					#remotes
+					#localScreenContainer
+					.localDisplay
+						video#localVideo(autoplay muted)
+					.videoOptions
+						.chat-btn#switchToChat
+							img(src='/images/icon-backarrow.png')
+						.chat-btn#callButton
+							img(src='/images/icon-phone.png')
+						.chat-btn#muteButton
+						.chat-btn#killVideoButton
