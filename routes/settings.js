@@ -74,13 +74,13 @@ router.post('/change*', function(req, res, done) {
 					console.log('wrong password');
 						var e = 'Incorrect current password entered';
 						req.flash('settingsMessage', e);
-						//return done(null, req.user, req.flash('settingsMessage', e));
 						res.redirect('/settings/change?field=password');
 					}
 					//check new passwords match
 					else if(req.body.update != req.body.confirm) {
 						var e = 'Passwords do not match';
-						return done(null, req.user, req.flash('settingsMessage', e));
+						req.flash('settingsMessage', e);
+						res.redirect('/settings/change?field=password');
 					}
 					else {
 						var newPassword = user.generateHash(req.body.update);
