@@ -18,9 +18,9 @@ block content
 						li(style="z-index: #{z};")
 							a(href="/chat/chatpeer?user=#{history[i][0]}")
 								ul.historyitem
-									.user
+									.middle-left
 										p=history[i][0]
-									.message
-										p=history[i][1]
-									.time
+									.middle-right
 										p=history[i][2]
+									.post
+										p=history[i][1]

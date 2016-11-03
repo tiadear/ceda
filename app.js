@@ -43,6 +43,7 @@ module.exports = app;
 var routes = require('./routes/index');
 var chat = require('./routes/chat');
 var forum = require('./routes/forum');
+var settings = require('./routes/settings');
 
 
 
@@ -78,6 +79,7 @@ app.use(passport.session());
 app.use('/', routes);
 app.use('/chat', chat);
 app.use('/forum', forum);
+app.use('/settings', settings);
 
 
 

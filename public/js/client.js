@@ -191,8 +191,6 @@ $(function(){
 
 
 
-
-
         //swap to video chat
         $('#chat-btn-video').on('click touch', function(){
             socket.emit('videoReady', roomID);
@@ -201,38 +199,19 @@ $(function(){
             $('#user2').hide();
             $('.chatRoom').css('padding-top', '0px');
             $('.videoWrap').show();
-            //socket.emit('videoReady', roomID);
-        });
-
-        //swap to video chat
-        $('#switchToChat').on('click touch', function(){
-            $('.videoWrap').hide();
-            $('.chatRoom').css('padding-top', '20px');
-            $('.displayMessagesWrap').show();
-            $('.sendMessagesWrap').show();
-            $('#user2').show();
-            //socket.emit('switchToChat', roomID);
-        });
-
-            
-
-        
 
 
-
-
-
-
-            var room = roomID;
 
             var webrtc = new SimpleWebRTC({
                 localVideoEl: 'localVideo',
                 remoteVideosEl: '',
-                autoRequestMedia: true,
+                autoRequestMedia: false,
                 debug: false,
                 detectSpeakingEvents: true,
                 autoAdjustMic: false
             });
+
+            var room = roomID;
 
             webrtc.on('readyToCall', function () {
                 console.log('2. ready to call');
@@ -242,89 +221,124 @@ $(function(){
                 }
             });
 
-            // we got access to the camera
-            webrtc.on('localStream', function (stream) {
-                console.log('1. local stream');
-                $('#localVolume').show();
-            });
+            $('#callButton').on('click touch', function() {
+                console.log('call button clicked');
+                webrtc.startLocalVideo();
 
-            // we did not get access to the camera
-            webrtc.on('localMediaError', function (err) {
-                console.log('local media error');
-            });
+                // we got access to the camera
+                webrtc.on('localStream', function (stream) {
+                    console.log('1. local stream');
+                    $('#localVolume').show();
+                });
 
-            // local screen obtained
-            webrtc.on('localScreenAdded', function (video) {
-                console.log('local screen added');
-                video.onclick = function () {
-                    //video.style.width = video.videoWidth + 'px';
-                    //video.style.height = video.videoHeight + 'px';
-                };
-                document.getElementById('localScreenContainer').appendChild(video);
-                $('#localScreenContainer').show();
-            });
-            // local screen removed
-            webrtc.on('localScreenRemoved', function (video) {
-                document.getElementById('localScreenContainer').removeChild(video);
-                $('#localScreenContainer').hide();
-            });
+                // we did not get access to the camera
+                webrtc.on('localMediaError', function (err) {
+                    console.log('local media error');
+                });
 
-            // a peer video has been added
-            webrtc.on('videoAdded', function (video, peer) {
-                console.log('4. video added', peer);
-                webrtc.mute()
-                var remotes = document.getElementById('remotes');
-                if (remotes) {
-                    console.log('5. yay remotes')
-                    var container = document.createElement('div');
-                    container.className = 'videoDisplay';
-                    container.id = 'container_' + webrtc.getDomId(peer);
-                    container.appendChild(video);
-
-                    // suppress contextmenu
-                    video.oncontextmenu = function () { return false; };
-
-                    // resize the video on click
+                // local screen obtained
+                webrtc.on('localScreenAdded', function (video) {
+                    console.log('local screen added');
                     video.onclick = function () {
-                        //container.style.width = video.videoWidth + 'px';
-                        //container.style.height = video.videoHeight + 'px';
+                        //video.style.width = video.videoWidth + 'px';
+                        //video.style.height = video.videoHeight + 'px';
                     };
+                    document.getElementById('localScreenContainer').appendChild(video);
+                    $('#localScreenContainer').show();
+                });
+                // local screen removed
+                webrtc.on('localScreenRemoved', function (video) {
+                    document.getElementById('localScreenContainer').removeChild(video);
+                    $('#localScreenContainer').hide();
+                });
 
-                    // show the ice connection state
-                    /*
-                    if (peer && peer.pc) {
-                        console.log('6. peer and peer.pc')
-                        var connstate = document.createElement('div');
-                        connstate.className = 'connectionstate';
-                        container.appendChild(connstate);
-                        peer.pc.on('iceConnectionStateChange', function (event) {
-                            switch (peer.pc.iceConnectionState) {
-                            case 'checking':
-                                connstate.innerText = 'Connecting to peer...';
-                                break;
-                            case 'connected':
-                            case 'completed': // on caller side
-                                $(vol).show();
-                                connstate.innerText = 'Connection established.';
-                                break;
-                            case 'disconnected':
-                                connstate.innerText = 'Disconnected.';
-                                break;
-                            case 'failed':
-                                connstate.innerText = 'Connection failed.';
-                                break;
-                            case 'closed':
-                                connstate.innerText = 'Connection closed.';
-                                break;
-                            }
-                        });
-                    }*/
-                    remotes.appendChild(container);
+                // a peer video has been added
+                webrtc.on('videoAdded', function (video, peer) {
+                    console.log('4. video added', peer);
+                    var remotes = document.getElementById('remotes');
+                    if (remotes) {
+                        console.log('5. yay remotes')
+                        var container = document.createElement('div');
+                        container.className = 'videoDisplay';
+                        container.id = 'container_' + webrtc.getDomId(peer);
+                        container.appendChild(video);
+
+                        // suppress contextmenu
+                        video.oncontextmenu = function () { return false; };
+
+                        // resize the video on click
+                        video.onclick = function () {
+                            //container.style.width = video.videoWidth + 'px';
+                            //container.style.height = video.videoHeight + 'px';
+                        };
+
+                        // show the ice connection state
+                        /*
+                        if (peer && peer.pc) {
+                            console.log('6. peer and peer.pc')
+                            var connstate = document.createElement('div');
+                            connstate.className = 'connectionstate';
+                            container.appendChild(connstate);
+                            peer.pc.on('iceConnectionStateChange', function (event) {
+                                switch (peer.pc.iceConnectionState) {
+                                case 'checking':
+                                    connstate.innerText = 'Connecting to peer...';
+                                    break;
+                                case 'connected':
+                                case 'completed': // on caller side
+                                    $(vol).show();
+                                    connstate.innerText = 'Connection established.';
+                                    break;
+                                case 'disconnected':
+                                    connstate.innerText = 'Disconnected.';
+                                    break;
+                                case 'failed':
+                                    connstate.innerText = 'Connection failed.';
+                                    break;
+                                case 'closed':
+                                    connstate.innerText = 'Connection closed.';
+                                    break;
+                                }
+                            });
+                        }*/
+                        remotes.appendChild(container);
+                    }
+                });
+            });
+
+            //swap to video chat
+            $('#switchToChat').on('click touch', function(){
+                webrtc.stopLocalVideo();
+                $('.videoWrap').hide();
+                $('.chatRoom').css('padding-top', '20px');
+                $('.displayMessagesWrap').show();
+                $('.sendMessagesWrap').show();
+                $('#user2').show();
+            });
+
+            $('#muteButton').on('cilck touch', function() {
+                webrtc.mute();
+                numClicks++;
+                if(numClicks == 2) {
+                    webrtc.unmute();
+                    numClicks = 0;
                 }
             });
+
+            $('#killVideoButton').om('click touch', function() {
+                webrtc.stopLocalVideo();
+                numClicks++;
+                if(numClicks == 2) {
+                    webrtc.startLocalVideo();
+                    numClicks = 0;
+                }
+            });
+
+            
             // a peer was removed
             webrtc.on('videoRemoved', function (video, peer) {
                 console.log('video removed ', peer);
+                
                 var remotes = document.getElementById('remotes');
                 var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
                 if (remotes && el) {
@@ -381,9 +395,9 @@ $(function(){
 
         */
 
+        });
 
-
-
+        
 
 
 

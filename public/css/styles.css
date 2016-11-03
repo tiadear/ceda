@@ -166,7 +166,7 @@ form {
   .container .logout {
     padding-top: 85vh;
     text-align: right; }
-  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap {
+  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap, .container .settingsWrap {
     width: 100%;
     padding: 40px 0;
     text-align: center; }
@@ -359,7 +359,6 @@ form {
         .container .chatRoom .videoWrap .localDisplay video {
           width: 100%;
           position: absolute;
-          border: solid 4px #ea5455;
           -webkit-border-radius: 20px;
           -moz-border-radius: 20px;
           -ms-border-radius: 20px;
@@ -421,5 +420,30 @@ form {
         width: 100%; }
   .container .postReply {
     display: none; }
+  .container .settingsWrap .settingsA, .container .settingsWrap .settingsN {
+    position: relative; }
+    .container .settingsWrap .settingsA .settingsAccount, .container .settingsWrap .settingsA .settingsNotification, .container .settingsWrap .settingsN .settingsAccount, .container .settingsWrap .settingsN .settingsNotification {
+      text-align: left;
+      background-color: white;
+      -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      padding: 20px; }
+      .container .settingsWrap .settingsA .settingsAccount .setting, .container .settingsWrap .settingsA .settingsNotification .setting, .container .settingsWrap .settingsN .settingsAccount .setting, .container .settingsWrap .settingsN .settingsNotification .setting {
+        text-align: left;
+        display: block;
+        padding-top: 20px; }
+        .container .settingsWrap .settingsA .settingsAccount .setting .settingTitle, .container .settingsWrap .settingsA .settingsNotification .setting .settingTitle, .container .settingsWrap .settingsN .settingsAccount .setting .settingTitle, .container .settingsWrap .settingsN .settingsNotification .setting .settingTitle {
+          color: #213e64;
+          display: inline-block;
+          width: 30%; }
+        .container .settingsWrap .settingsA .settingsAccount .setting .settingInput, .container .settingsWrap .settingsA .settingsNotification .setting .settingInput, .container .settingsWrap .settingsN .settingsAccount .setting .settingInput, .container .settingsWrap .settingsN .settingsNotification .setting .settingInput {
+          display: inline-block; }
+  .container .settingsWrap .settingsA {
+    z-index: 100;
+    margin: 40px 0 0; }
+  .container .settingsWrap .settingsN {
+    z-index: 50; }
 
 /*# sourceMappingURL=styles.css.map */

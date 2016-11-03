@@ -164,7 +164,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                 }
             }
             .localDisplay { width: 200px; height: 150px; position: fixed; bottom: 60px; right: 0px; margin-right: $pad;
-                video { width: 100%; position: absolute; border: solid 4px $red; @include border-radius(20px); }
+                video { width: 100%; position: absolute; @include border-radius(20px); }
             }
             #localScreenContainer { display: none; }
             .connectionstate { position: absolute; top: 0px; width: 100%; text-align: center; color: #fff }
@@ -199,6 +199,23 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         }
     }
     .postReply {display :none;}
+
+
+
+
+    .settingsWrap { @extend .chatWraps;
+        .settingsA, .settingsN {position: relative;
+            .settingsAccount, .settingsNotification { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
+                .setting { text-align: left; display: block; padding-top: $pad;
+                    .settingTitle { color: $blue; display: inline-block; width: 30%; }
+                    .settingInput { display: inline-block; }
+                }
+                input {}
+            }
+        }
+        .settingsA { z-index: 100; margin: $pad*2 0 0; }
+        .settingsN { z-index: 50; }
+    }
 
 } // end of container
 
