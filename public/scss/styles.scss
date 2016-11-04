@@ -95,8 +95,20 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
     // dash
-    .logout { padding-top: 85vh; text-align: right; }
     .chatWraps { width: 100%; padding: $pad*2 0; text-align: center; }
+    .dash {
+        @extend .chatWraps;
+        .alerts {
+            .forumAlerts {
+
+            }
+            .chatAlerts {
+
+            }
+        }
+        .logout { padding-top: 85vh; text-align: right; }
+    }
+    
 
 
 

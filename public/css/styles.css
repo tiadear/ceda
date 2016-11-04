@@ -169,13 +169,13 @@ form {
         .container nav ul li a .navoption img {
           height: 30px;
           margin: 10px auto 0 auto; }
-  .container .logout {
-    padding-top: 85vh;
-    text-align: right; }
-  .container .chatWraps, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap, .container .settingsWrap {
+  .container .chatWraps, .container .dash, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap, .container .settingsWrap {
     width: 100%;
     padding: 40px 0;
     text-align: center; }
+  .container .dash .logout {
+    padding-top: 85vh;
+    text-align: right; }
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
     .container .chatChoiceWrap .chatChoices .chatChoice {

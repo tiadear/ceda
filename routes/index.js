@@ -2,6 +2,9 @@
 
 const User = require('../models/account.js');
 const Room = require('../models/room.js');
+var Thread = require('../models/thread.js');
+var Post = require('../models/posts.js');
+var chatHistory = require('../models/chatHistory.js');
 
 const express = require('express');
 const router = express.Router();
@@ -15,11 +18,89 @@ local.strategy(passport);
 
 
 
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return date.getDate() + "/" + date.getMonth()+1 + "/" + date.getFullYear() + "  " + strTime;
+}
+
+
+
+
+
 router.get('/', function(req, res){
 	res.render('index', {
         user : req.user,
         message : req.flash('loginMessage'),
         title : 'ceda'
+    });
+});
+
+
+router.get('/', function(req, res) {
+    async.waterfall([
+        function(callback) {
+
+            Post.find({user : req.user._id}, function(err, posts) {
+                if (err) throw err;
+                if (posts) {
+                    callback(null, posts);
+                }
+            });
+
+        }, function(posts, callback) {
+
+
+            function findThreads(threadId, postId, postContent, postUser, postDate) {
+                var newThread = new Promise(
+                    function(resolve, reject) {
+                        Thread.findById(threadId, function(err, thread) {
+                            if (err) throw err;
+                            
+                        });
+                    }
+                );
+                newThread.then(
+                    function(val) {
+
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('username not found due to ' + reason);
+                    }
+                );
+            }
+
+
+
+
+            posts.forEach(function(post, i) {
+                var id = post._id;
+                arr[id] = [];
+                var date = new Date(post.created);
+                var dateformat = formatDate(date);
+
+                findThreads(post.threadId, id, post.content, post.user, dateformat);
+            });
+
+        }, function(user, threads) {
+
+        }
+
+    ], function(err, result){
+        if (err) throw err;
+        res.render('index', {
+            user : req.user,
+            alerts : req.alerts,
+            message : req.flash('loginMessage'),
+            title: 'ceda'
+        });
     });
 });
 
