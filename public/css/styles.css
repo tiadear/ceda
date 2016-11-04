@@ -146,6 +146,12 @@ form {
         margin: 0 auto; }
     .container .open .notamember {
       padding-top: 60px; }
+    .container .open #deleteUser button#delete, .container .open #deleteUser .social-login #delete.social-btn, .container .open .social-login #deleteUser #delete.social-btn, .container .open #deleteUser .chatChoiceWrap .chatChoices #delete.chatChoice, .container .chatChoiceWrap .chatChoices .open #deleteUser #delete.chatChoice {
+      background-color: #ffffff;
+      border: #ffffff;
+      color: #ea5455; }
+      .container .open #deleteUser button#delete:hover, .container .open #deleteUser .social-login #delete.social-btn:hover, .container .open .social-login #deleteUser #delete.social-btn:hover, .container .open #deleteUser .chatChoiceWrap .chatChoices #delete.chatChoice:hover, .container .chatChoiceWrap .chatChoices .open #deleteUser #delete.chatChoice:hover {
+        color: #213e64; }
   .container nav {
     height: 50px;
     width: 100%; }

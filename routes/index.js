@@ -168,7 +168,7 @@ router.post('/username', function(req, res) {
 
 
 
-router.get('/deleteaccount', function(req, res) {
+router.get('/delete', function(req, res) {
     res.render('delete', {
         user : req.user
     });

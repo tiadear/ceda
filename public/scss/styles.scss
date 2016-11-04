@@ -63,6 +63,12 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             #login-go { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
         }
         .notamember { padding-top: $pad * 3; }
+
+        #deleteUser {
+            button#delete { background-color: $white; border: $white; color: $red;
+                &:hover {color: $blue;}
+           }
+        }
     } // end of open
 
 
