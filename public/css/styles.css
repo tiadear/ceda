@@ -438,6 +438,71 @@ form {
           color: #213e64;
           display: inline-block;
           width: 30%; }
+        .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch {
+          position: relative;
+          width: 71px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          display: inline-block; }
+          .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-checkbox, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-checkbox, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-checkbox, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-checkbox {
+            display: none; }
+          .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: solid 2px #213e64;
+            -webkit-border-radius: 20px;
+            -moz-border-radius: 20px;
+            -ms-border-radius: 20px;
+            border-radius: 20px; }
+            .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner {
+              display: block;
+              width: 200%;
+              margin-left: -100%;
+              transition: margin 0.3s ease-in 0s; }
+            .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after {
+              display: block;
+              float: left;
+              width: 50%;
+              height: 28px;
+              padding: 0;
+              line-height: 28px;
+              font-size: 0.8em;
+              color: #ffffff;
+              font-family: Trebuchet, Arial, sans-serif;
+              font-weight: bold;
+              box-sizing: border-box; }
+            .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:before {
+              content: "ON";
+              padding-left: 10px;
+              background-color: #ffffff;
+              color: #213e64; }
+            .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-inner:after {
+              content: "OFF";
+              padding-right: 10px;
+              background-color: #ebebeb;
+              color: #b8b8b8;
+              text-align: right; }
+            .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-switch {
+              display: block;
+              width: 25px;
+              margin: 3px;
+              background: #213e64;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              right: 39px;
+              border: 2px solid #213e64;
+              -webkit-border-radius: 20px;
+              -moz-border-radius: 20px;
+              -ms-border-radius: 20px;
+              border-radius: 20px;
+              transition: all 0.3s ease-in 0s; }
+          .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0px; }
+          .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px; }
         .container .settingsWrap .settingsA .settingsAccount .setting .settingInput, .container .settingsWrap .settingsA .settingsNotification .setting .settingInput, .container .settingsWrap .settingsN .settingsAccount .setting .settingInput, .container .settingsWrap .settingsN .settingsNotification .setting .settingInput {
           display: inline-block; }
       .container .settingsWrap .settingsA .settingsAccount form, .container .settingsWrap .settingsA .settingsNotification form, .container .settingsWrap .settingsN .settingsAccount form, .container .settingsWrap .settingsN .settingsNotification form {
@@ -452,5 +517,8 @@ form {
     margin: 40px 0 0; }
   .container .settingsWrap .settingsN {
     z-index: 50; }
+    .container .settingsWrap .settingsN .settingTitle {
+      vertical-align: middle;
+      padding-bottom: 20px; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -38,8 +38,16 @@ block content
 					.setting
 						.settingTitle
 							p messages
-						input.notifyChange(type='checkbox', name='notifyChat')
+						.onoffswitch
+							input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=true)
+							label.onoffswitch-label(for='notifyChat')
+								span.onoffswitch-inner
+								span.onoffswitch-switch
 					.setting
 						.settingTitle
 							p forum replies
-						input.notifyChange(type='checkbox', name='notifyForum')
+						.onoffswitch
+							input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyChat', checked=true )
+							label.onoffswitch-label(for='notifyForum')
+								span.onoffswitch-inner
+								span.onoffswitch-switch

@@ -42,6 +42,5 @@ block content
 									input.form-input#pass1(type='password', name='update', placeholder='new #{field}')
 									input.form-input#pass2(type='password', name='confirm', placeholder='confirm your #{field}')
 									input(type='hidden', name='userId', value='#{user._id}')
-									input(type='hidden', name='email', value='#{user.email}')
 									button.form-submit#passSubmit.inactive(type="submit") Submit
 									a(href='/settings') Cancel
