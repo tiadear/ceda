@@ -12,6 +12,8 @@ var userSchema = mongoose.Schema({
 	resetPasswordExpires: Date,
 	firstName: String,
 	lastName: String,
+	notifyChat : Boolean,
+	notifyForum : Boolean,
 	provider: String,
 	facebook: {},
 	twitter: {},

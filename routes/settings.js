@@ -6,6 +6,8 @@ var router = express.Router();
 var async = require('async');
 
 
+
+
 router.get('/', function(req, res) {
 	res.render('settings', {
 		user : req.user,
@@ -109,19 +111,48 @@ router.post('/change*', function(req, res, done) {
 
 // notification settings
 router.post('/', function(req, res) {
+	console.log('checked: ' + req.body.checked);
+
 	async.waterfall([
 
 		function(callback) {
 
+			if (req.body.checked === true) {
+				callback(null, false);
+			} else {
+				callback(null, true);
+			}
+		}, function(checked, callback) {
 
+			var field = req.query.field;
+			var id = req.user._id;
+
+			if (field === 'notifyChat') {
+				User.update(
+					{ '_id' : id },
+					{ $set: { notifyChat : checked } },
+					function(err, user) {
+						if(err) throw err;
+						callback(null);
+					}
+				);
+			} 
+			else if (field === 'notifyForum') {
+				User.update(
+					{ '_id' : id },
+					{ $set: { notifyForum : checked } },
+					function(err, user) {
+						if(err) throw err;
+						callback(null);
+					}
+				);
+			} 
 		}
 		
 	], function(err, result) {
 		if(err) throw err;
-		console.log('result: '+result);
 		res.render('settings', {
 			user : req.user,
-			notifications : req.notifications,
 			title : 'ceda'
 		});
 	});

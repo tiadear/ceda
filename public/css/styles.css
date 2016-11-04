@@ -482,7 +482,7 @@ form {
               content: "OFF";
               padding-right: 10px;
               background-color: #ebebeb;
-              color: #b8b8b8;
+              color: #9f9f9f;
               text-align: right; }
             .container .settingsWrap .settingsA .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsA .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsAccount .setting .onoffswitch .onoffswitch-label .onoffswitch-switch, .container .settingsWrap .settingsN .settingsNotification .setting .onoffswitch .onoffswitch-label .onoffswitch-switch {
               display: block;

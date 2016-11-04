@@ -215,7 +215,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                             .onoffswitch-inner { display: block; width: 200%; margin-left: -100%; transition: margin 0.3s ease-in 0s; }
                             .onoffswitch-inner:before, .onoffswitch-inner:after { display: block; float: left; width: 50%; height: 28px; padding: 0; line-height: 28px; font-size: 0.8em; color: $white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold; box-sizing: border-box; }
                             .onoffswitch-inner:before { content: "ON"; padding-left: $pad/2; background-color: $white; color: $blue; }
-                            .onoffswitch-inner:after { content: "OFF"; padding-right: $pad/2; background-color: $grey; color: darken($grey, 20%); text-align: right; }
+                            .onoffswitch-inner:after { content: "OFF"; padding-right: $pad/2; background-color: $grey; color: darken($grey, 30%); text-align: right; }
                             .onoffswitch-switch { display: block; width: 25px; margin: 3px; background: $blue; position: absolute; top: 0; bottom: 0; right: 39px; border: 2px solid $blue; @include border-radius(20px); transition: all 0.3s ease-in 0s; }
                             
                         }

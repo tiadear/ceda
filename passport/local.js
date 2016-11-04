@@ -39,6 +39,8 @@ exports.strategy = function(passport) {
 						newUser.password = newUser.generateHash(req.body.password);
 						newUser.firstName = req.body.firstName;
 						newUser.lastName = req.body.lastName;
+						newUser.notifyChat = 1;
+                		newUser.notifyChat = 1;
 						newUser.provider = 'local';
 						newUser.userType = false;
 

@@ -1,5 +1,35 @@
 extends layout
 block content
+	script.
+		$(document).ready(function() {
+			$('.onoffswitch-checkbox').on('click touch', function() {
+
+				var check = $(this).attr('checked');
+				console.log('checked? '+ check);
+
+				if(check === true) {
+
+					$.ajax ({
+						type : 'POST',
+						url : '/settings?field='+ this.id,
+						data : {
+							checked : true
+						}
+					});
+				} 
+				if(check === undefined) {
+				console.log('undefined reached');
+					$.ajax ({
+						type : 'POST',
+						url : '/settings?field='+ this.id,
+						data : {
+							checked : false
+						}
+					});
+				}
+
+			});
+		});
 	.container
 		include includes/nav.jade
 		.settingsWrap
@@ -38,16 +68,24 @@ block content
 					.setting
 						.settingTitle
 							p messages
+							p #{user.notifyChat}
 						.onoffswitch
-							input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=true)
+							if (user.notifyChat === true)
+								input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=true)
+							else
+								input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=false)
 							label.onoffswitch-label(for='notifyChat')
 								span.onoffswitch-inner
 								span.onoffswitch-switch
 					.setting
 						.settingTitle
 							p forum replies
+							p #{user.notifyForum}
 						.onoffswitch
-							input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyChat', checked=true )
+							if (user.notifyForum === true)
+								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=true)
+							else
+								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=false)
 							label.onoffswitch-label(for='notifyForum')
 								span.onoffswitch-inner
 								span.onoffswitch-switch
