@@ -1,0 +1,12 @@
+extends layout
+block content
+	.container
+		include includes/nav.jade
+		.forumWrap
+			h1 New Post
+			.newPost
+				form.form-post(role='form', action="/forum", method="POST")
+					input.form-input(type="text", name="title", placeholder="Title")
+					input.form-input(type="text", name="content", placeholder="What did you want to say?")
+					button.form-submit(type="submit") Submit
+					a.forgot(href="/") Cancel

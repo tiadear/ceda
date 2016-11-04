@@ -29,9 +29,12 @@ module.exports = new GoogleStrategy({
                 newUser.email = profile.emails[0].value;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
+                newUser.notifyChat = 1;
+                newUser.notifyChat = 1;
                 newUser.provider = 'google';
                 newUser.google =  token;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {

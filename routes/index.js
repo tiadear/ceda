@@ -5,13 +5,10 @@ const Room = require('../models/room.js');
 
 const express = require('express');
 const router = express.Router();
+var async = require('async');
 
 const passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
-var async = require('async');
-
-var chat = require('../chat/chat');
 const local = require('../passport/local');
 local.strategy(passport);
 
@@ -21,6 +18,7 @@ local.strategy(passport);
 router.get('/', function(req, res){
 	res.render('index', {
         user : req.user,
+        message : req.flash('loginMessage'),
         title : 'ceda'
     });
 });
@@ -28,7 +26,9 @@ router.get('/', function(req, res){
 
 
 router.get('/signup', function(req, res) {
-	res.render('signup', { });
+	res.render('signup', { 
+        message : req.flash('signupMessage')
+    });
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
@@ -49,7 +49,7 @@ router.get('/login', function(req, res) {
 });
 */
 router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/login', 
+    failureRedirect: '/', 
     failureFlash: true 
 }), function(req, res, next) {
     req.session.save(function (err) {
@@ -168,7 +168,7 @@ router.post('/username', function(req, res) {
 
 
 
-router.get('/deleteaccount', function(req, res) {
+router.get('/delete', function(req, res) {
     res.render('delete', {
         user : req.user
     });
@@ -187,106 +187,7 @@ router.post('/delete', function(req, res) {
 
 
 
-router.get('/chat', function(req, res) {
-    res.render('chat', {
-        user : req.user
-    });
-});
 
-router.get('/chatpeer', function(req, res) {
-    async.waterfall([
-        function(callback) {
-            User.findById(req.user._id, function(err, user) {
-                if(err) throw err;
-                var currentUser = user._id;
-                var currentUsername = user.username;
-                console.log('user 1 is: ' + currentUsername);
-                callback(null, currentUser, currentUsername);
-            });
-        },
-        function(user1, user1name, callback) {
-
-            function returnRandom(currentuser) {
-
-                User.random(function(err, user) {
-                    if (err) throw err;
-                    if(String(user._id) != String(currentuser)) {
-                        var randomPeer = user._id;
-                        var randomUsername = user.username;
-                        console.log('user 2 is: ' + randomUsername);
-                        callback(null, user1, user1name, randomPeer, randomUsername);
-                    } else {
-                       console.log('random user is the same as current user');
-                       returnRandom(user._id);
-                    }
-                });
-            }
-            returnRandom(user1);
-        },
-        function(user1, user1name, user2, user2name, callback) {
-            console.log('looking for a room...');
-            Room.findOne({user_init : user1, user_resp : user2}, function(err, room) {
-                if (err) throw err;
-                if (room) {
-                    console.log('room was found');
-                    req.room = room;
-                    req.usersInRoom = [user1name, user2name];
-                    req.userIDs = [user1, user2];
-                    callback(null, req.room, req.usersInRoom, req.userIDs);
-                } else {
-                    console.log('room was not found, looking again...')
-                    Room.findOne({user_init : user2, user_resp : user1}, function(err, room) {
-                        if (err) throw err;
-                        if (room) {
-                            console.log('room was found');
-                            req.room = room;
-                            req.usersInRoom = [user1name, user2name];
-                            req.userIDs = [user1, user2];
-                            callback(null, req.room, req.usersInRoom, req.userIDs);
-                        } else {
-                            console.log('no room found');
-                            // create a new room!
-                            var newRoom = new Room();
-                            newRoom.roomID = uuid.v4();
-                            newRoom.user_init = currentUser;
-                            newRoom.user_resp = randomPeer;
-                            newRoom.room_type = 0;
-
-                            newRoom.save(function(err){
-                                if (err) {
-                                    console.log(err);
-                                    throw err;
-                                } else {
-                                    console.log('saving user');
-                                    req.room = newRoom;
-                                    req.usersInRoom = [user1name, user2name];
-                                    req.userIDs = [user1, user2];
-                                    callback(null, req.room, req.usersInRoom, req.userIDs);
-                                }
-                            });
-                        }
-                    });
-
-                }
-            });
-            
-        }
-    ], function (err, result) {
-        console.log(result);
-
-        req.session.save(function(err){
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-            res.render('chatroom', {
-                room : req.room,
-                usersInRoom : req.usersInRoom,
-                userIDs : req.userIDs
-            });
-        });
-    });
-});
 
 
 
