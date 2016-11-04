@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/account');
-var uuid = uuid = require('uuid');
-
+var uuid = require('uuid');
+var passport = require('passport');
 var nodemailer = require('nodemailer');
 var postmarkTransport = require('nodemailer-postmark-transport');
 
@@ -18,12 +18,11 @@ exports.strategy = function(passport) {
 
 	passport.use('local-signup', new LocalStrategy({
 		usernameField: 'email',
-		passwordField: 'password', 
-		passReqToCallback: true
+		passwordField: 'password'
 		},
 		function(req, res, done) {
 			process.nextTick(function(){
-				User.findOne({email : email}, function(err, user){
+				User.findOne({email : req.body.email}, function(err, user){
 					if(err) {
 						return done(err);
 						console.log('something went horribly wrong');
@@ -35,11 +34,13 @@ exports.strategy = function(passport) {
 					} 
 
 					else {
-						var newUser = new User ()
-						newUser.email = email;
-						newUser.password = newUser.generateHash(password);
+						var newUser = new User ();
+						newUser.email = req.body.email;
+						newUser.password = newUser.generateHash(req.body.password);
 						newUser.firstName = req.body.firstName;
 						newUser.lastName = req.body.lastName;
+						newUser.notifyChat = 1;
+                		newUser.notifyChat = 1;
 						newUser.provider = 'local';
 						newUser.userType = false;
 
@@ -68,6 +69,7 @@ exports.strategy = function(passport) {
 		},
 		function(req, email, password, done) {
 			User.findOne({email : email}, function(err, user) {
+				console.log('found user');
 				if(err) {
 					return done(err);
 					console.log('something went horribly wrong #2');
@@ -78,6 +80,7 @@ exports.strategy = function(passport) {
 				}
 
 				if(!user.validPassword(password)) {
+					console.log('invalid password');
 					return done(null, false, req.flash('loginMessage', 'Wrong password'));
 				} 
 

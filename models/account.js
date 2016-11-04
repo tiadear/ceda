@@ -12,6 +12,8 @@ var userSchema = mongoose.Schema({
 	resetPasswordExpires: Date,
 	firstName: String,
 	lastName: String,
+	notifyChat : Boolean,
+	notifyForum : Boolean,
 	provider: String,
 	facebook: {},
 	twitter: {},
@@ -24,7 +26,7 @@ userSchema.methods.generateHash = function(password) {
 }
 
 userSchema.methods.validPassword = function(password) {
-	return bcrypt.compareSync(password, this.password);
+	return bcrypt.compareSync(password, this.password);	
 }
 
 userSchema.statics.random = function(cb) {

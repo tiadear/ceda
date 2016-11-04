@@ -18,6 +18,7 @@ local.strategy(passport);
 router.get('/', function(req, res){
 	res.render('index', {
         user : req.user,
+        message : req.flash('loginMessage'),
         title : 'ceda'
     });
 });
@@ -25,7 +26,9 @@ router.get('/', function(req, res){
 
 
 router.get('/signup', function(req, res) {
-	res.render('signup', { });
+	res.render('signup', { 
+        message : req.flash('signupMessage')
+    });
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
@@ -46,7 +49,7 @@ router.get('/login', function(req, res) {
 });
 */
 router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/login', 
+    failureRedirect: '/', 
     failureFlash: true 
 }), function(req, res, next) {
     req.session.save(function (err) {
@@ -165,7 +168,7 @@ router.post('/username', function(req, res) {
 
 
 
-router.get('/deleteaccount', function(req, res) {
+router.get('/delete', function(req, res) {
     res.render('delete', {
         user : req.user
     });
