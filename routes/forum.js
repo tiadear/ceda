@@ -7,19 +7,6 @@ var async = require('async');
 
 
 
-function formatDate(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return date.getDate() + "/" + date.getMonth()+1 + "/" + date.getFullYear() + "  " + strTime;
-}
-
-
-
 
 //forum page
 router.get('/', function(req, res) {
@@ -81,6 +68,11 @@ router.get('/', function(req, res) {
 		                //console.log('arr2 length: '+arr2.length);
 
 						if (arr2.length === threads.length) {
+
+							arr2.sort(function(a,b) {
+								return new Date(a.date) - (b.date);
+							});
+
 							req.threads = arr2;
 							callback(null, req.threads);
 						}
@@ -96,6 +88,18 @@ router.get('/', function(req, res) {
 			for(i = 0; i < threads.length; i++) {
 				var id = threads[i]._id;
 				arr[id] = [];
+
+				function formatDate(date) {
+				  	var hours = date.getHours();
+				  	var minutes = date.getMinutes();
+				  	var ampm = hours >= 12 ? 'pm' : 'am';
+				  	hours = hours % 12;
+				  	hours = hours ? hours : 12; // the hour '0' should be '12'
+				  	minutes = minutes < 10 ? '0'+minutes : minutes;
+				  	var strTime = hours + ':' + minutes + ' ' + ampm;
+				  	var months = date.getMonth() +1;
+				  	return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+				}
                 
                 var date = new Date(threads[i].created);
                 var dateformat = formatDate(date);
@@ -289,6 +293,19 @@ router.get('/thread*', function(req, res) {
 			posts.forEach(function(post, i) {
 				var id = post._id;
 				arr[id] = [];
+
+				function formatDate(date) {
+				  	var hours = date.getHours();
+				  	var minutes = date.getMinutes();
+				  	var ampm = hours >= 12 ? 'pm' : 'am';
+				  	hours = hours % 12;
+				  	hours = hours ? hours : 12; // the hour '0' should be '12'
+				  	minutes = minutes < 10 ? '0'+minutes : minutes;
+				  	var strTime = hours + ':' + minutes + ' ' + ampm;
+				  	var months = date.getMonth() +1;
+				  	return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+				}
+
 				var date = new Date(post.created);
                 var dateformat = formatDate(date);
 

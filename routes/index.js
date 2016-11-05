@@ -2,6 +2,9 @@
 
 const User = require('../models/account.js');
 const Room = require('../models/room.js');
+var Thread = require('../models/thread.js');
+var Post = require('../models/posts.js');
+var chatHistory = require('../models/chatHistory.js');
 
 const express = require('express');
 const router = express.Router();
@@ -15,17 +18,36 @@ local.strategy(passport);
 
 
 
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return date.getDate() + "/" + date.getMonth()+1 + "/" + date.getFullYear() + "  " + strTime;
+}
+
+
+
 router.get('/', function(req, res){
+    if(req.user) {
+        res.redirect('/home');
+    }
 	res.render('index', {
-        user : req.user,
+        message : req.flash('loginMessage'),
         title : 'ceda'
     });
 });
 
 
 
+
 router.get('/signup', function(req, res) {
-	res.render('signup', { });
+	res.render('signup', { 
+        message : req.flash('signupMessage')
+    });
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
@@ -33,20 +55,20 @@ router.post('/signup', passport.authenticate('local-signup', { failureRedirect: 
             if(err){
                 return next(err);
             }
-            res.redirect('/');
+            res.render('home', {
+                user : req.user,
+                title: 'ceda'
+            });
 
         });
     }
 );
 
 
-/*
-router.get('/login', function(req, res) {
-    res.render('login', { user : req.user, error : req.flash('error')});
-});
-*/
+
+
 router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/login', 
+    failureRedirect: '/', 
     failureFlash: true 
 }), function(req, res, next) {
     req.session.save(function (err) {
@@ -54,7 +76,10 @@ router.post('/login', passport.authenticate('local-login', {
             console.log(err);
             return next(err);
         }
-        res.redirect('/');
+        res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
     });
 });
 
@@ -111,7 +136,10 @@ router.get('/auth/twitter',
 router.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
 	}
 );
 
@@ -125,7 +153,10 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
 	}
 );
 
@@ -154,7 +185,10 @@ router.post('/username', function(req, res) {
                         return next(err);
                     }
                     console.log('saving user');
-                    res.redirect('/');
+                    res.render('home', {
+                        user : req.user,
+                        title: 'ceda'
+                    });
                 });
             });
         }
@@ -165,7 +199,7 @@ router.post('/username', function(req, res) {
 
 
 
-router.get('/deleteaccount', function(req, res) {
+router.get('/delete', function(req, res) {
     res.render('delete', {
         user : req.user
     });

@@ -1,9 +1,11 @@
 extends layout
 block content
-
-	form#deleteUser(role='form', method='post', action='/delete')
-		.form-group
-			p Are you sure you want to delete your account?
-		button.btn.btn-default(type='submit') Yes, delete my account
-		a(href="/")
-			button.btn.btn-primary(type="button") No, I want to stay
+	.container
+		.open
+			.logo
+				img#logo(src='/images/ceda2.png')
+			h1 Are you sure you want to delete your account?
+			form.form-login#deleteUser(role='form', method='POST', action='/delete')
+				button.form-submit#delete(type="submit") Yes delete my account
+				a(href="/") 
+					button.form-submit(type='button') No I want to stay

@@ -32,7 +32,7 @@ block content
 									.post
 										p=item[3]
 									.bottom-left
-									if (currentuser === postuser)
+									if (user._id === posts[1])
 										.bottom-right
 											a(href="/forum/edit?id=#{item[0]}") edit
 											a(href="/forum/delete?id=#{item[0]}") delete

@@ -6,6 +6,8 @@ block content
 				.logo
 					img#logo(src='/images/ceda2.png')
 				h1 Login
+				if (message.length > 0)
+					.alert #{message}
 				.social-login
 					a(href="/auth/facebook")
 						.social-btn#login-fb
@@ -24,37 +26,3 @@ block content
 				.notamember
 					p Not a member? 
 					a.signup(href="/signup") Sign Up
-		if (user)
-			include includes/nav.jade
-			if (user.username)
-				h1 Hi #{user.username}
-				.circle
-				if (history)
-					.history
-						h2 History
-						ul.historyconvo
-							for item,i in history
-								- var z = (100) - [i];
-								li(style="z-index: #{z};")
-									a(href="/chat/chatpeer?user=#{history[i][0]}")
-										ul.historyitem
-											.user
-												p=history[i][0]
-											.message
-												p=history[i][1]
-											.time
-												p=history[i][2]
-				.base
-					.logout
-						a(href="/logout") Logout
-						br
-						a(href='/deleteaccount') Delete my account
-			else
-				form.usernameRequest(role='form', method='post', action='/username')
-					p Plesae provide a username
-					p Remember ceda is anonymous so choose a username that won't reveal any details about you
-					p So don't choose your twitter handle
-					input.form-input(type='text', name='username', placeholder='Username')
-					input(type='hidden', name='email', value='#{user.email}')
-					button.form-submit(type="submit") Submit
-
