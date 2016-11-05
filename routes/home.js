@@ -18,18 +18,6 @@ local.strategy(passport);
 
 
 
-function formatDate(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "  " + strTime;
-}
-
-
 // dashbaord
 router.get('/', function(req, res) {
     async.waterfall([
@@ -97,6 +85,18 @@ router.get('/', function(req, res) {
                     function(val) {
                         //console.log('val: '+val[counter]);
                         if(val[counter] != undefined) {
+
+                            function formatDate(date) {
+                                var hours = date.getHours();
+                                var minutes = date.getMinutes();
+                                var ampm = hours >= 12 ? 'pm' : 'am';
+                                hours = hours % 12;
+                                hours = hours ? hours : 12; // the hour '0' should be '12'
+                                minutes = minutes < 10 ? '0'+minutes : minutes;
+                                var strTime = hours + ':' + minutes + ' ' + ampm;
+                                var months = date.getMonth() +1;
+                                return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+                            }
 
                             var date = new Date(val[counter].created);
                             var postTime = formatDate(date);
@@ -232,6 +232,18 @@ router.get('/', function(req, res) {
 
                             //stop on the last item
                             if(i === ((history.length)-1)) {
+
+                                function formatDate(date) {
+                                    var hours = date.getHours();
+                                    var minutes = date.getMinutes();
+                                    var ampm = hours >= 12 ? 'pm' : 'am';
+                                    hours = hours % 12;
+                                    hours = hours ? hours : 12; // the hour '0' should be '12'
+                                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                                    var strTime = hours + ':' + minutes + ' ' + ampm;
+                                    var months = date.getMonth() +1;
+                                    return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+                                }
 
                                 var date = new Date(history[i].timesent);
                                 var dateformat = formatDate(date);
