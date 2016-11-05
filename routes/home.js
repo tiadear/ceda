@@ -26,7 +26,7 @@ function formatDate(date) {
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? '0'+minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
-  return date.getDate() + "/" + date.getMonth()+1 + "/" + date.getFullYear() + "  " + strTime;
+  return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "  " + strTime;
 }
 
 
@@ -97,16 +97,20 @@ router.get('/', function(req, res) {
                     function(val) {
                         //console.log('val: '+val[counter]);
                         if(val[counter] != undefined) {
+
+                            var date = new Date(val[counter].created);
+                            var postTime = formatDate(date);
+                        
                             //console.log('val: '+val[counter].content);
-                            arr[threadId] = [threadId, threadTitle, val[counter].content, val[counter].user, val[counter].created];
+                            arr[threadId] = [threadId, threadTitle, val[counter].content, val[counter].user, postTime];
                             arr2.push(arr[threadId]);
                         }
-                        console.log('counter: '+counter);
+                        //console.log('counter: '+counter);
 
                         if(counter === (total -1)) {
                             //console.log('arr2: '+ uniq(arr2));
                             req.alertsForum = uniq(arr2);
-                            console.log('req.alertsForum: '+ req.alertsForum);
+                            //console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
                     }
@@ -149,7 +153,7 @@ router.get('/', function(req, res) {
 
                 var lastusertomsg = new Promise(
                     function(resolve, reject) {
-                        console.log('point 2');
+                        //console.log('point 2');
 
                         if(historyuser === currentuser) {
                             console.log('you were the last person to send a message');
@@ -168,7 +172,7 @@ router.get('/', function(req, res) {
 
                             // then you are the user_resp
                             else {
-                                console.log('point 3');
+                                //console.log('point 3');
                                 // and your convo partner MUST be the user_init
                                 User.findById(user1, function(err, partner) {
                                     if (err) throw err;
@@ -178,7 +182,7 @@ router.get('/', function(req, res) {
                             }
                         }
                         else {
-                            console.log('point 4');
+                            //console.log('point 4');
                             resolve(historyuser);
                         }
                     }
@@ -193,6 +197,11 @@ router.get('/', function(req, res) {
                         //if the number of arrays is equal to the number of rooms
                         // ie. we have looped through every room
                         if(arr2.length == rooms.length) {
+
+                            arr2.sort(function(a,b){
+                                return new Date(b.historytime) - (a.historytime);
+                            });
+
                             //send it to the callback
                             req.history = arr2;
                             req.alertsForum = alertsForum;
@@ -208,7 +217,6 @@ router.get('/', function(req, res) {
             }
 
             for(j = 0; j < rooms.length; j++){
-                console.log('j: '+j);
                 var id = rooms[j]._id;
                 var _user1 = rooms[j].user_init;
                 var _user2 = rooms[j].user_resp;
@@ -221,9 +229,6 @@ router.get('/', function(req, res) {
                     //loop through all history items for that room
                     if(history.length !== 0) {
                         for(i = 0; i < history.length; i++) {
-
-                            console.log('i: '+i);
-                            console.log('history length: '+history.length);
 
                             //stop on the last item
                             if(i === ((history.length)-1)) {
