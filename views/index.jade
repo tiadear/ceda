@@ -26,28 +26,3 @@ block content
 				.notamember
 					p Not a member? 
 					a.signup(href="/signup") Sign Up
-		if (user)
-			if (user.username)
-				include includes/nav.jade
-				.dash
-					h1 Hi #{user.username}
-					.alerts
-						.forumAlerts
-							p forum replies
-							p #{alerts.number}
-						.chatAlerts
-							p incoming messages
-							p #{alerts.number}
-					.logout
-						a(href="/logout") Logout
-			else
-				.open
-					.logo
-						img#logo(src='/images/ceda2.png')
-					h1 Please enter a username
-					p Remember Ceda is anonymous, so choose a username that won't reveal any details about you
-					form.form-login(role='form', method='post', action='/username')
-						input.form-input(type='text', name='username', placeholder='Username')
-						input(type='hidden', name='email', value='#{user.email}')
-						button.form-submit(type="submit") Submit
-

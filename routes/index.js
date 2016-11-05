@@ -31,78 +31,16 @@ function formatDate(date) {
 
 
 
-
-
 router.get('/', function(req, res){
+    if(req.user) {
+        res.redirect('/home');
+    }
 	res.render('index', {
-        user : req.user,
         message : req.flash('loginMessage'),
         title : 'ceda'
     });
 });
 
-
-router.get('/', function(req, res) {
-    async.waterfall([
-        function(callback) {
-
-            Post.find({user : req.user._id}, function(err, posts) {
-                if (err) throw err;
-                if (posts) {
-                    callback(null, posts);
-                }
-            });
-
-        }, function(posts, callback) {
-
-
-            function findThreads(threadId, postId, postContent, postUser, postDate) {
-                var newThread = new Promise(
-                    function(resolve, reject) {
-                        Thread.findById(threadId, function(err, thread) {
-                            if (err) throw err;
-                            
-                        });
-                    }
-                );
-                newThread.then(
-                    function(val) {
-
-                    }
-                )
-                .catch(
-                    function(reason){
-                        console.log('username not found due to ' + reason);
-                    }
-                );
-            }
-
-
-
-
-            posts.forEach(function(post, i) {
-                var id = post._id;
-                arr[id] = [];
-                var date = new Date(post.created);
-                var dateformat = formatDate(date);
-
-                findThreads(post.threadId, id, post.content, post.user, dateformat);
-            });
-
-        }, function(user, threads) {
-
-        }
-
-    ], function(err, result){
-        if (err) throw err;
-        res.render('index', {
-            user : req.user,
-            alerts : req.alerts,
-            message : req.flash('loginMessage'),
-            title: 'ceda'
-        });
-    });
-});
 
 
 
@@ -117,18 +55,18 @@ router.post('/signup', passport.authenticate('local-signup', { failureRedirect: 
             if(err){
                 return next(err);
             }
-            res.redirect('/');
+            res.render('home', {
+                user : req.user,
+                title: 'ceda'
+            });
 
         });
     }
 );
 
 
-/*
-router.get('/login', function(req, res) {
-    res.render('login', { user : req.user, error : req.flash('error')});
-});
-*/
+
+
 router.post('/login', passport.authenticate('local-login', { 
     failureRedirect: '/', 
     failureFlash: true 
@@ -138,7 +76,10 @@ router.post('/login', passport.authenticate('local-login', {
             console.log(err);
             return next(err);
         }
-        res.redirect('/');
+        res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
     });
 });
 
@@ -195,7 +136,10 @@ router.get('/auth/twitter',
 router.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
 	}
 );
 
@@ -209,7 +153,10 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.render('home', {
+            user : req.user,
+            title: 'ceda'
+        });
 	}
 );
 
@@ -238,7 +185,10 @@ router.post('/username', function(req, res) {
                         return next(err);
                     }
                     console.log('saving user');
-                    res.redirect('/');
+                    res.render('home', {
+                        user : req.user,
+                        title: 'ceda'
+                    });
                 });
             });
         }

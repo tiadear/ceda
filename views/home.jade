@@ -1,0 +1,53 @@
+extends layout
+block content
+	.container
+		if (user)
+			if (user.username)
+				include includes/nav.jade
+				.dash
+					h1 Hi #{user.username}
+					if (alertsForum)
+						.threadList
+							h2 Recent forum posts
+							ul.threads
+								for item,i in alertsForum
+									- var z = (100) - [i]
+										li(style="z-index: #{z};")
+											a(href="/forum/thread?id=#{item[0]}")
+												ul.threadItem
+													.top
+														p=item[1]
+													.post
+														p=item[2]
+													.bottom-left
+														p=item[3]
+													.bottom-right
+														p=item[4]
+					if (history)
+						.history
+							h2 Chat History
+							ul.historyconvo
+								for item,i in history
+									- var z = (100) - [i];
+									li(style="z-index: #{z};")
+										a(href="/chat/chatpeer?user=#{history[i][0]}")
+											ul.historyitem
+												.top
+													p=history[i][0]
+												.middle-right
+													p=history[i][2]
+												.post
+													p=history[i][1]
+					.logout
+						a(href="/logout") Logout
+			else
+				.open
+					.logo
+						img#logo(src='/images/ceda2.png')
+					h1 Please enter a username
+					p Remember Ceda is anonymous, so choose a username that won't reveal any details about you
+					form.form-login(role='form', method='post', action='/username')
+						input.form-input(type='text', name='username', placeholder='Username')
+						input(type='hidden', name='email', value='#{user.email}')
+						button.form-submit(type="submit") Submit
+
