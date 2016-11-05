@@ -61,11 +61,19 @@ $(function(){
 
                 $('#outgoing').unbind('keypress');
 
+                var typing = false;
+                var timeout = undefined;
+
+                function timeoutFunction() {
+                    typing = false;
+                    socket.emit("isTyping", false);
+                }
+
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
 
                     //if enter has not been hit
-                    if(e.which != 13) {
+                    if(e.which !== 13) {
                         if(typing === false && $('#outgoing').is(':focus')) {
                             typing = true;
                             socket.emit('userTyping', true);
@@ -73,6 +81,7 @@ $(function(){
                             clearTimeout(timeout);
                             timeout = setTimeout(timeoutFunction, 5000);
                         }
+                        
                     }
 
                     //if enter has been hit
@@ -84,10 +93,25 @@ $(function(){
 
                         //reset the outgoing chat to null
                         $('#outgoing').val('');
-                    } 
+                        socket.emit('userTyping', false);
+                        typing = false;
+                    }
+                    
                 });
             }
 
+        });
+
+        //If a user is typing
+        socket.on('isTyping', function(data){
+            if(data.isTyping) {
+                if($('#'+data.user+'').length === 0) {
+                    $('#incoming').append('<li class="istyping" id='+data.user+'>'+data.user+' is typing</li>');
+                    timeout = setTimeout(timeoutFunction, 5000);
+                }
+            } else {
+                $('#'+data.user+'').remove();
+            }
         });
     
 
@@ -167,27 +191,6 @@ $(function(){
 
 
 
-
-
-        var typing = false;
-        var timeout = undefined;
-
-        function timeoutFunction() {
-            typing = false;
-            socket.emit("isTyping", false);
-        }
-
-        //If a user is typing
-        socket.on('isTyping', function(data){
-            if(data.isTyping) {
-                if($('#'+data.user+'').length === 0) {
-                    $('#incoming').append('<li>'+data.user+' is typing</li>');
-                    timeout = setTimeout(timeoutFunction, 5000);
-                }
-            } else {
-                $('#'+data.user+'').remove();
-            }
-        });
 
 
 

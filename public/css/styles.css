@@ -257,6 +257,9 @@ form {
         padding-bottom: 80px; }
         .container .chatRoom .displayMessagesWrap #incoming li {
           list-style-type: none; }
+        .container .chatRoom .displayMessagesWrap #incoming .istyping {
+          display: block;
+          font-size: 0.8em; }
         .container .chatRoom .displayMessagesWrap #incoming .msgtime {
           width: 100%;
           display: block;
