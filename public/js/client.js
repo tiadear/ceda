@@ -66,7 +66,7 @@ $(function(){
 
                 function timeoutFunction() {
                     typing = false;
-                    socket.emit("isTyping", false);
+                    socket.emit("userTyping", false);
                 }
 
                 //when something is entered into the outgoing message box
