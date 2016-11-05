@@ -41,6 +41,7 @@ module.exports = app;
 
 // routes
 var routes = require('./routes/index');
+var home = require('./routes/home');
 var chat = require('./routes/chat');
 var forum = require('./routes/forum');
 var settings = require('./routes/settings');
@@ -77,6 +78,7 @@ app.use(passport.session());
 
 // general
 app.use('/', routes);
+app.use('/home', home);
 app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
@@ -201,6 +203,16 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('leaveRoom', function(userselected, currentuser){
+        console.log('leaving room');
+        chatHistory.find({ room : socket.room }).exec(function(err, history) {
+            if (err) throw err;
+            if (!history) {
+                Room.IdfindByIdAndRemove(socket.room, function(err) {
+                    if (err) throw err;
+                    console.log('room: '+socket.room+' delted');
+                });
+            }
+        });
         socket.leave(socket.room);
     });
 
@@ -238,7 +250,17 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('disconnect', function() {
+        console.log('socket disconnected');
         numClients[socket.room]--;
+        chatHistory.find({ room : socket.room }, function(err, history) {
+            if (err) throw err;
+            if (!history || history === '' || history.length === 0 || history === null) {
+                Room.findByIdAndRemove(socket.room, function(err) {
+                    if (err) throw err;
+                    console.log('room: '+socket.room+' delted');
+                });
+            }
+        });
     });
 
 });
