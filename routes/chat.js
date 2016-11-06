@@ -62,9 +62,6 @@ router.get('/', function(req, res){
             function findUser(roomID, currentuser, user1, user2, historyUser, historyMessage, historyTime) {
                 var findLastUser = new Promise (
                     function(resolve, reject) {
-                        console.log('historyMessage: '+historyMessage);
-                        console.log('currentuser: '+currentuser);
-                        console.log('historyUser: '+historyUser);
 
                         if(String(currentuser) === String(historyUser)) {
                             if(String(user1) === String(currentuser)) {
@@ -80,13 +77,32 @@ router.get('/', function(req, res){
                             }
                         }
                         else {
-                            resolve(historyUser);
+                            User.findById(historyUser, function(err, convopartner) {
+                                if (err) throw err;
+                                resolve(convopartner.username);
+                            });
                         }
                     }
                 );
                 findLastUser.then(
                     function(val) {
-                        arr1[roomID] = [val, historyMessage, historyTime];
+
+                        function formatDate(date) {
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            var ampm = hours >= 12 ? 'pm' : 'am';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12; // the hour '0' should be '12'
+                            minutes = minutes < 10 ? '0'+minutes : minutes;
+                            var strTime = hours + ':' + minutes + ' ' + ampm;
+                            var months = date.getMonth() +1;
+                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+                        }
+
+                        var date = new Date(historyTime);
+                        var newtime = formatDate(date);
+
+                        arr1[roomID] = [val, historyMessage, newtime];
                         arr2.push(arr1[roomID]);
                         console.log('arr2: '+arr2);
 
@@ -104,17 +120,7 @@ router.get('/', function(req, res){
                 );
             }
 
-            function formatDate(date) {
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var ampm = hours >= 12 ? 'pm' : 'am';
-                hours = hours % 12;
-                hours = hours ? hours : 12; // the hour '0' should be '12'
-                minutes = minutes < 10 ? '0'+minutes : minutes;
-                var strTime = hours + ':' + minutes + ' ' + ampm;
-                var months = date.getMonth() +1;
-                return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-            }
+            
 
             for(j = 0; j < rooms.length; j++){
 
@@ -124,9 +130,6 @@ router.get('/', function(req, res){
                 var _currentuser = req.user._id;
                 arr1[id] = [];
                 var arr2 = [];
-
-                //console.log('1st loop user1: '+_user1);
-                //console.log('1st loop user2: '+_user2);
 
                 getChatHistory(id, _currentuser, _user1, _user2, j);
 			}
