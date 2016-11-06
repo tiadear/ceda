@@ -174,11 +174,30 @@ router.get('/chatpeer*', function(req, res) {
 
                 User.random(function(err, user) {
                     if (err) throw err;
+
                     if(String(user._id) != String(currentuser)) {
-                        var randomPeer = user._id;
-                        var randomUsername = user.username;
-                        console.log('user 2 is: ' + randomUsername);
-                        callback(null, user1, user1name, randomPeer, randomUsername);
+
+                        // check if the current user has blocked this user
+                        Flag.findOne({user : user._id, userWhoFlagged : currentuser}, function(err, flag) {
+                            if(err) throw err;
+                            if(flag) {
+                                console.log(currentuser+' has blocked '+user._id);
+                                returnRandom(currentuser);
+                            } else {
+                                Flag.findOne({user : currentuser, userWhoFlagged : user._id}, function(err, flag) {
+                                    if(err) throw err;
+                                    if (flag) {
+                                        console.log(user._id+' has blocked '+currentuser);
+                                        returnRandom(currentuser);
+                                    } else {
+                                        var randomPeer = user._id;
+                                        var randomUsername = user.username;
+                                        console.log('user 2 is: ' + randomUsername);
+                                        callback(null, user1, user1name, randomPeer, randomUsername);
+                                    }
+                                });
+                            }
+                        }); 
                     } else {
                        console.log('random user is the same as current user');
                        returnRandom(user._id);
@@ -351,9 +370,6 @@ router.get('/chatprof', function(req, res) {
 
 router.get('/blockuser', function(req, res){
     async.waterfall([
-        function(callback) {
-
-        },
 
         function(callback) {
             var flaggedUser = req.query.id;
@@ -365,14 +381,29 @@ router.get('/blockuser', function(req, res){
 
             newFlag.save(function(err){
                 if (err) throw err;
-                callback(null, flaggedUser, userWhoFlagged);
+                callback(null, flaggedUser, req.user._id);
             });
-        }, 
+        },
+
         function(flaggedUser, userWhoFlagged, callback) {
             Flag.find({user : flaggedUser}, function(err, flags) {
-                console.log('flags: '+flags);
-                console.log('flags length: '+flags.length);
-            }); 
+                if (err) throw err;
+                if(flags) {
+                    if ((flags.length +1) === 3) {
+                        User.update(
+                            { '_id' : flaggedUser },
+                            { $set: { isBlocked : true } },
+                            function(err, user) {
+                                if(err) throw err;
+                                console.log('user: '+ flaggedUser +' has been blocked');
+                                callback(null);
+                            }
+                        );
+                    } else {
+                        callback(null);
+                    }
+                }
+            });
         }
     ], function(err, result) {
         req.session.save(function(err){

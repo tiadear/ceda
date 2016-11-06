@@ -83,7 +83,7 @@ router.get('/', function(req, res) {
                 );
                 getLastPost.then(
                     function(val) {                        
-                        if(val[counter] != undefined) {
+                        //if(val[counter] != undefined) {
 
                             function formatDate(date) {
                                 var hours = date.getHours();
@@ -97,27 +97,46 @@ router.get('/', function(req, res) {
                                 return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
                             }
 
-                            var date = new Date(val[counter].created);
+                            var date = new Date(val[0].created);
                             var postTime = formatDate(date);
 
-                            User.findById(val[counter].user, function(err, user) {
-                                //console.log('val: '+val[counter].content);
-                                arr[threadId] = [threadId, threadTitle, val[counter].content, user.username, postTime];
-                                arr2.push(arr[threadId]);
-                            });
-                        }
+                            findUser(threadId, threadTitle, counter, total, val[0].user, val[0].content, postTime);
+                        //}
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('last post not found due to ' + reason);
+                    }
+                );
+            }
 
+
+            function findUser(threadId, threadTitle, counter, total, postUser, postContent, postTime) {
+                var getUsername = new Promise (
+                    function(resolve, reject) {
+                        User.findById(postUser, function(err, user){
+                            if (err) throw err;
+                            resolve(user.username);
+                        });
+                    }
+                );
+                getUsername.then(
+                    function(val)  {
+                        arr[threadId] = [threadId, threadTitle, postUser, val, postContent, postTime];
+                        arr2.push(arr[threadId]);
+
+                        //console.log('counter: '+counter);
                         if(counter === (total -1)) {
-                            //console.log('arr2: '+ uniq(arr2));
                             req.alertsForum = uniq(arr2);
-                            console.log('req.alertsForum: '+ req.alertsForum);
+                            //console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
                     }
                 )
                 .catch(
                     function(reason){
-                        console.log('last post not found due to ' + reason);
+                        console.log('username was not found due to ' + reason);
                     }
                 );
             }
