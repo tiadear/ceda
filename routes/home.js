@@ -82,8 +82,7 @@ router.get('/', function(req, res) {
                     }
                 );
                 getLastPost.then(
-                    function(val) {
-                        //console.log('val: '+val[counter]);
+                    function(val) {                        
                         if(val[counter] != undefined) {
 
                             function formatDate(date) {
@@ -100,17 +99,18 @@ router.get('/', function(req, res) {
 
                             var date = new Date(val[counter].created);
                             var postTime = formatDate(date);
-                        
-                            //console.log('val: '+val[counter].content);
-                            arr[threadId] = [threadId, threadTitle, val[counter].content, val[counter].user, postTime];
-                            arr2.push(arr[threadId]);
+
+                            User.findById(val[counter].user, function(err, user) {
+                                //console.log('val: '+val[counter].content);
+                                arr[threadId] = [threadId, threadTitle, val[counter].content, user.username, postTime];
+                                arr2.push(arr[threadId]);
+                            });
                         }
-                        //console.log('counter: '+counter);
 
                         if(counter === (total -1)) {
                             //console.log('arr2: '+ uniq(arr2));
                             req.alertsForum = uniq(arr2);
-                            //console.log('req.alertsForum: '+ req.alertsForum);
+                            console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
                     }
@@ -145,63 +145,87 @@ router.get('/', function(req, res) {
 
         function(alertsForum, rooms, callback) {
 
-
             var arr1 = [];
 
-            function lastuser(currentuser, user1, user2, historyuser, historymsg, historytime){
-
-                var lastusertomsg = new Promise(
+            function getChatHistory(roomID, currentuser, user1, user2, counter){
+                var findChatHistory = new Promise(
                     function(resolve, reject) {
-                        //console.log('point 2');
-
-                        if(historyuser === currentuser) {
-                            console.log('you were the last person to send a message');
-
-                            // if you are the user_init
-                            if(String(req.user._id) === String(user1)) {
-
-                                //then your convo partner is the user_resp
-                                User.findById(user2, function(err, partner) {
-                                    if (err) throw err;
-                                    console.log('convo partner is: ' + partner.username);
-                                    resolve(partner.username);
-                                });
-
+                        chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
+                            if (err) {
+                                console.log(err);
+                                throw err;
                             }
+                            if(history) {
+                                //console.log(history);
+                                resolve(history);
+                            }
+                        });
 
-                            // then you are the user_resp
-                            else {
-                                //console.log('point 3');
-                                // and your convo partner MUST be the user_init
-                                User.findById(user1, function(err, partner) {
+                    }
+                );
+
+                findChatHistory.then(
+                    function(val) {
+                        //console.log('val counter: '+val[0]);
+                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent);
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('chat history promise rejected for' + reason);
+                    }
+                );
+            }
+
+            function findUser(roomID, currentuser, user1, user2, historyUser, historyMessage, historyTime) {
+                var findLastUser = new Promise (
+                    function(resolve, reject) {
+
+                        if(String(currentuser) === String(historyUser)) {
+                            if(String(user1) === String(currentuser)) {
+                                User.findById(user2, function(err, userresp) {
                                     if (err) throw err;
-                                    console.log('convo partner is: ' + partner.username);
-                                    resolve(partner.username);
+                                    resolve(userresp);
+                                });
+                            } else {
+                                User.findById(user1, function(err, userinit) {
+                                    if (err) throw err;
+                                    resolve(userinit);
                                 });
                             }
                         }
                         else {
-                            //console.log('point 4');
-                            resolve(historyuser);
+                            User.findById(historyUser, function(err, convopartner) {
+                                if (err) throw err;
+                                resolve(convopartner);
+                            });
                         }
                     }
                 );
-
-                lastusertomsg.then(
+                findLastUser.then(
                     function(val) {
-                        //make the array for that room the last item
-                        arr1[id] = [val, historymsg, historytime];
-                        //push the history array into an overall history array
-                        arr2.push(arr1[id]);
-                        //if the number of arrays is equal to the number of rooms
-                        // ie. we have looped through every room
-                        if(arr2.length == rooms.length) {
 
-                            arr2.sort(function(a,b){
-                                return new Date(b.historytime) - (a.historytime);
-                            });
+                        function formatDate(date) {
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            var ampm = hours >= 12 ? 'pm' : 'am';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12; // the hour '0' should be '12'
+                            minutes = minutes < 10 ? '0'+minutes : minutes;
+                            var strTime = hours + ':' + minutes + ' ' + ampm;
+                            var months = date.getMonth() +1;
+                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+                        }
 
-                            //send it to the callback
+                        var date = new Date(historyTime);
+                        var newtime = formatDate(date);
+
+                        arr1[roomID] = [val._id, val.username, historyMessage, newtime];
+                        arr2.push(arr1[roomID]);
+                        //console.log('arr2: '+arr2);
+
+                        if (arr2.length === rooms.length) {
+                            console.log('arr2: '+arr2);
                             req.history = arr2;
                             req.alertsForum = alertsForum;
                             callback(null, req.alertsForum, req.history);
@@ -219,40 +243,11 @@ router.get('/', function(req, res) {
                 var id = rooms[j]._id;
                 var _user1 = rooms[j].user_init;
                 var _user2 = rooms[j].user_resp;
-                var _currentuser = req.user.username;
+                var _currentuser = req.user._id;
                 arr1[id] = [];
                 var arr2 = [];
 
-                chatHistory.find({room : id}, function(err, history) {
-
-                    //loop through all history items for that room
-                    if(history.length !== 0) {
-                        for(i = 0; i < history.length; i++) {
-
-                            //stop on the last item
-                            if(i === ((history.length)-1)) {
-
-                                function formatDate(date) {
-                                    var hours = date.getHours();
-                                    var minutes = date.getMinutes();
-                                    var ampm = hours >= 12 ? 'pm' : 'am';
-                                    hours = hours % 12;
-                                    hours = hours ? hours : 12; // the hour '0' should be '12'
-                                    minutes = minutes < 10 ? '0'+minutes : minutes;
-                                    var strTime = hours + ':' + minutes + ' ' + ampm;
-                                    var months = date.getMonth() +1;
-                                    return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-                                }
-
-                                var date = new Date(history[i].timesent);
-                                var dateformat = formatDate(date);
-
-                                lastuser(_currentuser, _user1, _user2, history[i].user, history[i].message, dateformat);
-                            }
-                        }
-                    }
-
-                });
+                getChatHistory(id, _currentuser, _user1, _user2, j);
             }
 
         }

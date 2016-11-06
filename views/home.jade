@@ -32,12 +32,12 @@ block content
 									li(style="z-index: #{z};")
 										a(href="/chat/chatpeer?user=#{history[i][0]}")
 											ul.historyitem
-												.top
-													p=history[i][0]
-												.middle-right
-													p=history[i][2]
-												.post
+												.middle-left
 													p=history[i][1]
+												.middle-right
+													p=history[i][3]
+												.post
+													p=history[i][2]
 					.logout
 						a(href="/logout") Logout
 			else

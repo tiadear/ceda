@@ -67,19 +67,19 @@ router.get('/', function(req, res){
                             if(String(user1) === String(currentuser)) {
                                 User.findById(user2, function(err, userresp) {
                                     if (err) throw err;
-                                    resolve(userresp.username);
+                                    resolve(userresp);
                                 });
                             } else {
                                 User.findById(user1, function(err, userinit) {
                                     if (err) throw err;
-                                    resolve(userinit.username);
+                                    resolve(userinit);
                                 });
                             }
                         }
                         else {
                             User.findById(historyUser, function(err, convopartner) {
                                 if (err) throw err;
-                                resolve(convopartner.username);
+                                resolve(convopartner);
                             });
                         }
                     }
@@ -102,9 +102,9 @@ router.get('/', function(req, res){
                         var date = new Date(historyTime);
                         var newtime = formatDate(date);
 
-                        arr1[roomID] = [val, historyMessage, newtime];
+                        arr1[roomID] = [val._id, val.username, historyMessage, newtime];
                         arr2.push(arr1[roomID]);
-                        console.log('arr2: '+arr2);
+                        //console.log('arr2: '+arr2);
 
                         if (arr2.length === rooms.length) {
                             console.log('arr2: '+arr2);
