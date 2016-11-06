@@ -135,24 +135,28 @@ $(function(){
 
         // getting chat history and displaying
 
-        function formatDate(d) {
-            var day = d.getDate();
-            var month = d.getMonth();
-            var year = d.getFullYear();
-            var hour = d.getHours();
-            var minutes = d.getMinutes();
-            return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+        function formatDate(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            var months = date.getMonth() +1;
+            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
         }
 
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
-                if(pastItem.user == user1username) {
-                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.message + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                //console.log('pastItem: '+pastItem);
+                if(pastItem[0] === user1) {
+                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
                 } else {
-                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem.message + '</li>');
+                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
                 }
 
-                var date = new Date(pastItem.timesent);
+                var date = new Date(pastItem[4]);
                 var dateformat = formatDate(date);
                         
                 $('#incoming').prepend('<li class="msgtime">'+ dateformat +'</li>');

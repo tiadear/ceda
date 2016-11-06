@@ -196,11 +196,41 @@ io.sockets.on('connection', function(socket){
         chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
             if(err) throw err;
             if(history) {
-                socket.emit('addHistory', history);
+                arr1 = [];
+                arr2 = [];
+                console.log('history length: '+history.length);
+
+                history.forEach(function(item, i) {
+                    arr1[item._id] =[];
+
+                    User.findById(item.user, function(err, user) {
+                        var username = user.username;
+                        console.log('username: '+username);
+                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
+                        arr2.push(arr1[item._id]);
+                        if(arr2.length === history.length) {
+                            console.log('arr2: '+arr2);
+                            socket.emit('addHistory', arr2);
+                        }
+                    });
+                });   
             }
             //new convo
         });
     });
+
+
+    // egghead
+    // 5805fb4469ef9c2f5821acda
+
+    // bibbity-bobbity
+    // 58109b03f180761638cc14c4
+
+    //mustardman
+    // 5805fbf669ef9c2f5821acdb
+
+    //heckles
+    // 581ae625297c373ea4f40e64
 
     socket.on('leaveRoom', function(userselected, currentuser){
         console.log('leaving room');
@@ -227,7 +257,7 @@ io.sockets.on('connection', function(socket){
             socket.emit("isTyping", false);
 
             var newChatHistory = new chatHistory();
-            newChatHistory.user = socket.username;
+            newChatHistory.user = socket.userID;
             newChatHistory.room = socket.room;
             newChatHistory.message = data;
 

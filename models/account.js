@@ -14,11 +14,13 @@ var userSchema = mongoose.Schema({
 	lastName: String,
 	notifyChat : Boolean,
 	notifyForum : Boolean,
+	disconnectTime : Date,
 	provider: String,
 	facebook: {},
 	twitter: {},
 	google: {},
-	oauthID: String
+	oauthID: String,
+	isBlocked: {type: Boolean, default: false }
 });
 
 userSchema.methods.generateHash = function(password) {

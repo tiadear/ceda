@@ -149,7 +149,6 @@ router.get('/', function(req, res) {
             var arr1 = [];
 
             function lastuser(currentuser, user1, user2, historyuser, historymsg, historytime){
-                console.log('reached last user function');
 
                 var lastusertomsg = new Promise(
                     function(resolve, reject) {
