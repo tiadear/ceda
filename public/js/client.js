@@ -1,9 +1,15 @@
 'use strict';
-/*
+
 $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
-*/
+
+$(document).ready(function() {
+    $('#nav-dash').on('click touch', function(){
+        socket.emit('leaveRoom');
+    });
+});
+
 var isChannelReady = false;
 var isInitiator = false;
 var isStarted = false;

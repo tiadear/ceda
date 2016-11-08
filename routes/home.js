@@ -21,9 +21,9 @@ local.strategy(passport);
 // dashbaord
 router.get('/', function(req, res) {
     async.waterfall([
+
         function(callback) {
 
-            // searching for all posts the user has written
             Post.find({user : req.user._id}, function(err, posts) {
                 if (err) throw err;
                 if (posts) {
@@ -32,13 +32,8 @@ router.get('/', function(req, res) {
             });
 
         }, function(posts, callback) {
-
-            // for each post, find the thread
-            // list the last post written in that thread
-
             arr = [];
             arr2 = [];
-            arr3 = [];
 
             // 2 - get the thread title
             function findThreads(threadId, counter, total) {
@@ -82,26 +77,24 @@ router.get('/', function(req, res) {
                     }
                 );
                 getLastPost.then(
-                    function(val) {                        
-                        //if(val[counter] != undefined) {
+                    function(val) {
 
-                            function formatDate(date) {
-                                var hours = date.getHours();
-                                var minutes = date.getMinutes();
-                                var ampm = hours >= 12 ? 'pm' : 'am';
-                                hours = hours % 12;
-                                hours = hours ? hours : 12; // the hour '0' should be '12'
-                                minutes = minutes < 10 ? '0'+minutes : minutes;
-                                var strTime = hours + ':' + minutes + ' ' + ampm;
-                                var months = date.getMonth() +1;
-                                return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-                            }
+                        function formatDate(date) {
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            var ampm = hours >= 12 ? 'pm' : 'am';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12; // the hour '0' should be '12'
+                            minutes = minutes < 10 ? '0'+minutes : minutes;
+                            var strTime = hours + ':' + minutes + ' ' + ampm;
+                            var months = date.getMonth() +1;
+                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+                        }
 
-                            var date = new Date(val[0].created);
-                            var postTime = formatDate(date);
+                        var date = new Date(val[0].created);
+                        var postTime = formatDate(date);
 
-                            findUser(threadId, threadTitle, counter, total, val[0].user, val[0].content, postTime);
-                        //}
+                        findUser(threadId, threadTitle, counter, total, val[0].user, val[0].content, postTime);
                     }
                 )
                 .catch(
@@ -145,20 +138,16 @@ router.get('/', function(req, res) {
             posts.forEach(function(post, i) {
                 findThreads(post.threadId, i, posts.length);
             });
-
-
-
         }, 
 
         function(alertsForum, callback) {
            
             //find all the rooms the current user has talked in
-            var roomsArr = []
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
                 if(rooms) {
                     callback(null, alertsForum, rooms);
-                }   
+                }
             });
         },
 
@@ -173,6 +162,12 @@ router.get('/', function(req, res) {
                             if (err) {
                                 console.log(err);
                                 throw err;
+                            }
+                            if (!history || history === '' || history.length === 0 || history === null) {
+                                Room.findByIdAndRemove(roomID, function(err) {
+                                    if (err) throw err;
+                                    console.log('room: '+ roomID +' delted');
+                                });
                             }
                             if(history) {
                                 //console.log(history);

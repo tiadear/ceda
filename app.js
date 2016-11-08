@@ -219,25 +219,12 @@ io.sockets.on('connection', function(socket){
         });
     });
 
-
-    // egghead
-    // 5805fb4469ef9c2f5821acda
-
-    // bibbity-bobbity
-    // 58109b03f180761638cc14c4
-
-    //mustardman
-    // 5805fbf669ef9c2f5821acdb
-
-    //heckles
-    // 581ae625297c373ea4f40e64
-
-    socket.on('leaveRoom', function(userselected, currentuser){
+    socket.on('leaveRoom', function(){
         console.log('leaving room');
-        chatHistory.find({ room : socket.room }).exec(function(err, history) {
+        chatHistory.find({ room : socket.room }, function(err, history) {
             if (err) throw err;
-            if (!history) {
-                Room.IdfindByIdAndRemove(socket.room, function(err) {
+            if (!history || history === '' || history.length === 0 || history === null) {
+                Room.findByIdAndRemove(socket.room, function(err) {
                     if (err) throw err;
                     console.log('room: '+socket.room+' delted');
                 });
