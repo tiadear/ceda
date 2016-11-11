@@ -3,19 +3,19 @@ block content
 	script(type="text/javascript").
 		$(document).ready(function(){
 			$('.reply').on('click touch', function(){ 
-				console.log('button clicked'); 
 				$('.postReply').show();
+				$('.options').hide();
+			});
+			$('.forgot').on('click touch', function(){ 
+				$('.postReply').hide();
+				$('.options').show();
 			});
 		});
 		//user 1 is current user
 		currentuser = '#{user._id}';
 		postuser = '#{posts[1]}';
 	.container
-		.options
-			a(href='/forum')
-				.back
-					img(src="/images/icon-back.png")
-			button.reply(type='button') Reply
+		include includes/nav-simple.jade	
 		.forumWrap
 			h1 #{thread[1]}
 			.threadList
@@ -50,6 +50,9 @@ block content
 										.bottom-right
 											a(href="/forum/edit?id=#{item[0]}") edit
 											a(href="/forum/delete?id=#{item[0]}") delete
+		.options
+			.reply 
+				p Reply
 		.postReply
 			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
 				input.form-input(type="text", name="content", placeholder="Your reply")

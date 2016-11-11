@@ -8,10 +8,8 @@ block content
 		// user 2 is peer
 		user2 = '#{userIDs[1]}';
 		user2username = '#{usersInRoom[1]}';
-	script(src="https://simplewebrtc.com/latest-v2.js")
-	script(src='/js/client.js')
 	.container
-		include includes/nav.jade
+		include includes/nav-simple.jade
 		.chatRoom
 			if (room)
 				h1 #{usersInRoom[1]}
@@ -40,3 +38,5 @@ block content
 							img(src='/images/icon-phone.png')
 						.chat-btn#muteButton
 						.chat-btn#killVideoButton
+	script(src="https://simplewebrtc.com/latest-v2.js")
+	script(src='/js/client.js')

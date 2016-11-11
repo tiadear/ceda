@@ -1,0 +1,17 @@
+extends layout
+block content
+	.container
+		if (user)
+			if (user.isBlocked)
+				.open
+					.logo
+						img#logo(src='/images/ceda2.png')
+					if (appeal)
+						h1 Thank you
+						p We will contact you shortly about your appeal.
+					else
+						h1 Appeal Blocking
+						form.form-login(role='form', action="/appeal", method="POST")
+							input.form-input(type="text", name="reason", placeholder="Please submit your reason for appealing this decision.", style="height: 200px;")
+							button.form-submit(type="submit") Submit
+							a.forgot(href='/') Cancel

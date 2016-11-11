@@ -8,7 +8,7 @@ block content
 						img#logo(src='/images/ceda2.png')
 					p You have been flagged as being inappropriate on several occassions and as such, have been blocked from using Ceda.
 					p If you would like to appeal this please click the button below.
-					a(href='/appealblocking')
+					a#appeal(href='/appealblocking')
 						button.form-submit(type='button') Appeal
 			else
 				if (user.username)

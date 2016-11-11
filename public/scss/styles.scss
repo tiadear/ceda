@@ -23,6 +23,7 @@ button { border: none; background-color: $red; color: $white; cursor: pointer; f
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
 h1 { @extend .htags; font-size: 1.8em; color: $blue; }
 h2 { @extend .htags; font-size: 1.2em; color: $blue; }
+h3 { @extend .htags; font-size: 1.2em; color: $white; }
 ul { -webkit-padding-start: 0px; margin: 0; }
 li { list-style-type: none; }
 p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px;}
@@ -32,12 +33,17 @@ p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 
 
 form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
     .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; border: solid 2px $red; @include border-radius(5px); }
-    .form-input { @extend .inputs;
+    .form-input { @extend .inputs; 
         &:focus { border: solid 2px $blue; outline: none; }
     }
     .form-submit { @extend .inputs; color: $white;
         &:hover { background-color: $blue; border: solid 2px $blue; }
     }
+}
+
+header {
+    height: 30px; background-color: $red;
+    .title { font-size: 0.8em; color: $white; margin: 0 auto; text-align: center; padding: $pad/2 0;}
 }
 
 
@@ -69,6 +75,11 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
                 &:hover {color: $blue;}
            }
         }
+        #appeal {
+            .form-submit { width: 100%; height: 40px; font-family: $sans; font-size: 1em; border: solid 2px $red; @include border-radius(5px); ; padding: $pad/4 $pad; margin-top: $pad;
+                &:hover { background-color: $blue; border: solid 2px $blue;  }
+            }
+        }
     } // end of open
 
 
@@ -77,7 +88,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 
 
     // nav display
-    nav { height: 50px; width: 100%;
+    nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2));
         ul { width: 100%;
             li { background-color: $red; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
                 &:hover, &:focus { background-color: $blue; }
@@ -89,6 +100,16 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
     } // end of nav
+
+
+    .simpleNav { height: 40px; width: 100%; background-color: $red; padding-top: $pad/2;  @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2));
+        a { position: absolute; padding-top: $pad/4;
+            .back { width: 15px; position: relative; margin-left: $pad; display: inline-block; vertical-align: top; 
+                img {width: 100%;}
+            }
+        }
+        .pageTitle { margin: 0 auto; display: inline-block; text-align: center; width: 100%; position: absolute; pointer-events: none;}
+    }
 
 
 
@@ -124,17 +145,25 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
                 //a {
-                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $blue; text-align: left; 
+                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $blue; text-align: left;
                         .top {font-size: 1.4em; padding: $pad 0;}
-                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; }
+                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; 
+                            .icon {width: 22px; display: inline-block; padding-right: $pad/2;
+                                img {width: 100%; }
+                            }
+                            p {display: inline-block;}
+                        }
                         .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right;}
                         .post { padding: $pad/2 0 $pad/2; }
                         .postnumber {font-size : 0.7em; padding-bottom: $pad/2;}
                         .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;}
-                        .icon { float: right; }
                         .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block;
                             a {padding: 0 $pad/4;}
                         }
+                        .blocked { width: 90%; height: 40px; font-size: 0.6em; text-transform: uppercase; color: darken($grey, 20%); text-align: right;
+                        }
+                        
+                        
                     }
                     ul { background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); }
                     .postItem { background-color: none; @include box-shadow(0 rgba(0,0,0,0)); border-bottom: solid 1px darken($grey, 10%); }
@@ -211,13 +240,12 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
             }
         }
     }
-    .options { padding: $pad;
-        .reply { float: right; padding: $pad/4 $pad;  @include border-radius(5px)}
-        .back { width: 40px; display: inline-block;
-            img {width: 100%;}
-        }
+    .options { padding: $pad; position: fixed; bottom: 0px; right: 0px;
+        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $red; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
+            p { color: $white; text-align: center; padding-top: 21px;}
+         }
     }
-    .postReply {display :none;}
+    .postReply {display :none; position: fixed; bottom: 0px; width: 100%;}
 
 
 

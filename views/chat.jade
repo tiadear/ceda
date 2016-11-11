@@ -19,8 +19,12 @@ block content
 							a(href="/chat/chatpeer?user=#{history[i][0]}")
 								ul.historyitem
 									.middle-left
+										if (history[i][4] == history[i][0])
+											.icon
+												img(src="/images/icon-block-red.png")
 										p=history[i][1]
 									.middle-right
 										p=history[i][3]
 									.post
 										p=history[i][2]
+									

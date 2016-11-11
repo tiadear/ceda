@@ -138,7 +138,8 @@ router.get('/', function(req, res) {
 router.get('/new', function(req, res) {
 	res.render('new', {
 		user : req.user,
-		title : 'ceda'
+		title : 'ceda',
+		pageTitle: 'forum'
 	});
 });
 
@@ -173,7 +174,8 @@ router.get('/edit*', function(req, res) {
 			thread : req.thread,
 			post : req.post,
 			user : req.user,
-			title : 'ceda'
+			title : 'ceda',
+			pageTitle: 'forum'
 		});
 	});
 });
@@ -321,7 +323,8 @@ router.get('/thread*', function(req, res) {
 				thread: req.thread,
 				posts : req.posts,
 				user : req.user,
-				title : 'ceda'
+				title : 'ceda',
+				pageTitle: 'forum'
 			});
 		});
 	});

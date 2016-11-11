@@ -29,7 +29,43 @@ router.get('/', function(req, res){
 
             var arr1 = [];
 
-            function getChatHistory(roomID, currentuser, user1, user2, counter){
+            function isFlagged(roomID, currentuser, user1, user2, counter){
+
+                var flaggedUser = new Promise( 
+                    function(resolve, reject) {
+                        // check if the current user has blocked the user init or user resp
+                        Flag.findOne({user: { $in: [user1, user2] }, userWhoFlagged : currentuser}, function(err, flag) {
+                            if(err) throw err;
+                            if(flag) {
+                                console.log(currentuser + ' has blocked ' + flag.user);
+                                resolve(flag.user);
+                            } else {
+                                Flag.findOne({userWhoFlagged: { $in: [user1, user2] }, user : currentuser}, function(err, flag) {
+                                    if(err) throw err;
+                                    if (flag) {
+                                        console.log(currentuser + ' has been blocked by ' + flag.userWhoFlagged);
+                                        resolve(currentuser);
+                                    } else {
+                                        resolve('');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                );
+                flaggedUser.then (
+                    function(val) {
+                        getChatHistory(roomID, currentuser, user1, user2, counter, val);
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('chat history promise rejected for' + reason);
+                    }
+                );
+            }
+
+            function getChatHistory(roomID, currentuser, user1, user2, counter, blocked){
                 var findChatHistory = new Promise(
                     function(resolve, reject) {
                         chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
@@ -54,8 +90,7 @@ router.get('/', function(req, res){
 
                 findChatHistory.then(
                     function(val) {
-                        //console.log('val counter: '+val[0]);
-                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent);
+                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent, blocked);
                     }
                 )
                 .catch(
@@ -65,10 +100,9 @@ router.get('/', function(req, res){
                 );
             }
 
-            function findUser(roomID, currentuser, user1, user2, historyUser, historyMessage, historyTime) {
+            function findUser(roomID, currentuser, user1, user2, historyUser, historyMessage, historyTime, blocked) {
                 var findLastUser = new Promise (
                     function(resolve, reject) {
-
                         if(String(currentuser) === String(historyUser)) {
                             if(String(user1) === String(currentuser)) {
                                 User.findById(user2, function(err, userresp) {
@@ -92,7 +126,6 @@ router.get('/', function(req, res){
                 );
                 findLastUser.then(
                     function(val) {
-
                         function formatDate(date) {
                             var hours = date.getHours();
                             var minutes = date.getMinutes();
@@ -108,12 +141,12 @@ router.get('/', function(req, res){
                         var date = new Date(historyTime);
                         var newtime = formatDate(date);
 
-                        arr1[roomID] = [val._id, val.username, historyMessage, newtime];
+                        arr1[roomID] = [val._id, val.username, historyMessage, newtime, blocked];
                         arr2.push(arr1[roomID]);
                         //console.log('arr2: '+arr2);
 
                         if (arr2.length === rooms.length) {
-                            console.log('arr2: '+arr2);
+                            //console.log('arr2: '+arr2);
                             req.history = arr2;
                             callback(null, req.history);
                         }
@@ -126,8 +159,6 @@ router.get('/', function(req, res){
                 );
             }
 
-            
-
             for(j = 0; j < rooms.length; j++){
 
                 var id = rooms[j]._id;
@@ -137,7 +168,7 @@ router.get('/', function(req, res){
                 arr1[id] = [];
                 var arr2 = [];
 
-                getChatHistory(id, _currentuser, _user1, _user2, j);
+                isFlagged(id, _currentuser, _user1, _user2, j);
 			}
 		}
 
@@ -286,7 +317,9 @@ router.get('/chatpeer*', function(req, res) {
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
-                userIDs : req.userIDs
+                userIDs : req.userIDs,
+                title: 'ceda',
+                pageTitle: 'chat'
             });
         });
     });
@@ -404,7 +437,9 @@ router.get('/chatprof*', function(req, res) {
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
-                userIDs : req.userIDs
+                userIDs : req.userIDs,
+                title: 'ceda',
+                pageTitle: 'chat'
             });
         });
     });

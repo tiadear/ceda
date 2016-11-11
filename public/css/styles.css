@@ -34,7 +34,7 @@ button, .container .open .social-login .social-btn, .container .chatChoiceWrap .
   button:focus, .container .open .social-login .social-btn:focus, .container .chatChoiceWrap .chatChoices .chatChoice:focus {
     outline: none; }
 
-.htags, h1, h2 {
+.htags, h1, h2, h3 {
   font-family: "Questrial", sans-serif;
   font-weight: 300;
   -webkit-margin-before: 0px;
@@ -49,6 +49,10 @@ h1 {
 h2 {
   font-size: 1.2em;
   color: #213e64; }
+
+h3 {
+  font-size: 1.2em;
+  color: #ffffff; }
 
 ul {
   -webkit-padding-start: 0px;
@@ -88,6 +92,16 @@ form {
     form .form-submit:hover {
       background-color: #213e64;
       border: solid 2px #213e64; }
+
+header {
+  height: 30px;
+  background-color: #ea5455; }
+  header .title {
+    font-size: 0.8em;
+    color: #ffffff;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 0; }
 
 .container {
   width: 100%; }
@@ -152,9 +166,28 @@ form {
       color: #ea5455; }
       .container .open #deleteUser button#delete:hover, .container .open #deleteUser .social-login #delete.social-btn:hover, .container .open .social-login #deleteUser #delete.social-btn:hover, .container .open #deleteUser .chatChoiceWrap .chatChoices #delete.chatChoice:hover, .container .chatChoiceWrap .chatChoices .open #deleteUser #delete.chatChoice:hover {
         color: #213e64; }
+    .container .open #appeal .form-submit {
+      width: 100%;
+      height: 40px;
+      font-family: "Questrial", sans-serif;
+      font-size: 1em;
+      border: solid 2px #ea5455;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px;
+      padding: 5px 20px;
+      margin-top: 20px; }
+      .container .open #appeal .form-submit:hover {
+        background-color: #213e64;
+        border: solid 2px #213e64; }
   .container nav {
     height: 50px;
-    width: 100%; }
+    width: 100%;
+    -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
     .container nav ul {
       width: 100%; }
       .container nav ul li {
@@ -169,6 +202,33 @@ form {
         .container nav ul li a .navoption img {
           height: 30px;
           margin: 10px auto 0 auto; }
+  .container .simpleNav {
+    height: 40px;
+    width: 100%;
+    background-color: #ea5455;
+    padding-top: 10px;
+    -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
+    .container .simpleNav a {
+      position: absolute;
+      padding-top: 5px; }
+      .container .simpleNav a .back {
+        width: 15px;
+        position: relative;
+        margin-left: 20px;
+        display: inline-block;
+        vertical-align: top; }
+        .container .simpleNav a .back img {
+          width: 100%; }
+    .container .simpleNav .pageTitle {
+      margin: 0 auto;
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      pointer-events: none; }
   .container .chatWraps, .container .dash, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap, .container .settingsWrap {
     width: 100%;
     padding: 40px 0;
@@ -207,6 +267,14 @@ form {
           padding: 20px 0 10px;
           width: 50%;
           display: inline-block; }
+          .container .history ul li ul .middle-left .icon, .container .history ul li .postItem .middle-left .icon, .container .threadList ul li ul .middle-left .icon, .container .threadList ul li .postItem .middle-left .icon {
+            width: 22px;
+            display: inline-block;
+            padding-right: 10px; }
+            .container .history ul li ul .middle-left .icon img, .container .history ul li .postItem .middle-left .icon img, .container .threadList ul li ul .middle-left .icon img, .container .threadList ul li .postItem .middle-left .icon img {
+              width: 100%; }
+          .container .history ul li ul .middle-left p, .container .history ul li .postItem .middle-left p, .container .threadList ul li ul .middle-left p, .container .threadList ul li .postItem .middle-left p {
+            display: inline-block; }
         .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
           font-size: 0.8em;
           width: 50%;
@@ -222,8 +290,6 @@ form {
           padding: 10px 0;
           width: 50%;
           display: inline-block; }
-        .container .history ul li ul .icon, .container .history ul li .postItem .icon, .container .threadList ul li ul .icon, .container .threadList ul li .postItem .icon {
-          float: right; }
         .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
           font-size: 0.8em;
           width: 50%;
@@ -232,6 +298,13 @@ form {
           display: inline-block; }
           .container .history ul li ul .bottom-right a, .container .history ul li .postItem .bottom-right a, .container .threadList ul li ul .bottom-right a, .container .threadList ul li .postItem .bottom-right a {
             padding: 0 5px; }
+        .container .history ul li ul .blocked, .container .history ul li .postItem .blocked, .container .threadList ul li ul .blocked, .container .threadList ul li .postItem .blocked {
+          width: 90%;
+          height: 40px;
+          font-size: 0.6em;
+          text-transform: uppercase;
+          color: #b8b8b8;
+          text-align: right; }
       .container .history ul li ul, .container .threadList ul li ul {
         background-color: white;
         -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
@@ -414,21 +487,34 @@ form {
       .container .forumWrap .addPost a .add img {
         width: 100%; }
   .container .options {
-    padding: 20px; }
+    padding: 20px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px; }
     .container .options .reply {
       float: right;
-      padding: 5px 20px;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-      -ms-border-radius: 5px;
-      border-radius: 5px; }
-    .container .options .back {
-      width: 40px;
-      display: inline-block; }
-      .container .options .back img {
-        width: 100%; }
+      width: 60px;
+      height: 60px;
+      -webkit-border-radius: 30px;
+      -moz-border-radius: 30px;
+      -ms-border-radius: 30px;
+      border-radius: 30px;
+      background-color: #ea5455;
+      cursor: pointer;
+      -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      bottom: 20px; }
+      .container .options .reply p {
+        color: #ffffff;
+        text-align: center;
+        padding-top: 21px; }
   .container .postReply {
-    display: none; }
+    display: none;
+    position: fixed;
+    bottom: 0px;
+    width: 100%; }
   .container .settingsWrap .settingsA, .container .settingsWrap .settingsN {
     position: relative; }
     .container .settingsWrap .settingsA .settingsAccount, .container .settingsWrap .settingsA .settingsNotification, .container .settingsWrap .settingsN .settingsAccount, .container .settingsWrap .settingsN .settingsNotification {
