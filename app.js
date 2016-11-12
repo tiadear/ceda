@@ -12,9 +12,9 @@ const   path = require('path'),
         User = require('./models/account.js');
 
 var favicon = require('static-favicon'),
-    logger = require('morgan');
-    cookieParser = require('cookie-parser');
-    bodyParser = require('body-parser');
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
     nodeStatic = require('node-static'),
     uuid = require('uuid'),
     flash = require('connect-flash'),
@@ -85,7 +85,7 @@ app.listen(port, function(){
   console.log("Express server listening on port ", port);
 });
 
-
+/*
 
 
 // passport strategies
@@ -112,7 +112,7 @@ passport.use(local, 'local-login');
 passport.use(facebook);
 passport.use(twitter);
 passport.use(google);
-
+*/
 
 
 
@@ -122,7 +122,7 @@ var mongo_uri = ENV['MONGODB_URI'];
 mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
-*/
+
 
 
 
@@ -296,3 +296,4 @@ Array.prototype.contains = function(k, callback) {
 
 
 
+*/
