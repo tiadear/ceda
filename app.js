@@ -116,7 +116,8 @@ passport.use(google);
 
 
 // connect to db
-mongoose.connect(db.url);
+var mongo_uri = ENV['MONGODB_URI'];
+mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
 
