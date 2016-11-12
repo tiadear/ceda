@@ -234,8 +234,10 @@ header {
     padding: 40px 0;
     text-align: center; }
   .container .dash .logout {
-    padding-top: 85vh;
-    text-align: right; }
+    text-align: right;
+    position: absolute;
+    bottom: 20px;
+    right: 20px; }
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
     .container .chatChoiceWrap .chatChoices .chatChoice {
@@ -480,7 +482,10 @@ header {
             margin: 0 auto; }
   .container .forumWrap .addPost {
     float: right;
-    padding: 20px; }
+    padding: 20px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px; }
     .container .forumWrap .addPost a .add {
       width: 50px;
       height: auto; }
@@ -499,7 +504,7 @@ header {
       -moz-border-radius: 30px;
       -ms-border-radius: 30px;
       border-radius: 30px;
-      background-color: #ea5455;
+      background-color: #6ed4b3;
       cursor: pointer;
       -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
       -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);

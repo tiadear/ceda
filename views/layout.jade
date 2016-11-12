@@ -8,7 +8,8 @@ html
     script(src='/js/jquery-3.1.1.min.js')
     script(src='/js/lib/adapter.js')
   body
-    include includes/head.jade
+    if (user)
+      include includes/head.jade
     if (error && error.length > 0)
       br
       h4.error-msg= error

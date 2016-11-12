@@ -127,7 +127,7 @@ header {
 
             }
         }
-        .logout { padding-top: 85vh; text-align: right; }
+        .logout { text-align: right; position: absolute; bottom: 20px; right: 20px;}
     }
     
 
@@ -232,7 +232,7 @@ header {
     // forum
     .forumWrap { @extend .chatWraps;
         .threadList {  }
-        .addPost { float: right; padding: $pad;
+        .addPost { float: right; padding: $pad; position: fixed; bottom: 0px; right: 0px;
             a {
                 .add {  width: 50px; height: auto;
                     img {width: 100%;}
@@ -241,7 +241,7 @@ header {
         }
     }
     .options { padding: $pad; position: fixed; bottom: 0px; right: 0px;
-        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $red; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
+        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $mint; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
             p { color: $white; text-align: center; padding-top: 21px;}
          }
     }
