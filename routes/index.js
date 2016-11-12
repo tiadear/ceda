@@ -104,6 +104,9 @@ router.post('/forgot', local.forgot,
 );
 
 
+
+
+
 router.get('/reset', function(req,res) {
     passport.authenticate('local-reset', {
         failureRedirect : '/forgot',

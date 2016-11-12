@@ -1,25 +1,27 @@
 
-var path = require('path'),
-    express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    passport = require('passport'),
-    nodemailer = require('nodemailer'),
-    expressSession = require('express-session'),
-    mongoose = require('mongoose'),
-    db = require('./db.js'),
-    User = require('./models/account.js'),
-    favicon = require('static-favicon'),
-    logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    nodeStatic = require('node-static'),
-    uuid = require('uuid'),
-    flash = require('connect-flash'),
-    debug = require('debug')('ceda:server'),
-    _ = require('underscore')._;
+var path = require('path');
+var express = require('express');
+var app = express();
+//var server = require('http').createServer(app);
+//var io = require('socket.io').listen(server);
 
+/*
+var passport = require('passport');
+var nodemailer = require('nodemailer');
+var expressSession = require('express-session');
+var mongoose = require('mongoose');
+var db = require('./db.js');
+var User = require('./models/account.js');
+var favicon = require('static-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var nodeStatic = require('node-static');
+var uuid = require('uuid');
+var flash = require('connect-flash');
+var debug = require('debug')('ceda:server');
+var _ = require('underscore')._;
+*/
 app.set('port', (process.env.PORT || 3000));
 
 app.use(express.static(__dirname + '/public'));
@@ -47,7 +49,9 @@ var settings = require('./routes/settings');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
+app.get('/', function(req, res) {
+  res.render('index');
+});
 
 
 // uncomment after placing your favicon in /public
