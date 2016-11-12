@@ -80,10 +80,9 @@ app.use('/settings', settings);
 
 
 // connect to port
-var server_port = process.env.PORT;
-var server_host = '0,0,0,0';
-app.listen(server_port, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+app.set('port', (process.env.PORT || 3000));
+app.listen(app.get('port'), function(){
+  console.log("Express server listening on port ", app.get('port'));
 });
 
 
