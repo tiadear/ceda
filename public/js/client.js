@@ -1,9 +1,15 @@
 'use strict';
-/*
+
 $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
-*/
+
+$(document).ready(function() {
+    $('#nav-dash').on('click touch', function(){
+        socket.emit('leaveRoom');
+    });
+});
+
 var isChannelReady = false;
 var isInitiator = false;
 var isStarted = false;
@@ -61,11 +67,19 @@ $(function(){
 
                 $('#outgoing').unbind('keypress');
 
+                var typing = false;
+                var timeout = undefined;
+
+                function timeoutFunction() {
+                    typing = false;
+                    socket.emit("userTyping", false);
+                }
+
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
 
                     //if enter has not been hit
-                    if(e.which != 13) {
+                    if(e.which !== 13) {
                         if(typing === false && $('#outgoing').is(':focus')) {
                             typing = true;
                             socket.emit('userTyping', true);
@@ -73,6 +87,7 @@ $(function(){
                             clearTimeout(timeout);
                             timeout = setTimeout(timeoutFunction, 5000);
                         }
+                        
                     }
 
                     //if enter has been hit
@@ -84,10 +99,25 @@ $(function(){
 
                         //reset the outgoing chat to null
                         $('#outgoing').val('');
-                    } 
+                        socket.emit('userTyping', false);
+                        typing = false;
+                    }
+                    
                 });
             }
 
+        });
+
+        //If a user is typing
+        socket.on('isTyping', function(data){
+            if(data.isTyping) {
+                if($('#'+data.user+'').length === 0) {
+                    $('#incoming').append('<li class="istyping" id='+data.user+'>'+data.user+' is typing</li>');
+                    timeout = setTimeout(timeoutFunction, 5000);
+                }
+            } else {
+                $('#'+data.user+'').remove();
+            }
         });
     
 
@@ -111,24 +141,28 @@ $(function(){
 
         // getting chat history and displaying
 
-        function formatDate(d) {
-            var day = d.getDate();
-            var month = d.getMonth();
-            var year = d.getFullYear();
-            var hour = d.getHours();
-            var minutes = d.getMinutes();
-            return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+        function formatDate(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            var months = date.getMonth() +1;
+            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
         }
 
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
-                if(pastItem.user == user1username) {
-                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem.message + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                //console.log('pastItem: '+pastItem);
+                if(pastItem[0] === user1) {
+                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
                 } else {
-                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem.message + '</li>');
+                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
                 }
 
-                var date = new Date(pastItem.timesent);
+                var date = new Date(pastItem[4]);
                 var dateformat = formatDate(date);
                         
                 $('#incoming').prepend('<li class="msgtime">'+ dateformat +'</li>');
@@ -167,27 +201,6 @@ $(function(){
 
 
 
-
-
-        var typing = false;
-        var timeout = undefined;
-
-        function timeoutFunction() {
-            typing = false;
-            socket.emit("isTyping", false);
-        }
-
-        //If a user is typing
-        socket.on('isTyping', function(data){
-            if(data.isTyping) {
-                if($('#'+data.user+'').length === 0) {
-                    $('#incoming').append('<li>'+data.user+' is typing</li>');
-                    timeout = setTimeout(timeoutFunction, 5000);
-                }
-            } else {
-                $('#'+data.user+'').remove();
-            }
-        });
 
 
 

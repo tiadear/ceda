@@ -138,7 +138,8 @@ router.get('/', function(req, res) {
 router.get('/new', function(req, res) {
 	res.render('new', {
 		user : req.user,
-		title : 'ceda'
+		title : 'ceda',
+		pageTitle: 'forum'
 	});
 });
 
@@ -173,7 +174,8 @@ router.get('/edit*', function(req, res) {
 			thread : req.thread,
 			post : req.post,
 			user : req.user,
-			title : 'ceda'
+			title : 'ceda',
+			pageTitle: 'forum'
 		});
 	});
 });
@@ -267,14 +269,12 @@ router.get('/thread*', function(req, res) {
 					function(val) {
 						arr[postId] = [postId, userId, val, postContent, postdate];
 						arr2.push(arr[postId]);
-						//console.log('arr2 length: '+arr2.length);
 
-						if (arr2.length === posts.length) {
+						arr2.sort(function(a,b){
+							return new Date(a[4]) - (b[4]);
+						});
 
-							arr2.sort(function(a,b){
-								return new Date(a.postdate) - (b.postdate);
-							});
-
+						if (arr2.length === posts.length) {\
 							req.posts = arr2;
 							//console.log('arr2: '+arr2);
 							req.thread = thread;
@@ -309,7 +309,7 @@ router.get('/thread*', function(req, res) {
 				var date = new Date(post.created);
                 var dateformat = formatDate(date);
 
-                findUser(post.user, id, post.content, dateformat);
+                findUser(post.user, id, post.content, post.created);
 			});
 		}
 	], function(err, result) {
@@ -321,7 +321,8 @@ router.get('/thread*', function(req, res) {
 				thread: req.thread,
 				posts : req.posts,
 				user : req.user,
-				title : 'ceda'
+				title : 'ceda',
+				pageTitle: 'forum'
 			});
 		});
 	});

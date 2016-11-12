@@ -196,18 +196,35 @@ io.sockets.on('connection', function(socket){
         chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
             if(err) throw err;
             if(history) {
-                socket.emit('addHistory', history);
+                arr1 = [];
+                arr2 = [];
+                console.log('history length: '+history.length);
+
+                history.forEach(function(item, i) {
+                    arr1[item._id] =[];
+
+                    User.findById(item.user, function(err, user) {
+                        var username = user.username;
+                        console.log('username: '+username);
+                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
+                        arr2.push(arr1[item._id]);
+                        if(arr2.length === history.length) {
+                            console.log('arr2: '+arr2);
+                            socket.emit('addHistory', arr2);
+                        }
+                    });
+                });   
             }
             //new convo
         });
     });
 
-    socket.on('leaveRoom', function(userselected, currentuser){
+    socket.on('leaveRoom', function(){
         console.log('leaving room');
-        chatHistory.find({ room : socket.room }).exec(function(err, history) {
+        chatHistory.find({ room : socket.room }, function(err, history) {
             if (err) throw err;
-            if (!history) {
-                Room.IdfindByIdAndRemove(socket.room, function(err) {
+            if (!history || history === '' || history.length === 0 || history === null) {
+                Room.findByIdAndRemove(socket.room, function(err) {
                     if (err) throw err;
                     console.log('room: '+socket.room+' delted');
                 });
@@ -227,7 +244,7 @@ io.sockets.on('connection', function(socket){
             socket.emit("isTyping", false);
 
             var newChatHistory = new chatHistory();
-            newChatHistory.user = socket.username;
+            newChatHistory.user = socket.userID;
             newChatHistory.room = socket.room;
             newChatHistory.message = data;
 

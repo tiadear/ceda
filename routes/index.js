@@ -5,6 +5,7 @@ const Room = require('../models/room.js');
 var Thread = require('../models/thread.js');
 var Post = require('../models/posts.js');
 var chatHistory = require('../models/chatHistory.js');
+var Appeal = require('../models/appeal.js');
 
 const express = require('express');
 const router = express.Router();
@@ -218,6 +219,33 @@ router.post('/delete', function(req, res) {
 
 
 
+router.get('/appealblocking', function(req, res) {
+    res.render('appeal', {
+        user : req.user,
+        message : req.flash('appealMessage'),
+        title : 'ceda'
+    });
+});
+
+router.post('/appeal', function(req, res) {
+
+    if(req.body.reason) {
+        var newAppeal = new Appeal();
+        newAppeal.user = req.user._id;
+        newAppeal.appeal = req.body.reason;
+
+        newAppeal.save(function(err){
+            if (err) throw err;
+            req.appeal = true;
+            res.redirect('/appeal', {
+                appeal: req.appeal,
+                user: req.user
+            });
+        });
+    } else {
+
+    }
+});
 
 
 
