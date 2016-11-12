@@ -22,16 +22,16 @@ var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
 var _ = require('underscore')._;
 */
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
 
 
 
-
+/*
 // module exports
 module.exports = app;
-
+*/
 
 
 /*
@@ -46,7 +46,7 @@ var settings = require('./routes/settings');
 
 
 // set up views
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
