@@ -25,10 +25,6 @@ app.use(express.static(__dirname + '/public'));
 
 
 
-// connect to port
-server.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
 
 
 
@@ -83,7 +79,10 @@ app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
 
-
+// connect to port
+server.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
 
 
 // passport strategies
@@ -111,6 +110,7 @@ passport.use(local, 'local-login');
 passport.use(facebook);
 passport.use(twitter);
 passport.use(google);
+
 
 
 
