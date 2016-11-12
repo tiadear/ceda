@@ -51,6 +51,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+/*
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -66,7 +67,7 @@ app.use(passport.session());
 //app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+*/
 
 // general
 app.use('/', routes);
@@ -116,11 +117,12 @@ passport.use(google);
 
 
 // connect to db
+/*
 var mongo_uri = ENV['MONGODB_URI'];
 mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
-
+*/
 
 
 
