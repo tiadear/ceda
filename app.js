@@ -1,11 +1,34 @@
+var express = require('express');
+var app = express();
 
+app.set('port', (process.env.PORT || 3000));
+
+app.use(express.static(__dirname + '/public'));
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
+app.get('/', function(request, response) {
+  response.render('index');
+});
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
+
+
+
+
+/*
 var path = require('path');
 var express = require('express');
 var app = express();
 //var server = require('http').createServer(app);
 //var io = require('socket.io').listen(server);
 
-/*
+
 var passport = require('passport');
 var nodemailer = require('nodemailer');
 var expressSession = require('express-session');
@@ -21,7 +44,7 @@ var uuid = require('uuid');
 var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
 var _ = require('underscore')._;
-*/
+
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
@@ -41,7 +64,7 @@ var home = require('./routes/home');
 var chat = require('./routes/chat');
 var forum = require('./routes/forum');
 var settings = require('./routes/settings');
-*/
+
 
 
 
@@ -80,7 +103,7 @@ app.use('/home', home);
 app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
-*/
+
 
 
 
@@ -89,7 +112,7 @@ app.listen(app.get('port'), function() {
   console.log('Ceda is running on port', app.get('port'));
 });
 
-/*
+
 
 
 // passport strategies
