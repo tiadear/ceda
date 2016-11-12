@@ -20,6 +20,8 @@ var path = require('path'),
     debug = require('debug')('ceda:server'),
     _ = require('underscore')._;
 
+app.set('port', (process.env.PORT || 3000));
+
 app.use(express.static(__dirname + '/public'));
 
 
@@ -30,14 +32,14 @@ module.exports = app;
 
 
 
-
+/*
 // routes
 var routes = require('./routes/index');
 var home = require('./routes/home');
 var chat = require('./routes/chat');
 var forum = require('./routes/forum');
 var settings = require('./routes/settings');
-
+*/
 
 
 
@@ -66,7 +68,7 @@ app.use(passport.session());
 //app.use(express.static(path.join(__dirname, 'public')));
 
 
-*/
+
 
 // general
 app.use('/', routes);
@@ -74,14 +76,13 @@ app.use('/home', home);
 app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
-
+*/
 
 
 
 // connect to port
-var port = server.listen(process.env.PORT || 3000);
-app.listen(port, function(){
-  console.log("Express server listening on port ", port);
+app.listen(app.get('port'), function() {
+  console.log('Ceda is running on port', app.get('port'));
 });
 
 /*
