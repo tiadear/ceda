@@ -49,7 +49,6 @@ app.set('view engine', 'jade');
 
 
 
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -80,11 +79,10 @@ app.use('/settings', settings);
 
 
 // connect to port
-app.set('port', (process.env.PORT || 3000));
-app.listen(app.get('port'), function(){
-  console.log("Express server listening on port ", app.get('port'));
+var port = server.listen(process.env.PORT || 3000);
+app.listen(port, function(){
+  console.log("Express server listening on port ", port);
 });
-
 
 
 
@@ -94,7 +92,6 @@ var local = require('./passport/local');
 var facebook = require('./passport/facebook');
 var twitter = require('./passport/twitter');
 var google = require('./passport/google');
-
 
 
 
@@ -118,7 +115,6 @@ passport.use(google);
 
 
 
-
 // connect to db
 mongoose.connect(db.url);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
@@ -136,6 +132,7 @@ app.use(function(req, res, next) {
 
 
 
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -145,14 +142,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-
-
-
-
-
-
 
 
 
