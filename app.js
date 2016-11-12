@@ -79,8 +79,14 @@ app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
 
+
+
+
+
+var server_port = process.env.PORT || 3000;
+var server_host = '0,0,0,0';
 // connect to port
-server.listen(process.env.PORT || 3000, function(){
+server.listen(server_port, server_host, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
