@@ -22,9 +22,6 @@ exports.strategy = function(passport) {
 		passReqToCallback : true
 		},
 		function(req, email, password, done) {
-			if(!email || !password) {
-				console.log("no email or password");
-			}
 			User.findOne({email : req.body.email}, function(err, user){
 				if(err) {
 					console.log('something went horribly wrong');

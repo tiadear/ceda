@@ -53,6 +53,7 @@ router.get('/signup', function(req, res) {
         title : 'ceda'
     });
 });
+/*
 router.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup',
     failureFlash: true
@@ -66,7 +67,18 @@ router.post('/signup', passport.authenticate('local-signup', {
         });
     }
 );
-
+*/
+router.post('/signup', function(req, res, next) {
+    if(!req.body.username || !req.body.email || !req.body.password || !req.body.confirmPassword) {
+        return next(req.flash('signupMessage', 'Please complete all fields'));
+    } else {
+        passport.authenticate('local-signup', {
+            successRedirect: '/home',
+            failureRedirect: '/signup',
+            failureFlash: true
+        })(req, res);
+    }
+});
 
 
 
