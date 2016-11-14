@@ -59,6 +59,7 @@ router.post('/signup', passport.authenticate('local-signup', {
 }), function(req, res, next) {
         req.session.save(function (err) {
             if(err){
+                console.log(err);
                 return next(err);
             }
             res.redirect('/home');

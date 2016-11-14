@@ -18,7 +18,8 @@ exports.strategy = function(passport) {
 
 	passport.use('local-signup', new LocalStrategy({
 		usernameField: 'email',
-		passwordField: 'password'
+		passwordField: 'password',
+		passReqToCallback : true
 		},
 		function(req, res, done) {
 			process.nextTick(function(){
@@ -36,11 +37,10 @@ exports.strategy = function(passport) {
 					else {
 						var newUser = new User ();
 						newUser.email = req.body.email;
+						newUser.username = req.body.username;
 						newUser.password = newUser.generateHash(req.body.password);
-						newUser.firstName = req.body.firstName;
-						newUser.lastName = req.body.lastName;
 						newUser.notifyChat = 1;
-                		newUser.notifyChat = 1;
+                		newUser.notifyForum = 1;
 						newUser.provider = 'local';
 						newUser.userType = false;
 
