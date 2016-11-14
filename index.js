@@ -16,6 +16,7 @@ var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
 
 var User = require('./models/account.js');
+var db = require('./db.js');
 
 
 // set port
@@ -120,7 +121,7 @@ app.listen(app.get('port'), function() {
 
 
 // connect to db
-var mongo_uri = process.env.MONGODB_URI;
+var mongo_uri = process.env.MONGODB_URI || db.url;
 mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });

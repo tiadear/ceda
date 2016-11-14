@@ -53,24 +53,11 @@ router.get('/signup', function(req, res) {
         title : 'ceda'
     });
 });
-/*
-router.post('/signup', passport.authenticate('local-signup', {
-    failureRedirect: '/signup',
-    failureFlash: true
-}), function(req, res, next) {
-        req.session.save(function (err) {
-            if(err){
-                console.log(err);
-                return next(err);
-            }
-            res.redirect('/home');
-        });
-    }
-);
-*/
 router.post('/signup', function(req, res, next) {
     if(!req.body.username || !req.body.email || !req.body.password || !req.body.confirmPassword) {
-        return next(req.flash('signupMessage', 'Please complete all fields'));
+        req.flash('signupMessage', 'Please complete all fields');
+        console.log("this is the bit it went wrong");
+        res.redirect('/signup');
     } else {
         passport.authenticate('local-signup', {
             successRedirect: '/home',
