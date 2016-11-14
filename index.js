@@ -294,9 +294,3 @@ Array.prototype.contains = function(k, callback) {
         return process.nextTick(check.bind(null, i+1));
     }(0));
 };
-
-
-
-
-
-*/
