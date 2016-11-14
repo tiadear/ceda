@@ -48,12 +48,15 @@ router.get('/', function(req, res){
 
 
 router.get('/signup', function(req, res) {
-	res.render('signup', { 
+	res.render('signup', {
         message : req.flash('signupMessage'),
         title : 'ceda'
     });
 });
-router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
+router.post('/signup', passport.authenticate('local-signup', {
+    failureRedirect: '/signup',
+    failureFlash: true
+}), function(req, res, next) {
         req.session.save(function (err) {
             if(err){
                 return next(err);
@@ -66,9 +69,9 @@ router.post('/signup', passport.authenticate('local-signup', { failureRedirect: 
 
 
 
-router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/', 
-    failureFlash: true 
+router.post('/login', passport.authenticate('local-login', {
+    failureRedirect: '/',
+    failureFlash: true
 }), function(req, res, next) {
     req.session.save(function (err) {
         if (err) {
