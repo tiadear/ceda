@@ -31,7 +31,6 @@ exports.strategy = function(passport) {
 
 					if(user) {
 						return done(null, false, req.flash('signupMessage', 'User already exists'));
-						console.log('user exists');
 					} 
 
 					else {
@@ -43,7 +42,6 @@ exports.strategy = function(passport) {
                 		newUser.notifyForum = 1;
 						newUser.provider = 'local';
 						newUser.userType = false;
-
 
 						newUser.save(function(err){
 							if(err) {
