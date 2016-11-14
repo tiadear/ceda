@@ -1,20 +1,22 @@
-// ROUTES!!!
-
-const User = require('../models/account.js');
-const Room = require('../models/room.js');
+// models
+var User = require('../models/account.js');
+var Room = require('../models/room.js');
 var Thread = require('../models/thread.js');
 var Post = require('../models/posts.js');
 var chatHistory = require('../models/chatHistory.js');
 var Appeal = require('../models/appeal.js');
 
-const express = require('express');
-const router = express.Router();
-var async = require('async');
+// express
+var express = require('express');
+var router = express.Router();
 
-const passport = require('passport');
+// passport
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-const local = require('../passport/local');
+var local = require('../passport/local');
 local.strategy(passport);
+
+var async = require('async');
 
 
 
@@ -47,20 +49,16 @@ router.get('/', function(req, res){
 
 router.get('/signup', function(req, res) {
 	res.render('signup', { 
-        message : req.flash('signupMessage')
+        message : req.flash('signupMessage'),
+        title : 'ceda'
     });
 });
-
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
         req.session.save(function (err) {
             if(err){
                 return next(err);
             }
-            res.render('home', {
-                user : req.user,
-                title: 'ceda'
-            });
-
+            res.redirect('/home');
         });
     }
 );
@@ -77,12 +75,10 @@ router.post('/login', passport.authenticate('local-login', {
             console.log(err);
             return next(err);
         }
-        res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
+        res.redirect('/home');
     });
 });
+
 
 
 
@@ -91,8 +87,6 @@ router.get('/forgot', function(req,res){
         user : req.user
     });
 });
-
-
 router.post('/forgot', local.forgot,
     function(req, res, next) {
         if(err){
@@ -118,21 +112,19 @@ router.get('/reset', function(req,res) {
 });
 
 
-// social media
 
+
+// social media
 router.get('/auth/facebook',
 	passport.authenticate('facebook', {scope : ['email']}),
     function(req, res) {}
 );
-
 router.get('/auth/facebook/callback',
 	passport.authenticate('facebook', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.redirect('/home');
 	}
 );
-
-
 router.get('/auth/twitter', 
 	passport.authenticate('twitter'),
 	function(req, res) {}
@@ -140,14 +132,9 @@ router.get('/auth/twitter',
 router.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {failureRedirect: '/'}),
 	function(req, res){
-		res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
+		res.redirect('/home');
 	}
 );
-
-
 router.get('/auth/google', 
 	passport.authenticate('google', { scope: [
 		'https://www.googleapis.com/auth/plus.login',
@@ -157,10 +144,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/'}),
 	function(req, res){
-		res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
+		res.redirect('/home');
 	}
 );
 
@@ -189,10 +173,7 @@ router.post('/username', function(req, res) {
                         return next(err);
                     }
                     console.log('saving user');
-                    res.render('home', {
-                        user : req.user,
-                        title: 'ceda'
-                    });
+                    res.redirect('/home');
                 });
             });
         }

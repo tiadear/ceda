@@ -1,41 +1,12 @@
-var express = require('express');
-var app = express();
-
-app.set('port', (process.env.PORT || 3000));
-
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-
-app.get('/', function(request, response) {
-  response.render('index');
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
-
-
-
-
-
-/*
 var path = require('path');
 var express = require('express');
 var app = express();
-//var server = require('http').createServer(app);
-//var io = require('socket.io').listen(server);
-
-
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 var passport = require('passport');
 var nodemailer = require('nodemailer');
 var expressSession = require('express-session');
 var mongoose = require('mongoose');
-var db = require('./db.js');
-var User = require('./models/account.js');
-var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -43,21 +14,54 @@ var nodeStatic = require('node-static');
 var uuid = require('uuid');
 var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
-var _ = require('underscore')._;
 
-app.set('port', (process.env.PORT || 5000));
+var User = require('./models/account.js');
 
+
+// set port
+app.set('port', (process.env.PORT || 3000));
+
+
+
+
+// public folder
 app.use(express.static(__dirname + '/public'));
 
 
 
-/*
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
+
+
+
 // module exports
 module.exports = app;
-*/
 
 
-/*
+
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(flash());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'mustardmanforpresident',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
 // routes
 var routes = require('./routes/index');
 var home = require('./routes/home');
@@ -68,49 +72,12 @@ var settings = require('./routes/settings');
 
 
 
-// set up views
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
-
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-/*
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(require('express-session')({
-    secret: 'mustardmanforpresident',
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(flash());
-app.use(passport.session());
-//app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
-// general
 app.use('/', routes);
 app.use('/home', home);
 app.use('/chat', chat);
 app.use('/forum', forum);
 app.use('/settings', settings);
-
-
-
-
-// connect to port
-app.listen(app.get('port'), function() {
-  console.log('Ceda is running on port', app.get('port'));
-});
 
 
 
@@ -139,16 +106,25 @@ passport.use(local, 'local-login');
 passport.use(facebook);
 passport.use(twitter);
 passport.use(google);
-*/
+
+
+
+
+
+// actually listen
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
 
 
 
 // connect to db
-/*
-var mongo_uri = ENV['MONGODB_URI'];
+var mongo_uri = process.env.MONGODB_URI;
 mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
+
 
 
 

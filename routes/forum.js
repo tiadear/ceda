@@ -274,7 +274,7 @@ router.get('/thread*', function(req, res) {
 							return new Date(a[4]) - (b[4]);
 						});
 
-						if (arr2.length === posts.length) {\
+						if (arr2.length === posts.length) {
 							req.posts = arr2;
 							//console.log('arr2: '+arr2);
 							req.thread = thread;
