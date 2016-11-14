@@ -7,7 +7,7 @@ block content
 				img#logo(src='/images/ceda2.png')
 			h1 Sign Up
 			if (message.length > 0)
-					.alert #{message}
+				.alert #{message}
 			form.form-login(role='form', action="/signup", method="POST")
 				input.form-input(type='text', name="username", placeholder='Username')
 				input.form-input(type="text", name="email", placeholder="Email")

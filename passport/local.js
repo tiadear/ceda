@@ -22,10 +22,13 @@ exports.strategy = function(passport) {
 		passReqToCallback : true
 		},
 		function(req, email, password, done) {
+			if(!email || !password) {
+				console.log("no email or password");
+			}
 			User.findOne({email : req.body.email}, function(err, user){
 				if(err) {
-					return done(err);
 					console.log('something went horribly wrong');
+					return done(err);
 				}
 				// check if the user already exists
 				if(user) {
@@ -47,7 +50,7 @@ exports.strategy = function(passport) {
 							newUser.username = req.body.username;
 							newUser.password = newUser.generateHash(req.body.password);
 							newUser.notifyChat = 1;
-		                	newUser.notifyForum = 1;
+							newUser.notifyForum = 1;
 							newUser.provider = 'local';
 							newUser.userType = false;
 
