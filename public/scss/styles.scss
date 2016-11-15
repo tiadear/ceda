@@ -53,7 +53,7 @@ header {
 .container { width: 100%; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
 
     // opening app
-    .open { width: 95%; margin: 100px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+    .open { width: 95%; margin: 10px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
         .logo { height: 50px; margin: 20px 0 50px 0;
             img { height: 100%; width: auto; margin: 0 auto; }
         }
