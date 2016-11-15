@@ -111,7 +111,7 @@ header {
       margin: 0 auto; } }
   .container .open {
     width: 95%;
-    margin: 100px auto;
+    margin: 10px auto;
     padding: 40px;
     background-color: #ffffff;
     text-align: center;
@@ -126,6 +126,9 @@ header {
         height: 100%;
         width: auto;
         margin: 0 auto; }
+    .container .open .alert {
+      padding-top: 20px;
+      color: #ea5455; }
     .container .open .form-login {
       max-width: 400px; }
       .container .open .form-login .forgot {

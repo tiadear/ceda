@@ -48,35 +48,38 @@ router.get('/', function(req, res){
 
 
 router.get('/signup', function(req, res) {
-	res.render('signup', { 
+	res.render('signup', {
         message : req.flash('signupMessage'),
         title : 'ceda'
     });
 });
-router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
-        req.session.save(function (err) {
-            if(err){
-                return next(err);
-            }
-            res.redirect('/home');
-        });
+router.post('/signup', function(req, res, next) {
+    if(!req.body.username || !req.body.email || !req.body.password || !req.body.confirmPassword) {
+        req.flash('signupMessage', 'Please complete all fields');
+        res.redirect('/signup');
+    } else {
+        passport.authenticate('local-signup', {
+            successRedirect: '/home',
+            failureRedirect: '/signup',
+            failureFlash: true
+        }) (req, res);
     }
-);
+});
 
 
 
 
-router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/', 
-    failureFlash: true 
-}), function(req, res, next) {
-    req.session.save(function (err) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-        res.redirect('/home');
-    });
+router.post('/login', function(req, res, next) {
+    if(!req.body.email || !req.body.password) {
+        req.flash('loginMessage', 'Please complete all fields');
+        res.redirect('/');
+    } else {
+        passport.authenticate('local-login', {
+            successRedirect: '/home',
+            failureRedirect: '/',
+            failureFlash: true
+        }) (req, res);
+    }
 });
 
 

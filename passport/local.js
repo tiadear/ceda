@@ -21,44 +21,50 @@ exports.strategy = function(passport) {
 		passwordField: 'password',
 		passReqToCallback : true
 		},
-		function(req, res, done) {
-			process.nextTick(function(){
-				User.findOne({email : req.body.email}, function(err, user){
-					if(err) {
-						return done(err);
-						console.log('something went horribly wrong');
+		function(req, email, password, done) {
+			User.findOne({email : req.body.email}, function(err, user){
+				if(err) {
+					console.log('something went horribly wrong');
+					return done(err);
+				}
+				// check if the user already exists
+				if(user) {
+					return done(null, false, req.flash('signupMessage', 'User already exists'));
+				}
+				if(!user) {
+					//check if all fields are filled out
+					if(!req.body.username || !req.body.password || !req.body.confirmPassword) {
+						return done(null, false, req.flash('signupMessage', 'Please complete all fields'));
 					}
-
-					if(user) {
-						return done(null, false, req.flash('signupMessage', 'User already exists'));
-						console.log('user exists');
-					} 
-
 					else {
-						var newUser = new User ();
-						newUser.email = req.body.email;
-						newUser.password = newUser.generateHash(req.body.password);
-						newUser.firstName = req.body.firstName;
-						newUser.lastName = req.body.lastName;
-						newUser.notifyChat = 1;
-                		newUser.notifyChat = 1;
-						newUser.provider = 'local';
-						newUser.userType = false;
+						// check if the passwords match
+						if(req.body.password != req.body.confirmPassword) {
+							return done(null, false, req.flash('signupMessage', 'Passwords do not match. Please try again.'));
+						}
+						else {
+							var newUser = new User ();
+							newUser.email = req.body.email;
+							newUser.username = req.body.username;
+							newUser.password = newUser.generateHash(req.body.password);
+							newUser.notifyChat = 1;
+							newUser.notifyForum = 1;
+							newUser.provider = 'local';
+							newUser.userType = false;
 
-
-						newUser.save(function(err){
-							if(err) {
-								console.log(err);
-								console.log('saving error')
-								return done(err);
-							} else {
-								console.log('saving user');
-								return done(null, newUser);
-							}
-						});
-					} // end else
-				});
+							newUser.save(function(err){
+								if(err) {
+									console.log(err);
+									return done(err);
+								} else {
+									console.log('saving user');
+									return done(null, newUser);
+								}
+							});
+						}
+					}
+				} // end else
 			});
+
 		}
 	));
 
