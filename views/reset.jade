@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	.container
+		.open
+			.logo
+				img#logo(src='/images/ceda2.png')
+			h1 Reset Password
+			if (message.length > 0)
+				.alert #{message}
+			form.form-login(role='form', action="/reset", method="POST")
+				input.form-input(type='password', name="password", placeholder='Password')
+				input.form-input(type='password', name='confirmPassword', placeholder='Confirm Password')
+				button.form-submit(type="submit") Submit
+				a.forgot(href='/') Cancel

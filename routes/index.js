@@ -87,16 +87,14 @@ router.post('/login', function(req, res, next) {
 
 router.get('/forgot', function(req,res){
     res.render('forgot', {
+        message : req.flash('forgotMessage'),
         user : req.user
     });
 });
 router.post('/forgot', local.forgot,
     function(req, res, next) {
-        if(err){
-            console.log(err);
-            return next(err);
-        }
-        res.redirect('/');
+        if(err) throw err;
+        res.redirect('/forgot');
     }
 );
 
@@ -104,15 +102,26 @@ router.post('/forgot', local.forgot,
 
 
 
-router.get('/reset', function(req,res) {
-    passport.authenticate('local-reset', {
-        failureRedirect : '/forgot',
-        failureFlash: true
-    }),
-    function(req, res){
-        res.redirect('/');
-    } 
+router.get('/reset/:token', function(req, res) {
+    User.findOne({resetPasswordToken : req.params.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
+        
+        if(!user) {
+            return done(null, false, req.flash('resetMessage', "Password reset token is invalid or has expired."));
+        } else {
+            res.render('reset', {
+                user: req.user,
+                message : req.flash('resetMessage'),
+                title: 'ceda'
+            });
+        }
+    });
 });
+router.post('/reset/:token', local.reset,
+    function(req, res, next) {
+        if (err) throw err;
+        res.redirect('/');
+    }
+);
 
 
 

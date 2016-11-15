@@ -124,22 +124,29 @@ exports.strategy = function(passport) {
 		        	if(err) {
 		        		return done(err);
 		        	}
+		        	if(!user) {
+		        		return done(null, false, req.flash('forgotMessage', "Sorry, no users with that email address were found"));
+		        	}
+		        	if(user) {
 		        		console.log('forget password point 3');
-		        		transport.sendMail({
-							from: 'e21c75b229fbe6890f93a1777dcea1dd@inbound.postmarkapp.com',
-							to: user.email,
-							subject: 'Your password has been changed',
-							html: '<h1>Hello</h1><br><p>You are receiving this email because someone has requested the to change the password for ' + user.email + '. If this was you, please click on the following link to finish resetting your password.<br>http://' + req.headers.host + '/reset/' + token + '<br> If you did not make this request, please ignore this email and your password will remain the same.</p>'
-						}, function(err, info) {
-							if (err) {
-								console.error(err);
-							} else {
-								console.log('success');
-					        	done(err);
-							}
-						});
-		        	
 
+		        		var postmark - require("postmark")(process.env.POSTMARK_API_TOKEN);
+
+		        		postmark.send({
+						    "From": "admin@ceda.io",
+						    "To": user.email,
+						    "Subject": "Request to change password",
+						    "TextBody": '<h1>Hello</h1><br><p>You are receiving this email because someone has requested the to change the password for ' + user.email + '. If this was you, please click on the following link to finish resetting your password.<br>http://' + req.headers.host + '/reset/' + token + '<br> If you did not make this request, please ignore this email and your password will remain the same.</p>',
+						    "Tag": "password"
+						}, function(error, success) {
+						    if(error) {
+						        console.error("Unable to send via postmark: " + error.message);
+						       return;
+						    }
+						    console.info("Sent to postmark for delivery");
+						    return done(null, user, req.flash('forgotMessage', 'An email has been sent to' + user.email + '.'));
+						});
+		        	}
 		        });
 
 			});
@@ -151,11 +158,38 @@ exports.strategy = function(passport) {
 	exports.reset = function(req, email, done) {
 		User.findOne({resetPasswordToken : req.params.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
 			if(!user) {
-				return done(err);
-				console.log('this reset password person does not exist');
-			} else {
-				res.render('reset',{
-					user: req.user
+				return done(null, false, req.flash('resetMessage', "Password reset token is invalid or has expired."));
+			} 
+			// there is a user
+			else {
+				user.password = req.body.password;
+				user.resetPasswordToken = undefined;
+				user.resetPasswordExpires = undefined;
+
+				user.save(function(err) {
+					if(err) {
+						console.log(err);
+						return done(err);
+					} 
+					
+					console.log('reset password successful');
+
+					var postmark - require("postmark")(process.env.POSTMARK_API_TOKEN);
+
+		        	postmark.send({
+						"From": "admin@ceda.io",
+						"To": user.email,
+						"Subject": "Your password has been changed",
+						"TextBody": '<h1>Hello</h1><br><p>This is a confirmation that the password for ' + user.email + 'has been changed',
+						"Tag": "password"
+					}, function(err, success) {
+						if(err) {
+							console.log('Password reset confirmation email not sent');
+							return done(err);
+						}
+						console.log('Password reset confirmation email sent');
+						return done(null, user, req.flash('resetMessage', 'An email has been sent to' + user.email));
+					});
 				});
 			}
 		});
