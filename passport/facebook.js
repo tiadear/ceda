@@ -29,9 +29,12 @@ module.exports = new FacebookStrategy({
                 newUser.email = profile.emails[0].value;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
+                newUser.notifyChat = 1;
+                newUser.notifyChat = 1;
                 newUser.provider = 'facebook';
                 newUser.facebook =  profile._json;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {

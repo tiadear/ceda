@@ -1,0 +1,60 @@
+extends layout
+block content
+	script(type="text/javascript").
+		$(document).ready(function(){
+			$('.reply').on('click touch', function(){ 
+				$('.postReply').show();
+				$('.options').hide();
+			});
+			$('.forgot').on('click touch', function(){ 
+				$('.postReply').hide();
+				$('.options').show();
+			});
+		});
+		//user 1 is current user
+		currentuser = '#{user._id}';
+		postuser = '#{posts[1]}';
+	.container
+		include includes/nav-simple.jade	
+		.forumWrap
+			h1 #{thread[1]}
+			.threadList
+				ul.threads
+					for item,i in posts
+						- var z = (100) - [i];
+						if (i == 0)
+							li(style="z-index: #{z}")
+								ul.threadItem
+									.middle-left
+										p=item[2]
+									.middle-right
+										p=item[4]
+									.post
+										p=item[3]
+									.bottom-left
+									if (user._id === posts[1])
+										.bottom-right
+											a(href="/forum/edit?id=#{item[0]}") edit
+											a(href="/forum/delete?id=#{item[0]}") delete
+						else
+							li
+								.postItem
+									.middle-left
+										p=item[2]
+									.middle-right
+										p=item[4]
+									.post
+										p=item[3]
+									.bottom-left
+									if (currentuser === postuser)
+										.bottom-right
+											a(href="/forum/edit?id=#{item[0]}") edit
+											a(href="/forum/delete?id=#{item[0]}") delete
+		.options
+			.reply 
+				p Reply
+		.postReply
+			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
+				input.form-input(type="text", name="content", placeholder="Your reply")
+				button.form-submit(type="submit") Submit
+				a.forgot(href="/") Cancel

@@ -1,5 +1,15 @@
 'use strict';
 
+$(window).on('load', function() {
+  window.scrollTo(0,document.body.scrollHeight);
+});
+
+$(document).ready(function() {
+    $('#nav-dash').on('click touch', function(){
+        socket.emit('leaveRoom');
+    });
+});
+
 var isChannelReady = false;
 var isInitiator = false;
 var isStarted = false;
@@ -22,36 +32,155 @@ var sdpConstraints = {
   }
 };
 
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // SOCKET STUFF
 
+
 var socket = io.connect();
-var myRoomID = null;
 
-    $(function(){
+$(function(){
 
-        if(room) {
-          console.log('there is a room');
-          //ssocket.emit('joinRoom', roomID);
+    var msgSubmit = document.getElementById('outgoingSubmit');
+    msgSubmit.disabled = true;
+
+    //prevent submitting message by default
+    $('#outgoing').keypress(function(e) {
+        e.preventDefault();
+    });
+
+    //if(roomID) {
+
+        function sendMessage(message) {
+            console.log('Client sending message: ', message);
+            socket.emit('message', message);
         }
+
+
+        socket.emit('addUser', user1, user1username, function(data){
+            if(data) {
+                console.log(user1username + ' has been added');
+
+                socket.emit('joinRoom', roomID, user1username, user2username);
+
+                msgSubmit.disabled = false;
+
+                $('#outgoing').unbind('keypress');
+
+                var typing = false;
+                var timeout = undefined;
+
+                function timeoutFunction() {
+                    typing = false;
+                    socket.emit("userTyping", false);
+                }
+
+                //when something is entered into the outgoing message box
+                $('#outgoing').keypress(function(e) {
+
+                    //if enter has not been hit
+                    if(e.which !== 13) {
+                        if(typing === false && $('#outgoing').is(':focus')) {
+                            typing = true;
+                            socket.emit('userTyping', true);
+                        } else {
+                            clearTimeout(timeout);
+                            timeout = setTimeout(timeoutFunction, 5000);
+                        }
+                        
+                    }
+
+                    //if enter has been hit
+                    if(e.which == 13) {
+                        e.preventDefault();
+                            
+                        //emit the message from the outgoing chat
+                        socket.emit('sendChat', $('#outgoing').val());
+
+                        //reset the outgoing chat to null
+                        $('#outgoing').val('');
+                        socket.emit('userTyping', false);
+                        typing = false;
+                    }
+                    
+                });
+            }
+
+        });
+
+        //If a user is typing
+        socket.on('isTyping', function(data){
+            if(data.isTyping) {
+                if($('#'+data.user+'').length === 0) {
+                    $('#incoming').append('<li class="istyping" id='+data.user+'>'+data.user+' is typing</li>');
+                    timeout = setTimeout(timeoutFunction, 5000);
+                }
+            } else {
+                $('#'+data.user+'').remove();
+            }
+        });
+    
+
+        socket.on('channelReady', function(room) {
+            console.log('joined ' + room);
+            isChannelReady = true;
+        });
+
+        socket.on('roomOpened', function(room) {
+            console.log('room opened: ' + room);
+            isChannelReady = true;
+            isInitiator = true;
+        });
+
+        socket.on('alertPeer', function(peerToBeAlerted, chatInitiator){
+            //send notification
+            console.log(chatInitiator + ' has sent a message to ' + peerToBeAlerted);
+        });
+
+
+
+        // getting chat history and displaying
+
+        function formatDate(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            var months = date.getMonth() +1;
+            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
+        }
+
+        socket.on('addHistory', function(past) {
+            past.forEach(function(pastItem) {
+                //console.log('pastItem: '+pastItem);
+                if(pastItem[0] === user1) {
+                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                } else {
+                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
+                }
+
+                var date = new Date(pastItem[4]);
+                var dateformat = formatDate(date);
+                        
+                $('#incoming').prepend('<li class="msgtime">'+ dateformat +'</li>');
+            });
+        });
+
+
 
         // For todays date;
         Date.prototype.today = function () { 
             return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
         }
-
         // For the time now
         Date.prototype.timeNow = function () {
             return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
         }
-
-        var datetime = "time sent: " + new Date().today() + " @ " + new Date().timeNow();
-
-
-
-        
+        var date = new Date().today();
+        var time = new Date().timeNow();
 
 
 
@@ -59,190 +188,293 @@ var myRoomID = null;
 
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-            $('#incoming').append('<li>' + username + ': ' + data + '</li>');
-            $('#incoming').append('<li>' + datetime +  '</li>');
+            $('#incoming').append('<li class="msgtime">'+ time +'</li>');
+            if(username == user1username) {
+                $('#incoming').append('<li class="incomingMessage" id="user1msg">' + data + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+            } else {
+                $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + data + '</li>');
+            }
             socket.emit('message', data);
         });
 
-        function sendMessage(message) {
-            console.log('Client sending message: ', message);
-            socket.emit('message', message);
-        }
 
-        socket.on('updateHistory', function(data){
-            $('#incoming').append('<li><b>ealier messages</b></li>')
-            $.each(data, function(data, msg) {
-                $('#incoming').append('<li>'+ msg +'</li>')
+
+
+
+
+
+
+        //swap to video chat
+        $('#chat-btn-video').on('click touch', function(){
+            socket.emit('videoReady', roomID);
+            $('.displayMessagesWrap').hide();
+            $('.sendMessagesWrap').hide();
+            $('#user2').hide();
+            $('.chatRoom').css('padding-top', '0px');
+            $('.videoWrap').show();
+
+
+
+            var webrtc = new SimpleWebRTC({
+                localVideoEl: 'localVideo',
+                remoteVideosEl: '',
+                autoRequestMedia: false,
+                debug: false,
+                detectSpeakingEvents: true,
+                autoAdjustMic: false
             });
-        })
 
-        var currentUser = user.username;
-        var chatPartner = 'random user';
+            var room = roomID;
+
+            webrtc.on('readyToCall', function () {
+                console.log('2. ready to call');
+                if (room) {
+                    console.log('3. webrtc join room');
+                    webrtc.joinRoom(room);
+                }
+            });
+
+            $('#callButton').on('click touch', function() {
+                console.log('call button clicked');
+                webrtc.startLocalVideo();
+
+                // we got access to the camera
+                webrtc.on('localStream', function (stream) {
+                    console.log('1. local stream');
+                    $('#localVolume').show();
+                });
+
+                // we did not get access to the camera
+                webrtc.on('localMediaError', function (err) {
+                    console.log('local media error');
+                });
+
+                // local screen obtained
+                webrtc.on('localScreenAdded', function (video) {
+                    console.log('local screen added');
+                    video.onclick = function () {
+                        //video.style.width = video.videoWidth + 'px';
+                        //video.style.height = video.videoHeight + 'px';
+                    };
+                    document.getElementById('localScreenContainer').appendChild(video);
+                    $('#localScreenContainer').show();
+                });
+                // local screen removed
+                webrtc.on('localScreenRemoved', function (video) {
+                    document.getElementById('localScreenContainer').removeChild(video);
+                    $('#localScreenContainer').hide();
+                });
+
+                // a peer video has been added
+                webrtc.on('videoAdded', function (video, peer) {
+                    console.log('4. video added', peer);
+                    var remotes = document.getElementById('remotes');
+                    if (remotes) {
+                        console.log('5. yay remotes')
+                        var container = document.createElement('div');
+                        container.className = 'videoDisplay';
+                        container.id = 'container_' + webrtc.getDomId(peer);
+                        container.appendChild(video);
+
+                        // suppress contextmenu
+                        video.oncontextmenu = function () { return false; };
+
+                        // resize the video on click
+                        video.onclick = function () {
+                            //container.style.width = video.videoWidth + 'px';
+                            //container.style.height = video.videoHeight + 'px';
+                        };
+
+                        // show the ice connection state
+                        /*
+                        if (peer && peer.pc) {
+                            console.log('6. peer and peer.pc')
+                            var connstate = document.createElement('div');
+                            connstate.className = 'connectionstate';
+                            container.appendChild(connstate);
+                            peer.pc.on('iceConnectionStateChange', function (event) {
+                                switch (peer.pc.iceConnectionState) {
+                                case 'checking':
+                                    connstate.innerText = 'Connecting to peer...';
+                                    break;
+                                case 'connected':
+                                case 'completed': // on caller side
+                                    $(vol).show();
+                                    connstate.innerText = 'Connection established.';
+                                    break;
+                                case 'disconnected':
+                                    connstate.innerText = 'Disconnected.';
+                                    break;
+                                case 'failed':
+                                    connstate.innerText = 'Connection failed.';
+                                    break;
+                                case 'closed':
+                                    connstate.innerText = 'Connection closed.';
+                                    break;
+                                }
+                            });
+                        }*/
+                        remotes.appendChild(container);
+                    }
+                });
+            });
+
+            //swap to video chat
+            $('#switchToChat').on('click touch', function(){
+                webrtc.stopLocalVideo();
+                $('.videoWrap').hide();
+                $('.chatRoom').css('padding-top', '20px');
+                $('.displayMessagesWrap').show();
+                $('.sendMessagesWrap').show();
+                $('#user2').show();
+            });
+
+            $('#muteButton').on('cilck touch', function() {
+                webrtc.mute();
+                numClicks++;
+                if(numClicks == 2) {
+                    webrtc.unmute();
+                    numClicks = 0;
+                }
+            });
+
+            $('#killVideoButton').om('click touch', function() {
+                webrtc.stopLocalVideo();
+                numClicks++;
+                if(numClicks == 2) {
+                    webrtc.startLocalVideo();
+                    numClicks = 0;
+                }
+            });
+
+            
+            // a peer was removed
+            webrtc.on('videoRemoved', function (video, peer) {
+                console.log('video removed ', peer);
+                
+                var remotes = document.getElementById('remotes');
+                var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
+                if (remotes && el) {
+                    remotes.removeChild(el);
+                }
+            });
+
+            // local p2p/ice failure
+            webrtc.on('iceFailed', function (peer) {
+                var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+                console.log('local fail', connstate);
+                if (connstate) {
+                    connstate.innerText = 'Connection failed.';
+                    fileinput.disabled = 'disabled';
+                }
+            });
+
+            // remote p2p/ice failure
+            webrtc.on('connectivityError', function (peer) {
+                var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+                console.log('remote fail', connstate);
+                if (connstate) {
+                    connstate.innerText = 'Connection failed.';
+                    fileinput.disabled = 'disabled';
+                }
+            });
+            /*
+            // Since we use this twice we put it here
+            function setRoom(name) {
+                //document.getElementById('title').innerText = 'Room: ' + name;
+                //document.getElementById('subTitle').innerText =  'Link to join: ' + location.href;
+                $('body').addClass('active');
+            }
+
+            if (room) {
+                setRoom(room);
+            } else {
+                $('form').submit(function () {
+                    var val = $('#sessionInput').val().toLowerCase().replace(/\s/g, '-').replace(/[^A-Za-z0-9_\-]/g, '');
+                    webrtc.createRoom(val, function (err, name) {
+                        console.log(' create room cb', arguments);
+
+                        var newUrl = location.pathname + '?' + name;
+                        if (!err) {
+                            history.replaceState({foo: 'bar'}, null, newUrl);
+                            setRoom(name);
+                        } else {
+                            console.log(err);
+                        }
+                    });
+                    return false;
+                });
+            }
+
+        */
+
+        });
 
         
 
-        //update the user list
-        socket.on('updateUsers', function(data){
-            $('#users').text("");
-            $('#usersList').text("");
 
-            if (!jQuery.isEmptyObject(data.users)) {
 
-                $.each(data.users, function(id, user){
 
-                    var currentuser = '/#'+socket.id;
-                    var userlistid = id;
-                    
-                    //if the current user does not match anyone in the list the list all the usernames
-                    if(currentuser != userlistid) {
-                        $('#users').append('<li id='+ id +'>' + user.username + '</li>');
-                        $('#usersList').append('<li id='+ id +'>' + user.username + '</li>');
-                    }
 
-                    $('#usersList li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
 
-                        socket.emit('joinRoom', userselected, currentuser);
-          
-                        $('#chooseuserWrap').hide();
-                        $('#contentWrap').show();
-                    });
 
-                    $('#users li').on('click', function(){
-                        var userselected =  $(this).attr('id');
-                        console.log('userlistid: '+ $(this).attr('id'));
 
-                        socket.emit('joinRoom', userselected, currentuser);
-                    });
 
-                });
-            }
-        });
-    
-        //update the room ID
-        socket.on('sendRoomID', function(data) {
-            myRoomID = data.id;
-        });
 
-        socket.on('createdRoom', function() {
-            console.log('room ready');
-            isChannelReady = true;
-            isInitiator = true;
-        });
 
-        socket.on('channelReady', function() {
-            console.log('channelReady ready');
-            isChannelReady = true;
-        });
 
-        var typing = false;
-        var timeout = undefined;
 
-        function timeoutFunction() {
-            typing = false;
-            socket.emit("isTyping", false);
-        }
 
-        //when something is entered into the outgoing message box
-        $('#outgoing').keypress(function(e) {
 
-            //if enter has not been hit
-            if(e.which != 13) {
-                if(typing === false && myRoomID !== null && $('#outgoing').is(':focus')) {
-                    typing = true;
-                    socket.emit('userTyping', true);
-                } else {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(timeoutFunction, 5000);
-                }
-            }
+/*
 
-            //if enter has been hit
-            if(e.which == 13) {
-                e.preventDefault();
-                
-                //emit the message from the outgoing chat
-                socket.emit('sendChat', $('#outgoing').val());
 
-                //reset the outgoing chat to null
-                $('#outgoing').val('');
-            } 
-        });
 
-        //If a user is typing
-        socket.on('isTyping', function(data){
-            if(data.isTyping) {
-                if($('#'+data.user+'').length === 0) {
-                    $('#incoming').append('<li>'+data.user+' is typing</li>');
-                    timeout = setTimeout(timeoutFunction, 5000);
-                }
-            } else {
-                $('#'+data.user+'').remove();
-            }
-        });
-
-        //on username submit
-        $('#userform').submit(function(e){
-            e.preventDefault();
-
-            var name = $('#username').val();
-
-            //emit the username and clear the previous value and then display the actual chat window
-            socket.emit('addUser', name, function(data){
-                $('#usernameWrap').hide();
-                $('#chooseuserWrap').show();
-
-            });
-            $('#username').val('');
-        });
-
-        //swap to video chat
-        $('#swaptovideo').on('click', function(){
-            console.log('is anything happening?');
-            $('#videoDisplay').show();
-        });
-
+        // This client receives a message
         socket.on('message', function(message) {
+            console.log('Client received message:', message);
+            
             if (message === 'got user media') {
                 maybeStart();
-            } else if (message.type === 'offer') {
+            }
+            
+            else if (message.type === 'offer') {
                 if (!isInitiator && !isStarted) {
                     maybeStart();
                 }
+                
                 pc.setRemoteDescription(new RTCSessionDescription(message));
                 doAnswer();
-            } else if (message.type === 'answer' && isStarted) {
+            } 
+
+            else if (message.type === 'answer' && isStarted) {
                 pc.setRemoteDescription(new RTCSessionDescription(message));
-            } else if (message.type === 'candidate' && isStarted) {
+            } 
+            
+            else if (message.type === 'candidate' && isStarted) {
                 var candidate = new RTCIceCandidate({
                     sdpMLineIndex: message.label,
                     candidate: message.candidate
                 });
+                
                 pc.addIceCandidate(candidate);
-            } else if (message === 'bye' && isStarted) {
+            }
+
+            else if (message === 'bye' && isStarted) {
                 handleRemoteHangup();
+                socket.emit('disconnect');
             }
         });
 
+        
 
-
-
-
-
-
-
-
-
-
-        /////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////
-        // WebRTC STUFF
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    // WebRTC STUFF
 
         var localVideo = document.querySelector('#localVideo');
         var remoteVideo = document.querySelector('#remoteVideo');
 
-        var startButton = document.getElementById('startButton');
         var callButton = document.getElementById('callButton');
         var hangupButton = document.getElementById('hangupButton');
         var muteButton = document.getElementById('muteButton');
@@ -250,7 +482,6 @@ var myRoomID = null;
         callButton.disabled = true;
         muteButton.disabled = true;
         hangupButton.disabled = true;
-        startButton.onclick = start;
         callButton.onclick = call;
         hangupButton.onclick = hangup;
 
@@ -260,12 +491,12 @@ var myRoomID = null;
             localStream = stream;
             sendMessage('got user media');
             if (isInitiator) {
+                //maybeStart();
                 callButton.disabled = false;
             }
         }
 
         function start() {
-            startButton.disabled = true;
             muteButton.disabled = false;
             navigator.mediaDevices.getUserMedia({
                 audio: false,
@@ -281,136 +512,132 @@ var myRoomID = null;
             callButton.disabled = true;
             maybeStart();
         }
-
+        
         var constraints = {
-          video: true
+            video: true
         };
 
         console.log('Getting user media with constraints', constraints);
 
         if (location.hostname !== 'localhost') {
-          requestTurn(
-            'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-          );
+            requestTurn(
+                'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
+            );
         }
 
         function maybeStart() {
-          console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
-          if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
-            console.log('>>>>>> creating peer connection');
-            createPeerConnection();
-            pc.addStream(localStream);
-            isStarted = true;
-            hangupButton.disabled = false;
-            console.log('isInitiator', isInitiator);
-            if (isInitiator) {
-              doCall();
+            console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
+            if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
+                console.log('>>>>>> creating peer connection');
+                createPeerConnection();
+                pc.addStream(localStream);
+                isStarted = true;
+                hangupButton.disabled = false;
+                console.log('isInitiator', isInitiator);
+                
+                if (isInitiator) {
+                    doCall();
+                }
             }
-          }
         }
 
         window.onbeforeunload = function() {
-          sendMessage('bye');
+            sendMessage('bye');
         };
 
         /////////////////////////////////////////////////////////
 
         function createPeerConnection() {
-          try {
-            pc = new RTCPeerConnection(null);
-            pc.onicecandidate = handleIceCandidate;
-            pc.onaddstream = handleRemoteStreamAdded;
-            pc.onremovestream = handleRemoteStreamRemoved;
-            console.log('Created RTCPeerConnnection');
-          } catch (e) {
-            console.log('Failed to create PeerConnection, exception: ' + e.message);
-            alert('Cannot create RTCPeerConnection object.');
-            return;
-          }
+            try {
+                pc = new RTCPeerConnection(null);
+                pc.onicecandidate = handleIceCandidate;
+                pc.onaddstream = handleRemoteStreamAdded;
+                pc.onremovestream = handleRemoteStreamRemoved;
+                console.log('Created RTCPeerConnnection');
+            } catch (e) {
+                console.log('Failed to create PeerConnection, exception: ' + e.message);
+                alert('Cannot create RTCPeerConnection object.');
+                return;
+            }
         }
 
         function handleIceCandidate(event) {
-          console.log('icecandidate event: ', event);
-          if (event.candidate) {
-            sendMessage({
-              type: 'candidate',
-              label: event.candidate.sdpMLineIndex,
-              id: event.candidate.sdpMid,
-              candidate: event.candidate.candidate
-            });
-          } else {
-            console.log('End of candidates.');
-          }
-        }
-
-        function handleRemoteStreamAdded(event) {
-          console.log('Remote stream added.');
-          remoteVideo.src = window.URL.createObjectURL(event.stream);
-          remoteStream = event.stream;
-        }
-
-        function handleCreateOfferError(event) {
-          console.log('createOffer() error: ', event);
-        }
-
-        function doCall() {
-          console.log('Sending offer to peer');
-          pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
-        }
-
-        function doAnswer() {
-          console.log('Sending answer to peer.');
-          pc.createAnswer().then(
-            setLocalAndSendMessage,
-            onCreateSessionDescriptionError
-          );
-        }
-
-        function setLocalAndSendMessage(sessionDescription) {
-          // Set Opus as the preferred codec in SDP if Opus is present.
-          //  sessionDescription.sdp = preferOpus(sessionDescription.sdp);
-          pc.setLocalDescription(sessionDescription);
-          console.log('setLocalAndSendMessage sending message', sessionDescription);
-          sendMessage(sessionDescription);
-        }
-
-        function onCreateSessionDescriptionError(error) {
-          trace('Failed to create session description: ' + error.toString());
-        }
-
-        function requestTurn(turnURL) {
-          var turnExists = false;
-          for (var i in pcConfig.iceServers) {
-            if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
-              turnExists = true;
-              turnReady = true;
-              break;
+            console.log('icecandidate event: ', event);
+            if (event.candidate) {
+                sendMessage({
+                    type: 'candidate',
+                    label: event.candidate.sdpMLineIndex,
+                    id: event.candidate.sdpMid,
+                    candidate: event.candidate.candidate
+                });
+            } else {
+                console.log('End of candidates.');
             }
-          }
-          if (!turnExists) {
-            console.log('Getting TURN server from ', turnURL);
-            // No TURN server. Get one from computeengineondemand.appspot.com:
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var turnServer = JSON.parse(xhr.responseText);
-                    console.log('Got TURN server: ', turnServer);
-                    pcConfig.iceServers.push({
-                        'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
-                        'credential': turnServer.password
-                    });
-                    turnReady = true;
-                }
-            };
-            xhr.open('GET', turnURL, true);
-            xhr.send();
-          }
         }
 
         function handleRemoteStreamAdded(event) {
             console.log('Remote stream added.');
             remoteVideo.src = window.URL.createObjectURL(event.stream);
             remoteStream = event.stream;
+        }
+
+        function handleCreateOfferError(event) {
+            console.log('createOffer() error: ', event);
+        }
+
+        function doCall() {
+            console.log('Sending offer to peer');
+            pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
+        }
+
+        function doAnswer() {
+            console.log('Sending answer to peer.');
+            pc.createAnswer().then(
+                setLocalAndSendMessage,
+                onCreateSessionDescriptionError
+            );
+        }
+
+        function setLocalAndSendMessage(sessionDescription) {
+            // Set Opus as the preferred codec in SDP if Opus is present.
+            //  sessionDescription.sdp = preferOpus(sessionDescription.sdp);
+            pc.setLocalDescription(sessionDescription);
+            console.log('setLocalAndSendMessage sending message', sessionDescription);
+            sendMessage(sessionDescription);
+        }
+
+        function onCreateSessionDescriptionError(error) {
+            trace('Failed to create session description: ' + error.toString());
+        }
+
+        function requestTurn(turnURL) {
+            var turnExists = false;
+            for (var i in pcConfig.iceServers) {
+                if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
+                    turnExists = true;
+                    turnReady = true;
+                    break;
+                }
+            }
+            
+            if (!turnExists) {
+                console.log('Getting TURN server from ', turnURL);
+                // No TURN server. Get one from computeengineondemand.appspot.com:
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var turnServer = JSON.parse(xhr.responseText);
+                        console.log('Got TURN server: ', turnServer);
+                        pcConfig.iceServers.push({
+                            'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+                            'credential': turnServer.password
+                        });
+                        turnReady = true;
+                    }
+                };
+                xhr.open('GET', turnURL, true);
+                xhr.send();
+            }
         }
 
         function handleRemoteStreamRemoved(event) {
@@ -431,97 +658,99 @@ var myRoomID = null;
         }
 
         function handleRemoteHangup() {
-          console.log('Session terminated.');
-          stop();
-          isInitiator = false;
+            console.log('Session terminated.');
+            stop();
+            isInitiator = false;
         }
 
         function stop() {
-          isStarted = false;
-          // isAudioMuted = false;
-          // isVideoMuted = false;
-          pc.close();
-          pc = null;
+            isStarted = false;
+            // isAudioMuted = false;
+            // isVideoMuted = false;
+            pc.close();
+            pc = null;
         }
 
         ///////////////////////////////////////////
 
         // Set Opus as the default audio codec if it's present.
         function preferOpus(sdp) {
-          var sdpLines = sdp.split('\r\n');
-          var mLineIndex;
-          // Search for m line.
-          for (var i = 0; i < sdpLines.length; i++) {
-            if (sdpLines[i].search('m=audio') !== -1) {
-              mLineIndex = i;
-              break;
+            var sdpLines = sdp.split('\r\n');
+            var mLineIndex;
+            // Search for m line.
+            for (var i = 0; i < sdpLines.length; i++) {
+                if (sdpLines[i].search('m=audio') !== -1) {
+                    mLineIndex = i;
+                    break;
+                }
             }
-          }
-          if (mLineIndex === null) {
+            if (mLineIndex === null) {
+                return sdp;
+            }
+
+            // If Opus is available, set it as the default in m line.
+            for (i = 0; i < sdpLines.length; i++) {
+                if (sdpLines[i].search('opus/48000') !== -1) {
+                    var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+                    if (opusPayload) {
+                        sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex],
+                        opusPayload);
+                    }
+                    break;
+                }
+            }
+
+            // Remove CN in m line and sdp.
+            sdpLines = removeCN(sdpLines, mLineIndex);
+
+            sdp = sdpLines.join('\r\n');
             return sdp;
-          }
-
-          // If Opus is available, set it as the default in m line.
-          for (i = 0; i < sdpLines.length; i++) {
-            if (sdpLines[i].search('opus/48000') !== -1) {
-              var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
-              if (opusPayload) {
-                sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex],
-                  opusPayload);
-              }
-              break;
-            }
-          }
-
-          // Remove CN in m line and sdp.
-          sdpLines = removeCN(sdpLines, mLineIndex);
-
-          sdp = sdpLines.join('\r\n');
-          return sdp;
         }
 
         function extractSdp(sdpLine, pattern) {
-          var result = sdpLine.match(pattern);
-          return result && result.length === 2 ? result[1] : null;
+            var result = sdpLine.match(pattern);
+            return result && result.length === 2 ? result[1] : null;
         }
 
         // Set the selected codec to the first in m line.
         function setDefaultCodec(mLine, payload) {
-          var elements = mLine.split(' ');
-          var newLine = [];
-          var index = 0;
-          for (var i = 0; i < elements.length; i++) {
-            if (index === 3) { // Format of media starts from the fourth.
-              newLine[index++] = payload; // Put target payload to the first.
+            var elements = mLine.split(' ');
+            var newLine = [];
+            var index = 0;
+            for (var i = 0; i < elements.length; i++) {
+                if (index === 3) { // Format of media starts from the fourth.
+                    newLine[index++] = payload; // Put target payload to the first.
+                }
+                if (elements[i] !== payload) {
+                    newLine[index++] = elements[i];
+                }
             }
-            if (elements[i] !== payload) {
-              newLine[index++] = elements[i];
-            }
-          }
-          return newLine.join(' ');
+            return newLine.join(' ');
         }
 
         // Strip CN from sdp before CN constraints is ready.
         function removeCN(sdpLines, mLineIndex) {
-          var mLineElements = sdpLines[mLineIndex].split(' ');
-          // Scan from end for the convenience of removing an item.
-          for (var i = sdpLines.length - 1; i >= 0; i--) {
-            var payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
-            if (payload) {
-              var cnPos = mLineElements.indexOf(payload);
-              if (cnPos !== -1) {
-                // Remove CN payload from m line.
-                mLineElements.splice(cnPos, 1);
-              }
-              // Remove CN line in sdp
-              sdpLines.splice(i, 1);
+            var mLineElements = sdpLines[mLineIndex].split(' ');
+            // Scan from end for the convenience of removing an item.
+            for (var i = sdpLines.length - 1; i >= 0; i--) {
+                var payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
+                if (payload) {
+                    var cnPos = mLineElements.indexOf(payload);
+                    if (cnPos !== -1) {
+                        // Remove CN payload from m line.
+                        mLineElements.splice(cnPos, 1);
+                    }
+                    // Remove CN line in sdp
+                    sdpLines.splice(i, 1);
+                }
             }
-          }
 
-          sdpLines[mLineIndex] = mLineElements.join(' ');
-          return sdpLines;
+            sdpLines[mLineIndex] = mLineElements.join(' ');
+            return sdpLines;
         }
 
+    */
 
+    //}
 
-    });
+});

@@ -1,10 +1,15 @@
 extends layout
 
 block content
-	form(method="POST")
-		legend Forgot Password
-		.form-group
-			label(for='email') Email
-			input.form-control(type='email', name='email', placeholder='Email')
-			input.form-control(type='hidden', name='password', value='1')
-		button.btn.btn-primary(type='submit') Reset password
+	.container
+		.open
+			.logo
+				img#logo(src='/images/ceda2.png')
+			h1 Forgot Password?
+			if (message.length > 0)
+				.alert #{message}
+			form.form-login(role='form', action="/forgot", method="POST")
+				input.form-input(type="text", name="email", placeholder="Email")
+				input.form-input(type="hidden", name="password", value='')
+				button.form-submit(type="submit") Reset password
+				a.forgot(href="/") Cancel

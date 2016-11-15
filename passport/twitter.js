@@ -29,9 +29,12 @@ module.exports = new TwitterStrategy({
                 newUser.email = String;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
+                newUser.notifyChat = 1;
+                newUser.notifyChat = 1;
                 newUser.provider = 'twitter';
                 newUser.twitter =  token;
                 newUser.oauthID = profile.id;
+                newUser.userType = false;
 
                 newUser.save(function(err) {
                     if(err) {
