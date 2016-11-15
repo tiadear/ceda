@@ -130,7 +130,7 @@ exports.strategy = function(passport) {
 		        	if(user) {
 		        		console.log('forget password point 3');
 
-		        		var postmark - require("postmark")(process.env.POSTMARK_API_TOKEN);
+		        		var postmark = require("postmark")(process.env.POSTMARK_API_TOKEN);
 
 		        		postmark.send({
 						    "From": "admin@ceda.io",
@@ -174,7 +174,7 @@ exports.strategy = function(passport) {
 					
 					console.log('reset password successful');
 
-					var postmark - require("postmark")(process.env.POSTMARK_API_TOKEN);
+					var postmark = require("postmark")(process.env.POSTMARK_API_TOKEN);
 
 		        	postmark.send({
 						"From": "admin@ceda.io",
