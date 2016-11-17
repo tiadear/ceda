@@ -111,7 +111,6 @@ router.get('/reset*', function(req, res) {
         }
         if(user)  {
             req.user = user;
-            console.log('user in index: '+user);
             res.render('reset', {
                 user: req.user,
                 message : req.flash('resetMessage'),

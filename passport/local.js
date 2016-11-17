@@ -143,37 +143,42 @@ exports.strategy = function(passport) {
 	exports.reset = function(req, res, done) {
 
 		User.findById(req.body.userid, function(err, user){
-			console.log('reset password point 1');
-			
 			if (err) throw err;
+			
+			if(user){
+				// check if the passwords match
+				if(req.body.password != req.body.confirmPassword) {
+					req.flash('resetMessage', 'Passwords do not match. Please try again.');
+					res.redirect('reset?token='+user.resetPasswordToken);
+				}
+				else {
+					user.password = user.generateHash(req.body.password);
+					user.resetPasswordToken = undefined;
+					user.resetPasswordExpires = undefined;
 
-			user.password = req.body.password;
-			user.resetPasswordToken = undefined;
-			user.resetPasswordExpires = undefined;
+					user.save(function(err) {
+						if(err) throw err;
+						console.log('reset password successful');
 
-			console.log('reset password point 2');
+						var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
 
-			user.save(function(err) {
-				if(err) throw err;
-				console.log('reset password successful');
-
-				var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
-
-		        postmark.send({
-					"From": "admin@ceda.io",
-					"To": user.email,
-					"Subject": "Password Change",
-					"TextBody": 'Hello,\n\n' + 'This is a confirmation that the password for ' + user.email + 'has been changed.',
-					"Tag": "password"
-				}, function(err) {
-					if(err) {
-						console.log('Password reset confirmation email not sent');
-						return done(err);
-					}
-					console.log('Password reset confirmation email sent');
-					return done(null, user);
-				});
-			});
+						postmark.send({
+							"From": "admin@ceda.io",
+							"To": user.email,
+							"Subject": "Password Change",
+							"TextBody": 'Hello,\n\n' + 'This is a confirmation that the password for ' + user.email + 'has been changed.',
+							"Tag": "password"
+						}, function(err) {
+							if(err) {
+								console.log('Password reset confirmation email not sent');
+								return done(err);
+							}
+							console.log('Password reset confirmation email sent');
+							return done(null, user);
+						});
+					});
+				}
+			}
 			
 		});
 	}
