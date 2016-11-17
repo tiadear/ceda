@@ -12,6 +12,15 @@ var async = require('async');
 
 
 router.get('/', function(req, res){
+
+    res.render('chat', {
+                history : req.history,
+                user : req.user,
+                title : 'ceda'
+            });
+
+
+    /*
 	async.waterfall([
 
 		function(callback){
@@ -231,6 +240,8 @@ router.get('/', function(req, res){
             });
         });
 	});
+
+*/
 });
 
 
