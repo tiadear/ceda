@@ -21,6 +21,7 @@ router.get('/', function(req, res){
 			Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
 				if (err) throw err;
 				if(rooms) {
+                    console.log(rooms);
 					callback(null, rooms);
 				}	
 			});
