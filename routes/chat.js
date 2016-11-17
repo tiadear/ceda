@@ -17,13 +17,12 @@ router.get('/', function(req, res){
 
 		function(callback){
 			//find all the rooms the current user has talked in
-			var roomsArr = []
-			Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
+			Room.find({ user_init : req.user._id}, function(err, rooms) {
 				if (err) throw err;
 				if(rooms) {
-                    console.log(rooms);
+                    console.log('rooms: '+rooms);
 					callback(null, rooms);
-				}	
+				}
 			});
             /*
 		},
