@@ -13,14 +13,6 @@ var async = require('async');
 
 router.get('/', function(req, res){
 
-    res.render('chat', {
-                history : req.history,
-                user : req.user,
-                title : 'ceda'
-            });
-
-
-    /*
 	async.waterfall([
 
 		function(callback){
@@ -35,6 +27,8 @@ router.get('/', function(req, res){
 		},
 
         function(rooms, callback) {
+
+            /*
 
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
@@ -212,6 +206,8 @@ router.get('/', function(req, res){
                 );
             }
 
+            */
+
             for(j = 0; j < rooms.length; j++){
                 console.log('rooms.length: '+ rooms.length);
                 var id = rooms[j]._id;
@@ -220,8 +216,11 @@ router.get('/', function(req, res){
                 var _currentuser = req.user._id;
                 arr1[id] = [];
                 var arr2 = [];
-
-                isFlagged(id, _currentuser, _user1, _user2, j);
+                
+                if(j = (rooms.length -1)) {
+                    callback(null);
+                }
+                //isFlagged(id, _currentuser, _user1, _user2, j);
 			}
 		}
 
