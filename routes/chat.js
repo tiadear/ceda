@@ -24,11 +24,12 @@ router.get('/', function(req, res){
 					callback(null, rooms);
 				}	
 			});
+            /*
 		},
 
         function(rooms, callback) {
 
-            /*
+            
 
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
@@ -206,7 +207,7 @@ router.get('/', function(req, res){
                 );
             }
 
-            */
+            
 
             for(j = 0; j < rooms.length; j++){
                 console.log('rooms.length: '+ rooms.length);
@@ -222,6 +223,7 @@ router.get('/', function(req, res){
                 }
                 //isFlagged(id, _currentuser, _user1, _user2, j);
 			}
+            */
 		}
 
 
