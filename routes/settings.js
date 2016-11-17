@@ -44,7 +44,7 @@ router.post('/change*', function(req, res, done) {
 				function(err, user) {
 					if(err) throw err;
 					console.log('user details updated');
-					res.redirect('/');
+					res.redirect('/settings');
 				}
 			);
 		}
@@ -56,7 +56,7 @@ router.post('/change*', function(req, res, done) {
 				function(err, user) {
 					if(err) throw err;
 					console.log('user details updated');
-					res.redirect('/');
+					res.redirect('/settings');
 				}
 			);
 		}
@@ -92,7 +92,7 @@ router.post('/change*', function(req, res, done) {
 							function(err, user) {
 								if(err) throw err;
 								console.log('user details updated');
-								res.redirect('/');
+								res.redirect('/settings');
 							}
 						);
 					}

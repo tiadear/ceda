@@ -4,6 +4,8 @@ block content
 		include includes/nav-simple.jade
 		.forumWrap
 			h1 Edit Post
+			if (message.length > 0)
+				.alert #{message}
 			if (post.top === true)
 				.newPost
 					form.form-post(role='form', action="/forum/thread?id=#{thread._id}", method="POST")

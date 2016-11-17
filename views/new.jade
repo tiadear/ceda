@@ -4,6 +4,8 @@ block content
 		include includes/nav-simple.jade
 		.forumWrap
 			h1 New Post
+			if (message.length > 0)
+				.alert #{message}
 			.newPost
 				form.form-post(role='form', action="/forum", method="POST")
 					input.form-input(type="text", name="title", placeholder="Title")

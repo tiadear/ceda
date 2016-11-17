@@ -93,7 +93,7 @@ router.get('/forgot', function(req,res){
 });
 router.post('/forgot', local.forgot,
     function(req, res, next) {
-        if(err) throw err;
+        req.flash('forgotMessage', "Please check your email! We've sent you instructions on how to reset your password.");
         res.redirect('/forgot');
     }
 );
@@ -102,12 +102,15 @@ router.post('/forgot', local.forgot,
 
 
 
-router.get('/reset/:token', function(req, res) {
-    User.findOne({resetPasswordToken : req.params.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
-        
+router.get('/reset*', function(req, res) {
+    User.findOne({resetPasswordToken : req.query.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
+        if (err) throw err;
         if(!user) {
-            return done(null, false, req.flash('resetMessage', "Password reset token is invalid or has expired."));
-        } else {
+            req.flash('forgotMessage', "Password reset token is invalid or has expired. Please re-enter your email.");
+            res.redirect('/forgot');
+        }
+        if(user)  {
+            req.user = user;
             res.render('reset', {
                 user: req.user,
                 message : req.flash('resetMessage'),
@@ -116,13 +119,14 @@ router.get('/reset/:token', function(req, res) {
         }
     });
 });
-router.post('/reset/:token', local.reset,
+router.post('/reset', local.reset,
     function(req, res, next) {
-        if (err) throw err;
+        req.flash('loginMessage', "Success! You're password has been changed.");
         res.redirect('/');
     }
 );
 
+//$2a$08$YPsDKBWB5Qy.Qvs8U9BdA.mI6Spy3EL8dbTfg9xvQWXBm3GAfFFBG"
 
 
 
@@ -164,32 +168,35 @@ router.get('/auth/google/callback',
 
 
 router.post('/username', function(req, res) {
-    User.findOne({email : req.body.email}, function(err, user){
-        if(err) {
-            throw err;
-            console.log(err);
-        }
-        if(!user) {
-            console.log('no user found');
-        } else {
-            user.username = req.body.username; 
-
-            user.save(function(err){
-                if(err) {
-                    console.log('error saving username');
-                    throw err;
-                }
-
-                req.session.save(function (err) {
-                    if(err){
-                        return next(err);
-                    }
-                    console.log('saving user');
+    if(!req.body.username) {
+        req.flash('usernameMessage', "Please enter a username");
+        res.redirect('/home');
+    } else {
+        User.findOne({email : req.body.email}, function(err, user){
+            if(err) throw err;
+            User.findOne({username : req.body.username}, function(err, otheruser){
+                if (err) throw err;
+                if (otheruser) {
+                    req.flash('usernameMessage', "Sorry, that username has been taken");
                     res.redirect('/home');
-                });
+                }
+                if (!otheruser) {
+                    user.username = req.body.username;
+
+                    user.save(function(err){
+                        if(err) throw err;
+                        req.session.save(function (err) {
+                            if(err){
+                                return next(err);
+                            }
+                            console.log('saving user');
+                            res.redirect('/home');
+                        });
+                    });
+                }
             });
-        }
-    });
+        });
+    }
 });
 
 

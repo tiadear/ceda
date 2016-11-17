@@ -8,8 +8,18 @@ block content
 			h1 Forgot Password?
 			if (message.length > 0)
 				.alert #{message}
-			form.form-login(role='form', action="/forgot", method="POST")
-				input.form-input(type="text", name="email", placeholder="Email")
-				input.form-input(type="hidden", name="password", value='')
-				button.form-submit(type="submit") Reset password
-				a.forgot(href="/") Cancel
+			if (message != "Please check your email! We've sent you instructions on how to reset your password." || message != )
+				form.form-login(role='form', action="/forgot", method="POST")
+					input.form-input(type="text", name="email", placeholder="Email")
+					input.form-input(type="hidden", name="password", value='')
+					button.form-submit(type="submit") Reset password
+					a.forgot(href="/") Cancel
+	script.
+		var message = "#{message}";
+		if (message === "Please check your email! We've sent you instructions on how to reset your password.") {
+			$(document).ready(function(){
+				window.setTimeout(function(){
+					location.href = "/";
+				}, 5000);
+			});
+		}

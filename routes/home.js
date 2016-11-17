@@ -22,6 +22,7 @@ local.strategy(passport);
 router.get('/', function(req, res) {
     res.render('home', {
             user : req.user,
+            message : req.flash('usernameMessage'),
             alertsForum : req.alertsForum,
             history : req.history,
             title: 'ceda'

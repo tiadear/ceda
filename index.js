@@ -19,6 +19,9 @@ var User = require('./models/account.js');
 var db = require('./db.js');
 
 
+require('dotenv').config();
+
+
 // set port
 app.set('port', (process.env.PORT || 3000));
 
@@ -113,7 +116,7 @@ passport.use(google);
 
 
 // actually listen
-app.listen(app.get('port'), function() {
+server.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
