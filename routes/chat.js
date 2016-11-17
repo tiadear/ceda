@@ -21,7 +21,7 @@ router.get('/', function(req, res){
 				if (err) throw err;
                 if(!rooms || rooms === '' || rooms.length === 0 || rooms === null) {
                    console.log('no rooms found');
-                   return;
+                   return callback;
                 }
 				if(rooms) {
 					callback(null, rooms);
@@ -30,8 +30,6 @@ router.get('/', function(req, res){
 		},
 
         function(rooms, callback) {
-
-            
 
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
