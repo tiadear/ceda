@@ -19,6 +19,9 @@ var User = require('./models/account.js');
 var db = require('./db.js');
 
 
+require('dotenv').config();
+
+
 // set port
 app.set('port', (process.env.PORT || 3000));
 

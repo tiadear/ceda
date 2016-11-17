@@ -93,7 +93,7 @@ router.get('/forgot', function(req,res){
 });
 router.post('/forgot', local.forgot,
     function(req, res, next) {
-        if(err) throw err;
+        req.flash('forgotMessage', "Please check your email! We've sent you instructions on how to reset your password.");
         res.redirect('/forgot');
     }
 );
@@ -102,12 +102,16 @@ router.post('/forgot', local.forgot,
 
 
 
-router.get('/reset/:token', function(req, res) {
-    User.findOne({resetPasswordToken : req.params.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
-        
+router.get('/reset*', function(req, res) {
+    User.findOne({resetPasswordToken : req.query.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
+        if (err) throw err;
         if(!user) {
-            return done(null, false, req.flash('resetMessage', "Password reset token is invalid or has expired."));
-        } else {
+            req.flash('forgotMessage', "Password reset token is invalid or has expired. Please re-enter your email.");
+            res.redirect('/forgot');
+        }
+        if(user)  {
+            req.user = user;
+            console.log('user in index: '+user);
             res.render('reset', {
                 user: req.user,
                 message : req.flash('resetMessage'),
@@ -116,13 +120,14 @@ router.get('/reset/:token', function(req, res) {
         }
     });
 });
-router.post('/reset/:token', local.reset,
+router.post('/reset', local.reset,
     function(req, res, next) {
-        if (err) throw err;
+        req.flash('loginMessage', "Success! You're password has been changed.");
         res.redirect('/');
     }
 );
 
+//$2a$08$YPsDKBWB5Qy.Qvs8U9BdA.mI6Spy3EL8dbTfg9xvQWXBm3GAfFFBG"
 
 
 
