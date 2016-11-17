@@ -217,7 +217,7 @@ router.get('/', function(req, res){
                 arr1[id] = [];
                 var arr2 = [];
                 
-                if(j = (rooms.length -1)) {
+                if(j === (rooms.length -1)) {
                     callback(null);
                 }
                 //isFlagged(id, _currentuser, _user1, _user2, j);
@@ -240,7 +240,7 @@ router.get('/', function(req, res){
         });
 	});
 
-*/
+
 });
 
 
