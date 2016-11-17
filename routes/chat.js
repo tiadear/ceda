@@ -17,14 +17,15 @@ router.get('/', function(req, res){
 
 		function(callback){
 			//find all the rooms the current user has talked in
-			Room.find({ user_resp : req.user._id}, function(err, rooms) {
+			Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
 				if (err) throw err;
 				if(rooms) {
                     console.log('rooms: '+rooms);
 					callback(null, rooms);
-				}
+				}   else {
+                    return callback(null);
+                }
 			});
-            /*
 		},
 
         function(rooms, callback) {
@@ -223,7 +224,7 @@ router.get('/', function(req, res){
                 }
                 //isFlagged(id, _currentuser, _user1, _user2, j);
 			}
-            */
+            
 		}
 
 
