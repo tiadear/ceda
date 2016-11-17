@@ -1,20 +1,22 @@
-// ROUTES!!!
-
-const User = require('../models/account.js');
-const Room = require('../models/room.js');
+// models
+var User = require('../models/account.js');
+var Room = require('../models/room.js');
 var Thread = require('../models/thread.js');
 var Post = require('../models/posts.js');
 var chatHistory = require('../models/chatHistory.js');
 var Appeal = require('../models/appeal.js');
 
-const express = require('express');
-const router = express.Router();
-var async = require('async');
+// express
+var express = require('express');
+var router = express.Router();
 
-const passport = require('passport');
+// passport
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-const local = require('../passport/local');
+var local = require('../passport/local');
 local.strategy(passport);
+
+var async = require('async');
 
 
 
@@ -46,90 +48,99 @@ router.get('/', function(req, res){
 
 
 router.get('/signup', function(req, res) {
-	res.render('signup', { 
-        message : req.flash('signupMessage')
+	res.render('signup', {
+        message : req.flash('signupMessage'),
+        title : 'ceda'
     });
 });
-
-router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/signup', failureFlash: true}), function(req, res, next) {
-        req.session.save(function (err) {
-            if(err){
-                return next(err);
-            }
-            res.render('home', {
-                user : req.user,
-                title: 'ceda'
-            });
-
-        });
+router.post('/signup', function(req, res, next) {
+    if(!req.body.username || !req.body.email || !req.body.password || !req.body.confirmPassword) {
+        req.flash('signupMessage', 'Please complete all fields');
+        res.redirect('/signup');
+    } else {
+        passport.authenticate('local-signup', {
+            successRedirect: '/home',
+            failureRedirect: '/signup',
+            failureFlash: true
+        }) (req, res);
     }
-);
-
-
-
-
-router.post('/login', passport.authenticate('local-login', { 
-    failureRedirect: '/', 
-    failureFlash: true 
-}), function(req, res, next) {
-    req.session.save(function (err) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-        res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
-    });
 });
+
+
+
+
+router.post('/login', function(req, res, next) {
+    if(!req.body.email || !req.body.password) {
+        req.flash('loginMessage', 'Please complete all fields');
+        res.redirect('/');
+    } else {
+        passport.authenticate('local-login', {
+            successRedirect: '/home',
+            failureRedirect: '/',
+            failureFlash: true
+        }) (req, res);
+    }
+});
+
 
 
 
 router.get('/forgot', function(req,res){
     res.render('forgot', {
+        message : req.flash('forgotMessage'),
         user : req.user
     });
 });
-
-
 router.post('/forgot', local.forgot,
     function(req, res, next) {
-        if(err){
-            console.log(err);
-            return next(err);
-        }
-        res.redirect('/');
+        req.flash('forgotMessage', "Please check your email! We've sent you instructions on how to reset your password.");
+        res.redirect('/forgot');
     }
 );
 
 
-router.get('/reset', function(req,res) {
-    passport.authenticate('local-reset', {
-        failureRedirect : '/forgot',
-        failureFlash: true
-    }),
-    function(req, res){
-        res.redirect('/');
-    } 
+
+
+
+router.get('/reset*', function(req, res) {
+    User.findOne({resetPasswordToken : req.query.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
+        if (err) throw err;
+        if(!user) {
+            req.flash('forgotMessage', "Password reset token is invalid or has expired. Please re-enter your email.");
+            res.redirect('/forgot');
+        }
+        if(user)  {
+            req.user = user;
+            res.render('reset', {
+                user: req.user,
+                message : req.flash('resetMessage'),
+                title: 'ceda'
+            });
+        }
+    });
 });
+router.post('/reset', local.reset,
+    function(req, res, next) {
+        req.flash('loginMessage', "Success! You're password has been changed.");
+        res.redirect('/');
+    }
+);
+
+//$2a$08$YPsDKBWB5Qy.Qvs8U9BdA.mI6Spy3EL8dbTfg9xvQWXBm3GAfFFBG"
+
 
 
 // social media
-
 router.get('/auth/facebook',
 	passport.authenticate('facebook', {scope : ['email']}),
     function(req, res) {}
 );
-
 router.get('/auth/facebook/callback',
 	passport.authenticate('facebook', {failureRedirect: '/'}),
 	function(req, res){
-		res.redirect('/');
+		res.redirect('/home');
 	}
 );
-
-
 router.get('/auth/twitter', 
 	passport.authenticate('twitter'),
 	function(req, res) {}
@@ -137,14 +148,9 @@ router.get('/auth/twitter',
 router.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {failureRedirect: '/'}),
 	function(req, res){
-		res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
+		res.redirect('/home');
 	}
 );
-
-
 router.get('/auth/google', 
 	passport.authenticate('google', { scope: [
 		'https://www.googleapis.com/auth/plus.login',
@@ -154,10 +160,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/'}),
 	function(req, res){
-		res.render('home', {
-            user : req.user,
-            title: 'ceda'
-        });
+		res.redirect('/home');
 	}
 );
 
@@ -165,35 +168,35 @@ router.get('/auth/google/callback',
 
 
 router.post('/username', function(req, res) {
-    User.findOne({email : req.body.email}, function(err, user){
-        if(err) {
-            throw err;
-            console.log(err);
-        }
-        if(!user) {
-            console.log('no user found');
-        } else {
-            user.username = req.body.username; 
-
-            user.save(function(err){
-                if(err) {
-                    console.log('error saving username');
-                    throw err;
+    if(!req.body.username) {
+        req.flash('usernameMessage', "Please enter a username");
+        res.redirect('/home');
+    } else {
+        User.findOne({email : req.body.email}, function(err, user){
+            if(err) throw err;
+            User.findOne({username : req.body.username}, function(err, otheruser){
+                if (err) throw err;
+                if (otheruser) {
+                    req.flash('usernameMessage', "Sorry, that username has been taken");
+                    res.redirect('/home');
                 }
+                if (!otheruser) {
+                    user.username = req.body.username;
 
-                req.session.save(function (err) {
-                    if(err){
-                        return next(err);
-                    }
-                    console.log('saving user');
-                    res.render('home', {
-                        user : req.user,
-                        title: 'ceda'
+                    user.save(function(err){
+                        if(err) throw err;
+                        req.session.save(function (err) {
+                            if(err){
+                                return next(err);
+                            }
+                            console.log('saving user');
+                            res.redirect('/home');
+                        });
                     });
-                });
+                }
             });
-        }
-    });
+        });
+    }
 });
 
 

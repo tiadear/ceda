@@ -1,40 +1,67 @@
+var path = require('path');
+var express = require('express');
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+var passport = require('passport');
+var nodemailer = require('nodemailer');
+var expressSession = require('express-session');
+var mongoose = require('mongoose');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var nodeStatic = require('node-static');
+var uuid = require('uuid');
+var flash = require('connect-flash');
+var debug = require('debug')('ceda:server');
 
-const   path = require('path'),
-        express = require('express'),
-        app = express(),
-        server = require('http').createServer(app),
-        io = require('socket.io').listen(server),
-        passport = require('passport'),
-        nodemailer = require('nodemailer'),
-        expressSession = require('express-session'),
-        mongoose = require('mongoose'),
-        db = require('./db.js'),
-        User = require('./models/account.js');
+var User = require('./models/account.js');
+var db = require('./db.js');
 
-var favicon = require('static-favicon'),
-    logger = require('morgan');
-    cookieParser = require('cookie-parser');
-    bodyParser = require('body-parser');
-    nodeStatic = require('node-static'),
-    uuid = require('uuid'),
-    flash = require('connect-flash'),
-    debug = require('debug')('ceda:server'),
-    _ = require('underscore')._;
 
+require('dotenv').config();
+
+
+// set port
+app.set('port', (process.env.PORT || 3000));
+
+
+
+
+// public folder
 app.use(express.static(__dirname + '/public'));
 
 
 
-// connect to port
-server.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 
 
 
 // module exports
 module.exports = app;
+
+
+
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(flash());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'mustardmanforpresident',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
@@ -49,34 +76,7 @@ var settings = require('./routes/settings');
 
 
 
-// set up views
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
-
-
-
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(require('express-session')({
-    secret: 'mustardmanforpresident',
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(flash());
-app.use(passport.session());
-//app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
-// general
 app.use('/', routes);
 app.use('/home', home);
 app.use('/chat', chat);
@@ -91,7 +91,6 @@ var local = require('./passport/local');
 var facebook = require('./passport/facebook');
 var twitter = require('./passport/twitter');
 var google = require('./passport/google');
-
 
 
 
@@ -115,10 +114,21 @@ passport.use(google);
 
 
 
+
+// actually listen
+server.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
+
+
+
 // connect to db
-mongoose.connect(db.url);
+var mongo_uri = process.env.MONGODB_URI || db.url;
+mongoose.connect(mongo_uri);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() { console.log("Mongo DB connected!"); });
+
 
 
 
@@ -132,6 +142,7 @@ app.use(function(req, res, next) {
 
 
 
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -141,14 +152,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -295,8 +298,3 @@ Array.prototype.contains = function(k, callback) {
         return process.nextTick(check.bind(null, i+1));
     }(0));
 };
-
-
-
-
-

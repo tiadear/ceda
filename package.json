@@ -1,48 +1,40 @@
 {
   "name": "ceda",
   "version": "1.0.0",
-  "main": "app.js",
+  "description": "A safe space to chat with people going through the same things",
   "engines": {
-    "node" : "4.2.4"
-    },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "node": "5.9.1"
   },
-  "author": "",
-  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
-    "angular": "^1.5.8",
     "async": "^2.1.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "debug": "^2.2.0",
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-flash": "0.0.2",
     "express-session": "^1.14.1",
     "jade": "^1.11.0",
-    "lodash": "^4.14.0",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.1",
     "morgan": "^1.7.0",
-    "mysql": "^2.11.1",
     "node-static": "^0.7.8",
-    "node-uuid": "^1.4.7",
     "nodemailer": "^2.6.4",
-    "nodemailer-postmark-transport": "^1.1.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "passport-twitter": "^1.0.4",
-    "should": "^11.1.0",
+    "postmark": "1.3.1",
     "socket.io": "^1.4.8",
-    "static-favicon": "^2.0.0-alpha",
-    "underscore": "^1.8.3",
-    "uuid": "^2.0.2",
-    "webrtc.io": "0.0.4"
-  }
+    "uuid": "^2.0.2"
+  },
+  "license": "MIT"
 }

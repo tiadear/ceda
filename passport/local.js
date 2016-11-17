@@ -18,46 +18,53 @@ exports.strategy = function(passport) {
 
 	passport.use('local-signup', new LocalStrategy({
 		usernameField: 'email',
-		passwordField: 'password'
+		passwordField: 'password',
+		passReqToCallback : true
 		},
-		function(req, res, done) {
-			process.nextTick(function(){
-				User.findOne({email : req.body.email}, function(err, user){
-					if(err) {
-						return done(err);
-						console.log('something went horribly wrong');
+		function(req, email, password, done) {
+			User.findOne({email : req.body.email}, function(err, user){
+				if(err) {
+					console.log('something went horribly wrong');
+					return done(err);
+				}
+				// check if the user already exists
+				if(user) {
+					return done(null, false, req.flash('signupMessage', 'User already exists'));
+				}
+				if(!user) {
+					//check if all fields are filled out
+					if(!req.body.username || !req.body.password || !req.body.confirmPassword) {
+						return done(null, false, req.flash('signupMessage', 'Please complete all fields'));
 					}
-
-					if(user) {
-						return done(null, false, req.flash('signupMessage', 'User already exists'));
-						console.log('user exists');
-					} 
-
 					else {
-						var newUser = new User ();
-						newUser.email = req.body.email;
-						newUser.password = newUser.generateHash(req.body.password);
-						newUser.firstName = req.body.firstName;
-						newUser.lastName = req.body.lastName;
-						newUser.notifyChat = 1;
-                		newUser.notifyChat = 1;
-						newUser.provider = 'local';
-						newUser.userType = false;
+						// check if the passwords match
+						if(req.body.password != req.body.confirmPassword) {
+							return done(null, false, req.flash('signupMessage', 'Passwords do not match. Please try again.'));
+						}
+						else {
+							var newUser = new User ();
+							newUser.email = req.body.email;
+							newUser.username = req.body.username;
+							newUser.password = newUser.generateHash(req.body.password);
+							newUser.notifyChat = 1;
+							newUser.notifyForum = 1;
+							newUser.provider = 'local';
+							newUser.userType = false;
 
-
-						newUser.save(function(err){
-							if(err) {
-								console.log(err);
-								console.log('saving error')
-								return done(err);
-							} else {
-								console.log('saving user');
-								return done(null, newUser);
-							}
-						});
-					} // end else
-				});
+							newUser.save(function(err){
+								if(err) {
+									console.log(err);
+									return done(err);
+								} else {
+									console.log('saving user');
+									return done(null, newUser);
+								}
+							});
+						}
+					}
+				} // end else
 			});
+
 		}
 	));
 
@@ -76,7 +83,7 @@ exports.strategy = function(passport) {
 				}
 
 				if(!user) {
-					return done(null, false, req.flash('loginMessage', 'No user found'));
+					return done(null, false, req.flash('loginMessage', 'Sorry, no user exists with that email address'));
 				}
 
 				if(!user.validPassword(password)) {
@@ -95,62 +102,84 @@ exports.strategy = function(passport) {
 
 
 	exports.forgot = function(req, email, done) {
-			console.log('forget password point 1');
 			var token = uuid.v4();
 
 			User.findOne({email : req.body.email}, function(err, user){
 				if (err) {
-					return done(err);
 					console.log('forgot password went wrong');
+					return done(err);
 				}
 				if(!user) {
-					return res.redirect('/forgot');
+					return done(null, false, req.flash('forgotMessage', "Sorry, no users with that email address were found"));
 		        }
 
 		        user.resetPasswordToken = token;
 		        user.resetPasswordExpires = Date.now() + 6*3600*1000;
-
-		        console.log('forget password point 2');
 		        
 		        user.save(function(err){
-		        	
-		        	if(err) {
-		        		return done(err);
-		        	}
-		        		console.log('forget password point 3');
-		        		transport.sendMail({
-							from: 'e21c75b229fbe6890f93a1777dcea1dd@inbound.postmarkapp.com',
-							to: user.email,
-							subject: 'Your password has been changed',
-							html: '<h1>Hello</h1><br><p>You are receiving this email because someone has requested the to change the password for ' + user.email + '. If this was you, please click on the following link to finish resetting your password.<br>http://' + req.headers.host + '/reset/' + token + '<br> If you did not make this request, please ignore this email and your password will remain the same.</p>'
-						}, function(err, info) {
-							if (err) {
-								console.error(err);
-							} else {
-								console.log('success');
-					        	done(err);
-							}
-						});
-		        	
-
+		        	if(err) throw err;
+		        	var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
+		        	postmark.send({
+						"From": "admin@ceda.io",
+						"To": user.email,
+						"Subject": "Password Reset",
+						"TextBody": 'Hello,\n\n' + 'You are receiving this email because someone has requested the to change the password for ' + user.email + '. If this was you, please click on the following link to finish resetting your password.\n\n' + 'http://' + req.headers.host + '/reset?token=' + token + '.\n\n' + 'If you did not make this request, please ignore this email and your password will remain the same.',
+						"Tag": "password"
+					}, function(err) {
+						if(err) {
+							console.error("Unable to send via postmark: " + err.message);
+							return done(err);
+						}
+						console.info("Sent to postmark for delivery");
+						return done(null, user);
+					});
 		        });
-
 			});
 	}
 
 
 
 
-	exports.reset = function(req, email, done) {
-		User.findOne({resetPasswordToken : req.params.token, resetPasswordExpires: { $gt: Date.now()}}, function(err, user){
-			if(!user) {
-				return done(err);
-				console.log('this reset password person does not exist');
-			} else {
-				res.render('reset',{
-					user: req.user
-				});
+	exports.reset = function(req, res, done) {
+
+		User.findById(req.body.userid, function(err, user){
+			if (err) throw err;
+			
+			if(user){
+				// check if the passwords match
+				if(req.body.password != req.body.confirmPassword) {
+					req.flash('resetMessage', 'Passwords do not match. Please try again.');
+					res.redirect('reset?token='+user.resetPasswordToken);
+				}
+				else {
+					user.password = user.generateHash(req.body.password);
+					user.resetPasswordToken = undefined;
+					user.resetPasswordExpires = undefined;
+
+					user.save(function(err) {
+						if(err) throw err;
+						console.log('reset password successful');
+
+						var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
+
+						postmark.send({
+							"From": "admin@ceda.io",
+							"To": user.email,
+							"Subject": "Password Change",
+							"TextBody": 'Hello,\n\n' + 'This is a confirmation that the password for ' + user.email + 'has been changed.',
+							"Tag": "password"
+						}, function(err) {
+							if(err) {
+								console.log('Password reset confirmation email not sent');
+								return done(err);
+							}
+							console.log('Password reset confirmation email sent');
+							return done(null, user);
+						});
+					});
+				}
 			}
+			
 		});
 	}
 }

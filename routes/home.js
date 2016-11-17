@@ -20,6 +20,17 @@ local.strategy(passport);
 
 // dashbaord
 router.get('/', function(req, res) {
+    res.render('home', {
+            user : req.user,
+            message : req.flash('usernameMessage'),
+            alertsForum : req.alertsForum,
+            history : req.history,
+            title: 'ceda'
+        });
+
+});
+
+/*
     async.waterfall([
 
         function(callback) {
@@ -30,6 +41,7 @@ router.get('/', function(req, res) {
                     callback(null, posts);
                 }
             });
+            
 
         }, function(posts, callback) {
             arr = [];
@@ -138,6 +150,8 @@ router.get('/', function(req, res) {
             posts.forEach(function(post, i) {
                 findThreads(post.threadId, i, posts.length);
             });
+
+
         }, 
 
         function(alertsForum, callback) {
@@ -146,9 +160,11 @@ router.get('/', function(req, res) {
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
                 if(rooms) {
-                    callback(null, alertsForum, rooms);
+                    req.alertsForum = alertsForum;
+                    callback(null, req.alertsForum, rooms);
                 }
             });
+        
         },
 
         function(alertsForum, rooms, callback) {
@@ -253,6 +269,7 @@ router.get('/', function(req, res) {
                 );
             }
 
+
             for(j = 0; j < rooms.length; j++){
                 var id = rooms[j]._id;
                 var _user1 = rooms[j].user_init;
@@ -263,6 +280,7 @@ router.get('/', function(req, res) {
 
                 getChatHistory(id, _currentuser, _user1, _user2, j);
             }
+            
 
         }
 
@@ -277,7 +295,7 @@ router.get('/', function(req, res) {
     });
 });
 
-
+*/
 
 
 
