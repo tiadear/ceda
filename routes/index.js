@@ -168,32 +168,35 @@ router.get('/auth/google/callback',
 
 
 router.post('/username', function(req, res) {
-    User.findOne({email : req.body.email}, function(err, user){
-        if(err) {
-            throw err;
-            console.log(err);
-        }
-        if(!user) {
-            console.log('no user found');
-        } else {
-            user.username = req.body.username; 
-
-            user.save(function(err){
-                if(err) {
-                    console.log('error saving username');
-                    throw err;
-                }
-
-                req.session.save(function (err) {
-                    if(err){
-                        return next(err);
-                    }
-                    console.log('saving user');
+    if(!req.body.username) {
+        req.flash('usernameMessage', "Please enter a username");
+        res.redirect('/home');
+    } else {
+        User.findOne({email : req.body.email}, function(err, user){
+            if(err) throw err;
+            User.findOne({username : req.body.username}, function(err, otheruser){
+                if (err) throw err;
+                if (otheruser) {
+                    req.flash('usernameMessage', "Sorry, that username has been taken");
                     res.redirect('/home');
-                });
+                }
+                if (!otheruser) {
+                    user.username = req.body.username;
+
+                    user.save(function(err){
+                        if(err) throw err;
+                        req.session.save(function (err) {
+                            if(err){
+                                return next(err);
+                            }
+                            console.log('saving user');
+                            res.redirect('/home');
+                        });
+                    });
+                }
             });
-        }
-    });
+        });
+    }
 });
 
 

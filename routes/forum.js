@@ -138,6 +138,7 @@ router.get('/', function(req, res) {
 router.get('/new', function(req, res) {
 	res.render('new', {
 		user : req.user,
+		message : req.flash('forumMessage'),
 		title : 'ceda',
 		pageTitle: 'forum'
 	});
@@ -173,6 +174,7 @@ router.get('/edit*', function(req, res) {
 		res.render('edit', {
 			thread : req.thread,
 			post : req.post,
+			message : req.flash('forumMessage'),
 			user : req.user,
 			title : 'ceda',
 			pageTitle: 'forum'
@@ -187,15 +189,20 @@ router.get('/edit*', function(req, res) {
 router.post('/', function(req, res) {
 	async.waterfall([
 		function(callback){
-			var newThread = new Thread();
-			newThread.user = req.user._id;
-			newThread.title = req.body.title;
+			if(!req.body.title || !req.body.content) {
+				req.flash('forumMessage', "Missing something?");
+				res.redirect('/forum/new');
+			} else {
+				var newThread = new Thread();
+				newThread.user = req.user._id;
+				newThread.title = req.body.title;
 
-			newThread.save(function(err){
-				if(err) throw err;
-				req.thread = newThread;
-				callback(null, req.thread);
-			});
+				newThread.save(function(err){
+					if(err) throw err;
+					req.thread = newThread;
+					callback(null, req.thread);
+				});
+			}
 		}, function(thread, callback) {
 			//console.log('thread id: '+thread._id);
 
@@ -320,6 +327,7 @@ router.get('/thread*', function(req, res) {
 			res.render('post', {
 				thread: req.thread,
 				posts : req.posts,
+				message : req.flash('forumMessage'),
 				user : req.user,
 				title : 'ceda',
 				pageTitle: 'forum'
@@ -333,12 +341,11 @@ router.get('/thread*', function(req, res) {
 router.post('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback) {
-			var key = req.query.id;
-            //console.log('thread id is: ' + key);
+
+			var key = req.query.id; // thread id
 
             Thread.findById(String(key), function(err, thread) {
                 if (err) throw err;
-                //console.log('thread: '+thread);
                 callback(null, key, thread.title);
             });
 		}, function(key, title, callback) {
@@ -346,33 +353,75 @@ router.post('/thread*', function(req, res) {
 			// if the post ID exists
 			// the post is being edited
 			if(req.body.postID) {
-				//console.log('edit post');
 
-				Post.update(
-					{ '_id' : req.body.postID },
-					{ $set: { "title" : req.body.title, "content" : req.body.content} },
-					function(err, post) {
-						if(err) throw err;
-						console.log('updated post: '+post);
-						callback(null, key);
+				Post.findById(req.body.postID, function(err, post) {
+					if(err) throw err;
+
+					//if it is the top post
+					if(post.top == true) {
+						//check for content and title
+						if(!req.body.content || !req.body.title) {
+							req.flash('forumMessage', "Please fill in both fields");
+							res.redirect('/forum/edit?id='+req.body.postID);
+						} else {
+							//then update
+							Post.update(
+								{ '_id' : req.body.postID },
+								{ $set: { "content" : req.body.content, "title" : req.body.title} },
+								function(err, post) {
+									if(err) throw err;
+									console.log('updated post: '+post);
+									callback(null, key);
+								}
+							);
+						}
+					} 
+					// if it is NOT the top post
+					else {
+						// just check for content
+						if(!req.body.content) {
+							req.flash('forumMessage', "You didn't write anything!");
+							res.redirect('/forum/edit?id='+req.body.postID);
+						} else {
+							// then update
+							Post.update(
+								{ '_id' : req.body.postID },
+								{ $set: { "content" : req.body.content} },
+								function(err, post) {
+									if(err) throw err;
+									console.log('updated post: '+post);
+									callback(null, key);
+								}
+							);
+						}
 					}
-				);
+				});
+
+				
 			}
+
 			// the post ID doesn't exists
 			// this is a reply to a post
 			else {
-				console.log('new reply');
-				var newPost = new Post();
-				newPost.user = req.user._id;
-				newPost.threadId = key;
-				newPost.top = false;
-				newPost.content = req.body.content;
 
-				newPost.save(function(err){
-					if(err) throw err;
-					req.post = newPost;
-					callback(null, key);
-				});
+				if(!req.body.content) {
+					req.flash('forumMessage', "You didn't write anything!");
+					res.redirect('/forum/thread?id='+key);
+				} else {
+
+					console.log('new reply');
+					var newPost = new Post();
+					newPost.user = req.user._id;
+					newPost.threadId = key;
+					newPost.top = false;
+					newPost.content = req.body.content;
+
+					newPost.save(function(err){
+						if(err) throw err;
+						req.post = newPost;
+						callback(null, key);
+					});
+				}
 			}
 		}
 	], function(err, result) {

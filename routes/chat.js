@@ -25,6 +25,59 @@ router.get('/', function(req, res){
 			});
 		},
 
+        function(rooms, callback) {
+
+            function checkIfHistory(roomID, counter){
+                var deleteChatHistory = new Promise(
+                    function(resolve, reject) {
+                        chatHistory.find({ room : roomID}, function(err, history) {
+                            if (err) throw err;
+                            if (!history || history === '' || history.length === 0 || history === null) {
+                                console.log('room to delete: ' + roomID);
+                                Room.findByIdAndRemove(roomID, function(err) {
+                                    if (err) throw err;
+                                    if(counter == (rooms.length -1)) {
+                                        resolve(counter);
+                                    }
+                                });
+                            } else {
+                                if(counter == (rooms.length -1)) {
+                                    resolve(counter);
+                                }
+                            }
+                            
+                        });
+                    }
+                );
+
+                deleteChatHistory.then(
+                    function(val) {
+                        callback(null);
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('first chat history promise rejected for' + reason);
+                    }
+                );
+            }
+
+            for(j = 0; j < rooms.length; j++){
+                
+                var id = rooms[j]._id;
+                checkIfHistory(id, j);
+            }
+        },
+
+        function(callback) {
+            Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
+                if (err) throw err;
+                if(rooms) {
+                    callback(null, rooms);
+                }   
+            });
+        },
+
 		function(rooms, callback) {
 
             var arr1 = [];
@@ -60,7 +113,7 @@ router.get('/', function(req, res){
                 )
                 .catch(
                     function(reason){
-                        console.log('chat history promise rejected for' + reason);
+                        console.log('flagged user promise rejected for' + reason);
                     }
                 );
             }
@@ -73,16 +126,7 @@ router.get('/', function(req, res){
                                 console.log(err);
                                 throw err;
                             }
-                            if (!history || history === '' || history.length === 0 || history === null) {
-                                Room.findByIdAndRemove(roomID, function(err) {
-                                    if (err) throw err;
-                                    console.log('room: '+ roomID +' delted');
-                                });
-                            }
-                            if(history) {
-                                //console.log(history);
-                                resolve(history);
-                            }
+                            resolve(history);
                         });
 
                     }
@@ -95,7 +139,7 @@ router.get('/', function(req, res){
                 )
                 .catch(
                     function(reason){
-                        console.log('chat history promise rejected for' + reason);
+                        console.log('second chat history promise rejected for' + reason);
                     }
                 );
             }
@@ -160,7 +204,7 @@ router.get('/', function(req, res){
             }
 
             for(j = 0; j < rooms.length; j++){
-
+                console.log('rooms.length: '+ rooms.length);
                 var id = rooms[j]._id;
                 var _user1 = rooms[j].user_init;
                 var _user2 = rooms[j].user_resp;

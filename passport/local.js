@@ -83,7 +83,7 @@ exports.strategy = function(passport) {
 				}
 
 				if(!user) {
-					return done(null, false, req.flash('loginMessage', 'No user found'));
+					return done(null, false, req.flash('loginMessage', 'Sorry, no user exists with that email address'));
 				}
 
 				if(!user.validPassword(password)) {

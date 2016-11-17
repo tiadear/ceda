@@ -523,6 +523,8 @@ header {
     position: fixed;
     bottom: 0px;
     width: 100%; }
+    .container .postReply form a {
+      cursor: pointer; }
   .container .settingsWrap .settingsA, .container .settingsWrap .settingsN {
     position: relative; }
     .container .settingsWrap .settingsA .settingsAccount, .container .settingsWrap .settingsA .settingsNotification, .container .settingsWrap .settingsN .settingsAccount, .container .settingsWrap .settingsN .settingsNotification {
