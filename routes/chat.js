@@ -20,7 +20,8 @@ router.get('/', function(req, res){
 			Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
 				if (err) throw err;
                 if(!rooms || rooms === '' || rooms.length === 0 || rooms === null) {
-                   return callback(null); 
+                   console.log('no rooms found');
+                   return;
                 }
 				if(rooms) {
 					callback(null, rooms);
