@@ -333,21 +333,38 @@ router.get('/chatpeer*', function(req, res) {
                             console.log('no room found');
                             // create a new room!
                             var newRoom = new Room();
-                            newRoom.user_init = user1;
-                            newRoom.user_resp = user2;
-                            newRoom.room_type = 0;
 
-                            newRoom.save(function(err){
-                                if (err) {
-                                    console.log(err);
-                                    throw err;
-                                } else {
-                                    console.log('saving user');
-                                    req.room = newRoom;
-                                    req.usersInRoom = [user1name, user2name];
-                                    req.userIDs = [user1, user2];
-                                    callback(null, req.room, req.usersInRoom, req.userIDs);
-                                }
+                            User.findById(user1, function(err, user) {
+                                var mic1Setting = user1.defaultMic;
+                                var vid1Setting = user1.defaultMic;
+
+                                User.findById(user2, function(err, user) {
+                                    var mic2Setting = user1.defaultMic;
+                                    var vid2Setting = user1.defaultMic;
+
+                                    newRoom.user_init = user1;
+                                    newRoom.user_resp = user2;
+                                    newRoom.user_init_mic = mic1Setting;
+                                    newRoom.user_init_video = vid1Setting;
+                                    newRoom.user_resp_mic = mic2Setting;
+                                    newRoom.user_resp_video = vid2Setting;
+                                    newRoom.room_type = 0;
+
+                                    newRoom.save(function(err){
+                                        if (err) {
+                                            console.log(err);
+                                            throw err;
+                                        } else {
+                                            console.log('saving user');
+                                            req.room = newRoom;
+                                            req.usersInRoom = [user1name, user2name];
+                                            req.userIDs = [user1, user2];
+                                            callback(null, req.room, req.usersInRoom, req.userIDs);
+                                        }
+                                    });
+
+                                });
+
                             });
                         }
                     });
