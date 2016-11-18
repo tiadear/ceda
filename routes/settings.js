@@ -136,7 +136,7 @@ router.post('/', function(req, res) {
 						callback(null);
 					}
 				);
-			} 
+			}
 			else if (field === 'notifyForum') {
 				User.update(
 					{ '_id' : id },
@@ -146,7 +146,27 @@ router.post('/', function(req, res) {
 						callback(null);
 					}
 				);
-			} 
+			}
+			else if (field === 'defaultMic') {
+				User.update(
+					{ '_id' : id },
+					{ $set: { defaultMic : checked } },
+					function(err, user) {
+						if(err) throw err;
+						callback(null);
+					}
+				);
+			}
+			else if (field === 'defaultVideo') {
+				User.update(
+					{ '_id' : id },
+					{ $set: { defaultVideo : checked } },
+					function(err, user) {
+						if(err) throw err;
+						callback(null);
+					}
+				);
+			}
 		}
 		
 	], function(err, result) {

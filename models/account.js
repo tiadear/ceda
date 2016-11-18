@@ -15,6 +15,8 @@ var userSchema = mongoose.Schema({
 	notifyChat : Boolean,
 	notifyForum : Boolean,
 	disconnectTime : Date,
+	defaultMic: {type: Boolean, default: false },
+	defaultVideo: {type: Boolean, default: false },
 	provider: String,
 	facebook: {},
 	twitter: {},

@@ -68,7 +68,6 @@ block content
 					.setting
 						.settingTitle
 							p messages
-							p #{user.notifyChat}
 						.onoffswitch
 							if (user.notifyChat === true)
 								input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=true)
@@ -80,12 +79,36 @@ block content
 					.setting
 						.settingTitle
 							p forum replies
-							p #{user.notifyForum}
 						.onoffswitch
 							if (user.notifyForum === true)
 								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=true)
 							else
 								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=false)
 							label.onoffswitch-label(for='notifyForum')
+								span.onoffswitch-inner
+								span.onoffswitch-switch
+			.settingsC
+				.settingsChat
+					h2 Video Chat
+					.setting
+						.settingTitle
+							p microphone
+						.onoffswitch
+							if (user.defaultMic === true)
+								input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=true)
+							else
+								input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=false)
+							label.onoffswitch-label(for='defaultMic')
+								span.onoffswitch-inner
+								span.onoffswitch-switch
+					.setting
+						.settingTitle
+							p webcam
+						.onoffswitch
+							if (user.defaultVideo === true)
+								input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=true)
+							else
+								input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=false)
+							label.onoffswitch-label(for='defaultVideo')
 								span.onoffswitch-inner
 								span.onoffswitch-switch
