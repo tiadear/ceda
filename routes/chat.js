@@ -30,7 +30,7 @@ router.get('/', function(req, res){
 		},
 
         function(rooms, callback) {
-
+            console.log('find rooms point 1');
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
                     function(resolve, reject) {
@@ -223,13 +223,15 @@ router.get('/', function(req, res){
 
 
 	], function(err, result){
+        console.log('err or result');
         if (err) {
+            console.log('there was an error');
             res.render('chat', {
                 user : req.user,
                 title : 'ceda'
             });
         }
-		//console.log('result: ' + result);
+		console.log('result: ' + result);
         req.session.save(function(err){
             if (err) throw err;
             res.render('chat', {
