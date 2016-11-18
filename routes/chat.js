@@ -21,7 +21,7 @@ router.get('/', function(req, res){
 				if (err) throw err;
                 if(!rooms || rooms === '' || rooms.length === 0 || rooms === null) {
                    console.log('no rooms found');
-                   return callback;
+                   callback(err);
                 }
 				if(rooms) {
 					callback(null, rooms);
@@ -207,8 +207,6 @@ router.get('/', function(req, res){
                 );
             }
 
-            
-
             for(j = 0; j < rooms.length; j++){
                 console.log('rooms.length: '+ rooms.length);
                 var id = rooms[j]._id;
@@ -218,22 +216,22 @@ router.get('/', function(req, res){
                 arr1[id] = [];
                 var arr2 = [];
                 
-                if(j === (rooms.length -1)) {
-                    callback(null);
-                }
-                //isFlagged(id, _currentuser, _user1, _user2, j);
+                isFlagged(id, _currentuser, _user1, _user2, j);
 			}
             
 		}
 
 
 	], function(err, result){
+        if (err) {
+            res.render('chat', {
+                user : req.user,
+                title : 'ceda'
+            });
+        }
 		//console.log('result: ' + result);
         req.session.save(function(err){
-            if (err) {
-                console.log(err);
-                throw err;
-            }
+            if (err) throw err;
             res.render('chat', {
                 history : req.history,
                 user : req.user,
