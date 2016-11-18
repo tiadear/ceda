@@ -21,7 +21,7 @@ router.get('/', function(req, res){
 				if (err) throw err;
                 if(!rooms || rooms === '' || rooms.length === 0 || rooms === null) {
                    console.log('no rooms found');
-                   callback(err);
+                   return callback(err);
                 }
 				if(rooms) {
 					callback(null, rooms);
