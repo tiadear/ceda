@@ -19,10 +19,6 @@ router.get('/', function(req, res){
 			//find all the rooms the current user has talked in
 			Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
 				if (err) throw err;
-                if(!rooms || rooms === '' || rooms.length === 0 || rooms === null) {
-                   console.log('no rooms found');
-                    callback(err);
-                }
 				if(rooms) {
 					callback(null, rooms);
 				}
@@ -30,6 +26,9 @@ router.get('/', function(req, res){
 		},
 
         function(rooms, callback) {
+            if (rooms.length === 0) {
+                callback(null);
+            }
             console.log('find rooms point 1');
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
@@ -78,12 +77,14 @@ router.get('/', function(req, res){
                 if (err) throw err;
                 if(rooms) {
                     callback(null, rooms);
-                }   
+                }
             });
         },
 
 		function(rooms, callback) {
-
+            if (rooms.length === 0) {
+                callback(null);
+            }
             var arr1 = [];
 
             function isFlagged(roomID, currentuser, user1, user2, counter){
@@ -223,14 +224,7 @@ router.get('/', function(req, res){
 
 
 	], function(err, result){
-        console.log('err or result');
-        if (err) {
-            console.log('there was an error');
-            res.render('chat', {
-                user : req.user,
-                title : 'ceda'
-            });
-        }
+        if (err) throw err;
 		console.log('result: ' + result);
         req.session.save(function(err){
             if (err) throw err;
