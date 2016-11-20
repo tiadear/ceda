@@ -56,6 +56,11 @@ $(function(){
             socket.emit('message', message);
         }
 
+        function timeoutFunction() {
+            typing = false;
+            socket.emit("userTyping", false);
+        }
+
 
         socket.emit('addUser', user1, user1username, function(data){
             if(data) {
@@ -70,10 +75,7 @@ $(function(){
                 var typing = false;
                 var timeout = undefined;
 
-                function timeoutFunction() {
-                    typing = false;
-                    socket.emit("userTyping", false);
-                }
+               
 
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
@@ -204,12 +206,8 @@ $(function(){
             socket.emit('sendChat', 'video request');
         });
 
-        $('#rejectVideo').on('click touch', function() {
-            socket.emit('sendChat', 'video rejected');
-        });
 
-
-        function runWebRTC() {
+        function runWebRTC(userAccepted, userInitiated) {
             console.log('1. run web rtc reached');
 
             $('.displayMessagesWrap').hide();
@@ -238,12 +236,29 @@ $(function(){
                 }
             });
 
+            console.log('userAccepted: '+userAccepted);
+            console.log('userInitiated: '+userInitiated);
+
             webrtc.startLocalVideo();
 
                 // we got access to the camera
                 webrtc.on('localStream', function (stream) {
                     console.log('2. local stream added');
+                    
                     $('#localVolume').show();
+
+                    // if you were not the initiator
+                    if (userAccepted == user1) {
+                        // and you didn't want your video shown
+                        if (String(vidSettings1) === String(false)) {
+                            console.log('mic settings for '+user1username+' are turned off');
+                            webrtc.pauseVideo();
+                        }
+                    }
+                    if (String(micSettings1) === String(false)) {
+                        console.log('mic settings for '+user1username+' are turned off');
+                        webrtc.mute();
+                    }
                 });
 
                 // we did not get access to the camera
@@ -267,9 +282,14 @@ $(function(){
                     $('#localScreenContainer').hide();
                 });
 
+                
+
                 // a peer video has been added
                 webrtc.on('videoAdded', function (video, peer) {
                     console.log('5. video added', peer);
+
+                    
+
                     var remotes = document.getElementById('remotes');
                     if (remotes) {
                         console.log('6. yay remotes')
@@ -317,8 +337,12 @@ $(function(){
                             });
                         }*/
                         remotes.appendChild(container);
+                        
+                        
+
                     }
                 });
+    
 
                 //swap to video chat
                 $('#switchToChat').on('click touch', function(){
@@ -331,24 +355,29 @@ $(function(){
                 });
 
 
-                var micnumClicks = 1;
-                var vidnumClicks = 1;
-
-                $('#micOffButton').on('cilck touch', function() {
-                    webrtc.mute();
-                    micnumClicks++;
-                    if(micnumClicks == 2) {
+                $('#micOffButton').on('click touch', function() {
+                    console.log('micSettings1: '+micSettings1);
+                    if(String(micSettings1) == String(true)) {
+                        webrtc.mute();
+                        socket.emit('micChangeSetting', room, user1, false);
+                        micSettings1 = false;
+                    } else {
                         webrtc.unmute();
-                        micnumClicks = 1;
+                        socket.emit('micChangeSetting', room, user1, true);
+                        micSettings1 = true;
                     }
                 });
 
                 $('#videoOffButton').on('click touch', function() {
-                    webrtc.pauseVideo();
-                    vidnumClicks++;
-                    if(vidnumClicks == 2) {
+                    console.log('vidSettings1: '+vidSettings1);
+                    if(String(vidSettings1) == String(true)) {
+                        webrtc.pauseVideo();
+                        socket.emit('vidChangeSetting', room, user1, false);
+                        vidSettings1 = false;
+                    } else {
                         webrtc.resumeVideo();
-                        vidnumClicks = 1;
+                        socket.emit('vidChangeSetting', room, user1, true);
+                        vidSettings1 = true;
                     }
                 });
 
@@ -389,16 +418,47 @@ $(function(){
 
         socket.on('videoAccepted', function() {
             socket.emit('readyToCall', roomID);
-            runWebRTC();
+            var userAccepted = user2;
+            var userInitiated = user1;
+            runWebRTC(userAccepted, userInitiated);
+            socket.emit('vidChangeSetting', roomID, user1, true);
+            vidSettings1 = true;
         });
 
-        //swap to video chat
+        // acceot video chat request
         $(document).on('click touch', '#acceptVideo', function(){
             socket.emit('videoReady', roomID);
-            runWebRTC();
+            var userInitiated = user2;
+            var userAccepted = user1;
+            runWebRTC(userAccepted, userInitiated);
+            $('#rejectVideo, #acceptVideo').css('pointer-events', 'none');
+            $('#rejectVideo, #acceptVideo').css('color', '#ebebeb');
+        });
+
+        // reject video chat
+        $(document).on('click touch', '#rejectVideo', function(){
+            socket.emit('sendChat', 'video rejected');
+            $('#rejectVideo, #acceptVideo').css('pointer-events', 'none');
+            $('#rejectVideo, #acceptVideo').css('color', '#ebebeb');
         });
 
 
-        
+        socket.on('micSettingChanged', function(data) {
+            //-change image in mic settings
+            if (String(data) === String(true)) {
+                $('#micOffButton img').attr('src', '/images/icon-microphone-false.png');
+            } else {
+                $('#micOffButton img').attr('src', '/images/icon-microphone-true.png');
+            }
+        });
+
+        socket.on('vidSettingChanged', function(data) {
+            //-change image in vid settings
+            if (String(data) === String(true)) {
+                $('#videoOffButton > img').attr('src', '/images/icon-switchtoVideo-false.png');
+            } else {
+                $('#videoOffButton > img').attr('src', '/images/icon-switchtoVideo-true.png');
+            }
+        });
 
 });

@@ -2,12 +2,18 @@ extends layout
 block content
 	script.
 		roomID = '#{room._id}';
+
 		//user 1 is current user
 		user1 = '#{userIDs[0]}';
 		user1username = '#{usersInRoom[0]}';
+		micSettings1 = '#{micSettings[0]}';
+		vidSettings1 = '#{vidSettings[0]}';
+
 		// user 2 is peer
 		user2 = '#{userIDs[1]}';
 		user2username = '#{usersInRoom[1]}';
+		micSettings2 = '#{micSettings[1]}';
+		vidSettings2 = '#{vidSettings[1]}';
 	.container
 		include includes/nav-simple.jade
 		.chatRoom
@@ -17,14 +23,14 @@ block content
 					.defaultSettings
 						.micSettings
 							if (micSettings[1] == false)
-								img(src="/images/icon-microphone-none.png")
+								img(src="/images/icon-microphone-false.png")
 							else
-								img(src="/images/icon-microphone.png")
+								img(src="/images/icon-microphone-true.png")
 						.vidSettings
 							if (vidSettings[1] == false)
-								img(src="/images/icon-switchtoVideo-none.png")
+								img(src="/images/icon-switchtoVideo-false.png")
 							else
-								img(src="/images/icon-switchtoVideo.png")
+								img(src="/images/icon-switchtoVideo-true.png")
 				.displayMessagesWrap
 					ul#incoming
 				.sendMessagesWrap
@@ -32,8 +38,21 @@ block content
 					.chatOptions
 						.chat-btn#chat-btn-image
 							img(src='/images/icon-image.png')
-						.chat-btn#chat-btn-video
-							img(src='/images/icon-switchToVideo.png')
+						if (vidSettings[1] == false && micSettings[1] == false)
+							//-disabled
+							.chat-btn#chat-btn-video
+								img(src='/images/icon-switchToVideo-true.png' class="disabled")
+						else if (vidSettings[1] == false && micSettings[1] == true)
+							//-enable chat but make sure video is turned off
+							.chat-btn#chat-btn-video
+								img(src='/images/icon-phone.png')
+						else if (vidSettings[1] == true && micSettings[1] == false)
+							//-enable chat but make sure mic is turned off
+							.chat-btn#chat-btn-video
+								img(src='/images/icon-switchToVideo-true.png')
+						else
+							.chat-btn#chat-btn-video
+								img(src='/images/icon-switchToVideo-true.png')
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
 								img(src='/images/icon-block.png')
@@ -45,11 +64,17 @@ block content
 						video#localVideo(autoplay muted)
 					.videoOptions
 						.chat-btn#switchToChat
-							img(src='/images/icon-backarrow.png')
+							img(src='/images/icon-backarrow-white.png')
 						.chat-btn#micOffButton
-							img(src='/images/icon-microphone-none.png')
+							if (micSettings[0] == false)
+								img(src="/images/icon-microphone-true.png")
+							else
+								img(src="/images/icon-microphone-false.png")
 						.chat-btn#videoOffButton
-							img(src='/images/icon-switchToVideo-none.png')
+							if (vidSettings[0] == false)
+								img(src="/images/icon-switchtoVideo-true.png")
+							else
+								img(src="/images/icon-switchtoVideo-false.png")
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
 								img(src='/images/icon-block.png')

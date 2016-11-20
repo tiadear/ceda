@@ -283,6 +283,64 @@ io.sockets.on('connection', function(socket){
         socket.broadcast.to(socket.room).emit('videoAccepted', room);
     });
 
+
+    socket.on('micChangeSetting', function(roomid, user, data) {
+        Room.findById(roomid, function(err, room) {
+            if (err) throw err;
+            if (user == room.user_init) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_init_mic : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('micSettingChanged', data);
+                        }
+                );
+            } else if (user == room.user_resp) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_resp_mic : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('micSettingChanged', data);
+                        }
+                );
+            }
+
+        });
+    });
+
+    socket.on('vidChangeSetting', function(roomid, user, data) {
+        console.log('video change setting reached');
+        Room.findById(roomid, function(err, room) {
+            if (err) throw err;
+            if (user == room.user_init) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_init_video : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('vidSettingChanged', data);
+                        }
+                );
+            } else if (user == room.user_resp) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_resp_video : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('vidSettingChanged', data);
+                        }
+                );
+            }
+
+        });
+    });
+
     socket.on('disconnect', function() {
         console.log('socket disconnected');
         numClients[socket.room]--;
