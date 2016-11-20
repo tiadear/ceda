@@ -184,10 +184,9 @@ $(function(){
 
 
 
-
-
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
+
             $('#incoming').append('<li class="msgtime">'+ time +'</li>');
             if(username == user1username) {
                 $('#incoming').append('<li class="incomingMessage" id="user1msg">' + data + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
@@ -200,21 +199,25 @@ $(function(){
 
 
 
+        // request to swap to video chat
+        $('#chat-btn-video').on('click touch', function() {
+            socket.emit('sendChat', 'video request');
+        });
+
+        $('#rejectVideo').on('click touch', function() {
+            socket.emit('sendChat', 'video rejected');
+        });
 
 
+        function runWebRTC() {
+            console.log('1. run web rtc reached');
 
-
-        //swap to video chat
-        $('#chat-btn-video').on('click touch', function(){
-            socket.emit('videoReady', roomID);
             $('.displayMessagesWrap').hide();
             $('.sendMessagesWrap').hide();
             $('#user2').hide();
             $('.chatRoom').css('padding-top', '0px');
             $('.videoWrap').show();
-
-
-
+        
             var webrtc = new SimpleWebRTC({
                 localVideoEl: 'localVideo',
                 remoteVideosEl: '',
@@ -227,20 +230,19 @@ $(function(){
             var room = roomID;
 
             webrtc.on('readyToCall', function () {
-                console.log('2. ready to call');
+                console.log('3. ready to call');
+
                 if (room) {
-                    console.log('3. webrtc join room');
+                    console.log('4. webrtc join room');
                     webrtc.joinRoom(room);
                 }
             });
 
-            $('#callButton').on('click touch', function() {
-                console.log('call button clicked');
-                webrtc.startLocalVideo();
+            webrtc.startLocalVideo();
 
                 // we got access to the camera
                 webrtc.on('localStream', function (stream) {
-                    console.log('1. local stream');
+                    console.log('2. local stream added');
                     $('#localVolume').show();
                 });
 
@@ -267,10 +269,10 @@ $(function(){
 
                 // a peer video has been added
                 webrtc.on('videoAdded', function (video, peer) {
-                    console.log('4. video added', peer);
+                    console.log('5. video added', peer);
                     var remotes = document.getElementById('remotes');
                     if (remotes) {
-                        console.log('5. yay remotes')
+                        console.log('6. yay remotes')
                         var container = document.createElement('div');
                         container.className = 'videoDisplay';
                         container.id = 'container_' + webrtc.getDomId(peer);
@@ -317,69 +319,85 @@ $(function(){
                         remotes.appendChild(container);
                     }
                 });
-            });
 
-            //swap to video chat
-            $('#switchToChat').on('click touch', function(){
-                webrtc.stopLocalVideo();
-                $('.videoWrap').hide();
-                $('.chatRoom').css('padding-top', '20px');
-                $('.displayMessagesWrap').show();
-                $('.sendMessagesWrap').show();
-                $('#user2').show();
-            });
+                //swap to video chat
+                $('#switchToChat').on('click touch', function(){
+                    webrtc.stopLocalVideo();
+                    $('.videoWrap').hide();
+                    $('.chatRoom').css('padding-top', '20px');
+                    $('.displayMessagesWrap').show();
+                    $('.sendMessagesWrap').show();
+                    $('#user2').show();
+                });
 
-            $('#muteButton').on('cilck touch', function() {
-                webrtc.mute();
-                numClicks++;
-                if(numClicks == 2) {
-                    webrtc.unmute();
-                    numClicks = 0;
-                }
-            });
 
-            $('#killVideoButton').om('click touch', function() {
-                webrtc.stopLocalVideo();
-                numClicks++;
-                if(numClicks == 2) {
-                    webrtc.startLocalVideo();
-                    numClicks = 0;
-                }
-            });
+                var micnumClicks = 1;
+                var vidnumClicks = 1;
 
-            
-            // a peer was removed
-            webrtc.on('videoRemoved', function (video, peer) {
-                console.log('video removed ', peer);
+                $('#micOffButton').on('cilck touch', function() {
+                    webrtc.mute();
+                    micnumClicks++;
+                    if(micnumClicks == 2) {
+                        webrtc.unmute();
+                        micnumClicks = 1;
+                    }
+                });
+
+                $('#videoOffButton').on('click touch', function() {
+                    webrtc.pauseVideo();
+                    vidnumClicks++;
+                    if(vidnumClicks == 2) {
+                        webrtc.resumeVideo();
+                        vidnumClicks = 1;
+                    }
+                });
+
                 
-                var remotes = document.getElementById('remotes');
-                var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
-                if (remotes && el) {
-                    remotes.removeChild(el);
-                }
-            });
+                // a peer was removed
+                webrtc.on('videoRemoved', function (video, peer) {
+                    console.log('video removed ', peer);
+                    
+                    var remotes = document.getElementById('remotes');
+                    var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
+                    if (remotes && el) {
+                        remotes.removeChild(el);
+                    }
+                });
 
-            // local p2p/ice failure
-            webrtc.on('iceFailed', function (peer) {
-                var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
-                console.log('local fail', connstate);
-                if (connstate) {
-                    connstate.innerText = 'Connection failed.';
-                    fileinput.disabled = 'disabled';
-                }
-            });
+                // local p2p/ice failure
+                webrtc.on('iceFailed', function (peer) {
+                    var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+                    console.log('local fail', connstate);
+                    if (connstate) {
+                        connstate.innerText = 'Connection failed.';
+                        fileinput.disabled = 'disabled';
+                    }
+                });
 
-            // remote p2p/ice failure
-            webrtc.on('connectivityError', function (peer) {
-                var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
-                console.log('remote fail', connstate);
-                if (connstate) {
-                    connstate.innerText = 'Connection failed.';
-                    fileinput.disabled = 'disabled';
-                }
-            });
+                // remote p2p/ice failure
+                webrtc.on('connectivityError', function (peer) {
+                    var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+                    console.log('remote fail', connstate);
+                    if (connstate) {
+                        connstate.innerText = 'Connection failed.';
+                        fileinput.disabled = 'disabled';
+                    }
+                });
 
+        }
+
+
+        socket.on('videoAccepted', function() {
+            socket.emit('readyToCall', roomID);
+            runWebRTC();
         });
+
+        //swap to video chat
+        $(document).on('click touch', '#acceptVideo', function(){
+            socket.emit('videoReady', roomID);
+            runWebRTC();
+        });
+
 
         
 

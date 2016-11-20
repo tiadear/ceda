@@ -178,14 +178,23 @@ header {
 
     // actual chat room
     .chatRoom { padding-top: $pad;
-        h1 { text-align: center; }
+        .chatPartner { width: 100%; text-align: center;
+            h1 { display: inline-block; padding-right: $pad/2; }
+            .defaultSettings { display: inline-block; position: relative;
+                .micSettings, .vidSettings { width: 30px; height: auto; display: inline-block;
+                    img { width: 100%; }
+                }
+            }
+        }
         .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
                 padding-bottom: $pad * 4;
                 li { list-style-type: none; }
                 .istyping { display: block; font-size: 0.8em;}
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px;}
-                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;}
+                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;
+                    .videoRequest { display: inline-block; color: $red; padding: $pad/2 $pad/2; cursor: pointer;}
+                }
                 #user1msg { background-color: $white; color: $blue; border: solid 1px $white; @include border-radius(5px); }
                 #user2msg { background-color: $blue; color: $white; border: solid 1px $blue; @include border-radius(5px); }
                 .speechbubble1 { width: 40px; display: inline-block; margin-left: -10px; position: relative; bottom: -15px;

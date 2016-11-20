@@ -12,7 +12,19 @@ block content
 		include includes/nav-simple.jade
 		.chatRoom
 			if (room)
-				h1 #{usersInRoom[1]}
+				.chatPartner
+					h1 #{usersInRoom[1]}
+					.defaultSettings
+						.micSettings
+							if (micSettings[1] == false)
+								img(src="/images/icon-microphone-none.png")
+							else
+								img(src="/images/icon-microphone.png")
+						.vidSettings
+							if (vidSettings[1] == false)
+								img(src="/images/icon-switchtoVideo-none.png")
+							else
+								img(src="/images/icon-switchtoVideo.png")
 				.displayMessagesWrap
 					ul#incoming
 				.sendMessagesWrap
@@ -34,11 +46,12 @@ block content
 					.videoOptions
 						.chat-btn#switchToChat
 							img(src='/images/icon-backarrow.png')
-						.chat-btn#callButton
-							img(src='/images/icon-phone.png')
-						.chat-btn#muteButton
-							img(src='/images/icon-mute.png')
-						.chat-btn#killVideoButton
-							img(src='/images/icon-switchtoVideo-none.png')
-	script(src="https://simplewebrtc.com/latest-v2.js")
+						.chat-btn#micOffButton
+							img(src='/images/icon-microphone-none.png')
+						.chat-btn#videoOffButton
+							img(src='/images/icon-switchToVideo-none.png')
+						a(href='/chat/blockuser?id=#{userIDs[1]}')
+							.chat-btn#chat-btn-block
+								img(src='/images/icon-block.png')
+	script(src='/js/simplewebrtc.js')
 	script(src='/js/client.js')
