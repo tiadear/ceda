@@ -212,7 +212,7 @@ $(function(){
 
             $('.displayMessagesWrap').hide();
             $('.sendMessagesWrap').hide();
-            $('#user2').hide();
+            $('.chatPartner').hide();
             $('.chatRoom').css('padding-top', '0px');
             $('.videoWrap').show();
         
