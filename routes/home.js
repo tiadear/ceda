@@ -20,17 +20,7 @@ local.strategy(passport);
 
 // dashbaord
 router.get('/', function(req, res) {
-    res.render('home', {
-            user : req.user,
-            message : req.flash('usernameMessage'),
-            alertsForum : req.alertsForum,
-            history : req.history,
-            title: 'ceda'
-        });
 
-});
-
-/*
     async.waterfall([
 
         function(callback) {
@@ -44,6 +34,12 @@ router.get('/', function(req, res) {
             
 
         }, function(posts, callback) {
+
+            if(posts.length === 0) {
+                var alerts = null;
+                callback(null, alerts);
+            }
+
             arr = [];
             arr2 = [];
 
@@ -152,22 +148,81 @@ router.get('/', function(req, res) {
             });
 
 
-        }, 
+        },
 
         function(alertsForum, callback) {
-           
-            //find all the rooms the current user has talked in
+
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
                 if(rooms) {
-                    req.alertsForum = alertsForum;
-                    callback(null, req.alertsForum, rooms);
+                    callback(null, alertsForum, rooms);
                 }
             });
-        
         },
 
         function(alertsForum, rooms, callback) {
+            if(rooms.length === 0) {
+                req.alertsForum = alertsForum;
+                callback(null, req.alertsForum);
+            }
+
+            function checkIfHistory(roomID, counter){
+                var deleteChatHistory = new Promise(
+                    function(resolve, reject) {
+                        chatHistory.find({ room : roomID}, function(err, history) {
+                            if (err) throw err;
+                            if (!history || history === '' || history.length === 0 || history === null) {
+                                console.log('room to delete: ' + roomID);
+                                Room.findByIdAndRemove(roomID, function(err) {
+                                    if (err) throw err;
+                                    if(counter == (rooms.length -1)) {
+                                        resolve(counter);
+                                    }
+                                });
+                            } else {
+                                if(counter == (rooms.length -1)) {
+                                    resolve(counter);
+                                }
+                            }
+                            
+                        });
+                    }
+                );
+
+                deleteChatHistory.then(
+                    function(val) {
+                        callback(null, alertsForum);
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('first chat history promise rejected for' + reason);
+                    }
+                );
+            }
+
+            for(j = 0; j < rooms.length; j++){                
+                var id = rooms[j]._id;
+                checkIfHistory(id, j);
+            }
+
+        },
+
+        function(alertsForum, callback) {
+            Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
+                if (err) throw err;
+                if(rooms) {
+                    callback(null, alertsForum, rooms);
+                }
+            });
+        },
+
+        function(alertsForum, rooms, callback) {
+
+            if(rooms.length === 0) {
+                req.alertsForum = alertsForum;
+                callback(null, req.alertsForum, null);
+            }
 
             var arr1 = [];
 
@@ -280,8 +335,6 @@ router.get('/', function(req, res) {
 
                 getChatHistory(id, _currentuser, _user1, _user2, j);
             }
-            
-
         }
 
     ], function(err, result){
@@ -295,7 +348,7 @@ router.get('/', function(req, res) {
     });
 });
 
-*/
+
 
 
 

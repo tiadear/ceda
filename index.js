@@ -243,22 +243,35 @@ io.sockets.on('connection', function(socket){
     socket.on('sendChat', function(data) {
         //send a msg
         if(socket.room !== undefined){
-            io.sockets.in(socket.room).emit("updateChat", socket.username, data);
-            socket.emit("isTyping", false);
+            if(data === 'video request') {
+                socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+" has requested to video chat. Do you accept?<br><br><div class='videoRequest' id='acceptVideo'>yes</div><div class='videoRequest' id='rejectVideo'>no</div>");
+                socket.emit("updateChat", socket.username, "Request to video chat sent");
+            }
+            else if (data === 'video rejected') {
+                socket.broadcast.to(socket.room).emit("updateChat", socket.username, "Video chat request rejected.");
+                socket.emit("updateChat", socket.username, "Video chat request rejected");
+            }
+            else if (data === 'video accepted') {
+                socket.broadcast.to(socket.room).emit("updateChat", socket.username, "Video chat request acceoted.");
+            }
+            else {
+                io.sockets.in(socket.room).emit("updateChat", socket.username, data);
+                socket.emit("isTyping", false);
 
-            var newChatHistory = new chatHistory();
-            newChatHistory.user = socket.userID;
-            newChatHistory.room = socket.room;
-            newChatHistory.message = data;
+                var newChatHistory = new chatHistory();
+                newChatHistory.user = socket.userID;
+                newChatHistory.room = socket.room;
+                newChatHistory.message = data;
 
-            newChatHistory.save(function(err){
-                if (err) {
-                    console.log(err);
-                    throw err;
-                } else {
-                    console.log('saving chat history');
-                }
-            });
+                newChatHistory.save(function(err){
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    } else {
+                        console.log('saving chat history');
+                    }
+                });
+            }
 
         } else {
             socket.emit("updateChat", socket.username, "Please connect to a room.");
@@ -267,6 +280,65 @@ io.sockets.on('connection', function(socket){
 
     socket.on('videoReady', function(room) {
         socket.emit('readyToCall', room);
+        socket.broadcast.to(socket.room).emit('videoAccepted', room);
+    });
+
+
+    socket.on('micChangeSetting', function(roomid, user, data) {
+        Room.findById(roomid, function(err, room) {
+            if (err) throw err;
+            if (user == room.user_init) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_init_mic : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('micSettingChanged', data);
+                        }
+                );
+            } else if (user == room.user_resp) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_resp_mic : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('micSettingChanged', data);
+                        }
+                );
+            }
+
+        });
+    });
+
+    socket.on('vidChangeSetting', function(roomid, user, data) {
+        console.log('video change setting reached');
+        Room.findById(roomid, function(err, room) {
+            if (err) throw err;
+            if (user == room.user_init) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_init_video : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('vidSettingChanged', data);
+                        }
+                );
+            } else if (user == room.user_resp) {
+                Room.update(
+                    { '_id' : roomid },
+                    { $set: { user_resp_video : data } },
+                        function(err, user) {
+                            if(err) throw err;
+                            console.log('user details updated');
+                            socket.emit('vidSettingChanged', data);
+                        }
+                );
+            }
+
+        });
     });
 
     socket.on('disconnect', function() {

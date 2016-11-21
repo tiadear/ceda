@@ -29,7 +29,7 @@ router.get('/', function(req, res){
             if (rooms.length === 0) {
                 callback(null);
             }
-            console.log('find rooms point 1');
+            //console.log('find rooms point 1');
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
                     function(resolve, reject) {
@@ -318,7 +318,10 @@ router.get('/chatpeer*', function(req, res) {
                     req.room = room;
                     req.usersInRoom = [user1name, user2name];
                     req.userIDs = [user1, user2];
-                    callback(null, req.room, req.usersInRoom, req.userIDs);
+                    req.micSettings = [room.user_init_mic, room.user_resp_mic];
+                    req.vidSettings = [room.user_init_video, room.user_resp_video];
+                   
+                    callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings);
                 } else {
                     console.log('room was not found, looking again...')
                     Room.findOne({user_init : user2, user_resp : user1}, function(err, room) {
@@ -328,7 +331,10 @@ router.get('/chatpeer*', function(req, res) {
                             req.room = room;
                             req.usersInRoom = [user1name, user2name];
                             req.userIDs = [user1, user2];
-                            callback(null, req.room, req.usersInRoom, req.userIDs);
+                            req.micSettings = [room.user_resp_mic, room.user_init_mic];
+                            req.vidSettings = [room.user_resp_video, room.user_init_video];
+
+                            callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings);
                         } else {
                             console.log('no room found');
                             // create a new room!
@@ -359,7 +365,9 @@ router.get('/chatpeer*', function(req, res) {
                                             req.room = newRoom;
                                             req.usersInRoom = [user1name, user2name];
                                             req.userIDs = [user1, user2];
-                                            callback(null, req.room, req.usersInRoom, req.userIDs);
+                                            req.micSettings = [mic1Setting, mic2Setting];
+                                            req.vidSettings = [vid1Setting, vid2Setting];
+                                            callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings);
                                         }
                                     });
 
@@ -374,7 +382,6 @@ router.get('/chatpeer*', function(req, res) {
             
         }
     ], function (err, result) {
-        console.log(result);
 
         req.session.save(function(err){
             if (err) {
@@ -385,6 +392,8 @@ router.get('/chatpeer*', function(req, res) {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
                 userIDs : req.userIDs,
+                micSettings : req.micSettings,
+                vidSettings : req.vidSettings,
                 title: 'ceda',
                 pageTitle: 'chat'
             });
