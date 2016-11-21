@@ -309,6 +309,10 @@ router.get('/', function(req, res) {
                         arr2.push(arr1[roomID]);
                         //console.log('arr2: '+arr2);
 
+                        arr2.sort(function(a,b){
+                            return new Date(a[3]) - (b[3]);
+                        });
+
                         if (arr2.length === rooms.length) {
                             console.log('arr2: '+arr2);
                             req.history = arr2;
