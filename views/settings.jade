@@ -1,6 +1,7 @@
 extends layout
 block content
 	script.
+		dbsubscribed = '#{user.notifyChat}';
 		$(document).ready(function() {
 			$('.onoffswitch-checkbox').on('click touch', function() {
 
@@ -68,16 +69,7 @@ block content
 					.notifyError
 					.setting
 						.section
-							button.js-push-btn(disabled) Enable push messaging
-							section.subscription-details.js-subscription-details.is-invisible
-								p.
-									Once you've subscribed your user, you'd send their subscription to your server to store in a database so that when you want to send a message you can lookup the subscription and send a message to it.
-									To simplify things for this code lab copy the following details into the 
-								a(href="https://web-push-codelab.appspot.com/") Push Companion Site 
-								p.
-									and it'll send a push message for you, using the application server keys on the site - so make sure they match.
-								pre
-									code.js-subscription-json
+							button#doIt(type='button') Enable push messaging
 						.settingTitle
 							p messages
 						.onoffswitch

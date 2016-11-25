@@ -4,9 +4,12 @@ html
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/css/styles.css')
+    link(rel='icon', type='image/png', sizes='16x16', href='/images/favicon/favicon-16x16.png')
+    link(rel='manifest', href='/images/favicon/manifest.json')
     script(src='/socket.io/socket.io.js')
     script(src='/js/jquery-3.1.1.min.js')
     script(src='/js/lib/adapter.js')
+    script(src='/js/favico.min.js')
   body
     if (user)
       include includes/head.jade

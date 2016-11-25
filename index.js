@@ -14,12 +14,17 @@ var nodeStatic = require('node-static');
 var uuid = require('uuid');
 var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
+var favicon = require('serve-favicon');
 
 var User = require('./models/account.js');
 var db = require('./db.js');
 
 
+
+
 require('dotenv').config();
+
+
 
 
 // set port
@@ -29,6 +34,7 @@ app.set('port', (process.env.PORT || 3000));
 
 
 // public folder
+//app.use(favicon(__dirname + '/public/images/favicon/favicon.ico'));
 app.use(express.static(__dirname + '/public'));
 
 
@@ -47,8 +53,7 @@ module.exports = app;
 
 
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+
 app.use(flash());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -156,6 +161,11 @@ app.use(function(err, req, res, next) {
 
 
 
+
+
+
+
+
 // socket stuff
 
 var numClients = {};
@@ -211,8 +221,13 @@ io.sockets.on('connection', function(socket){
                         console.log('username: '+username);
                         arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
                         arr2.push(arr1[item._id]);
+
+                        arr2.sort(function(a,b){
+                            return new Date(b[4]) - (a[4]);
+                        });
+
                         if(arr2.length === history.length) {
-                            console.log('arr2: '+arr2);
+                            //console.log('arr2: '+arr2);
                             socket.emit('addHistory', arr2);
                         }
                     });

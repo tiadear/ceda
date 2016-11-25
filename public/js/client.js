@@ -4,11 +4,34 @@ $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
 
-$(document).ready(function() {
-    $('#nav-dash').on('click touch', function(){
-        socket.emit('leaveRoom');
-    });
+
+
+var focus = true;
+$(window).blur(function() {
+    focus = false;
 });
+$(window).focus(function() {
+    focus = true;
+    removeBadge();
+});
+
+var badge = 0;
+var favicon = new Favico({
+    animation : 'popFade',
+    bgcolor: '#ea5455'
+});
+
+function addBadge() {
+    console.log('tried to add badge');
+    badge = badge + 1;
+    favicon.badge(badge);
+}
+function removeBadge() {
+    console.log('tried to remove badge');
+    badge = 0;
+    favicon.reset();
+}
+
 
 var isChannelReady = false;
 var isInitiator = false;
@@ -56,10 +79,7 @@ $(function(){
             socket.emit('message', message);
         }
 
-        function timeoutFunction() {
-            typing = false;
-            socket.emit("userTyping", false);
-        }
+        
 
 
         socket.emit('addUser', user1, user1username, function(data){
@@ -75,7 +95,10 @@ $(function(){
                 var typing = false;
                 var timeout = undefined;
 
-               
+                function timeoutFunction() {
+                    typing = false;
+                    socket.emit("userTyping", false);
+                }
 
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
@@ -89,7 +112,6 @@ $(function(){
                             clearTimeout(timeout);
                             timeout = setTimeout(timeoutFunction, 5000);
                         }
-                        
                     }
 
                     //if enter has been hit
@@ -112,6 +134,15 @@ $(function(){
 
         //If a user is typing
         socket.on('isTyping', function(data){
+
+            var typing = false;
+            var timeout = undefined;
+
+            function timeoutFunction() {
+                typing = false;
+                socket.emit("userTyping", false);
+            }
+
             if(data.isTyping) {
                 if($('#'+data.user+'').length === 0) {
                     $('#incoming').append('<li class="istyping" id='+data.user+'>'+data.user+' is typing</li>');
@@ -186,15 +217,25 @@ $(function(){
 
 
 
+        
+        
+
+        
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-
             $('#incoming').append('<li class="msgtime">'+ time +'</li>');
-            if(username == user1username) {
+            if(username === user1username) {
                 $('#incoming').append('<li class="incomingMessage" id="user1msg">' + data + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
             } else {
                 $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + data + '</li>');
+
+                if(focus === false){
+                    addBadge();
+                } else {
+                    removeBadge();
+                }
             }
+
             socket.emit('message', data);
         });
 
