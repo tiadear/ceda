@@ -502,4 +502,24 @@ $(function(){
             }
         });
 
+
+
+
+        $('#imagefile').on('change', function(e){
+            var file = e.originalEvent.target.files[0],
+                reader = new FileReader();
+                
+            reader.onload = function(evt){
+                socket.emit('image', evt.target.result);
+            };
+            reader.readAsDataURL(file);  
+        });
+
+        socket.on('sendImage', image);
+
+        function image (from, base64Image) {
+            $('#incoming').append($('<p>').append($('<b>').text(from),
+                '<img src="' + base64Image + '"/>'));
+        }
+
 });

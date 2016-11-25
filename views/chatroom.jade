@@ -22,6 +22,7 @@ block content
 			if (room)
 				.chatPartner
 					h1 #{usersInRoom[1]}
+					input#imagefile(type="file", accept="image/*")
 					.defaultSettings
 						.micSettings
 							if (micSettings[1] == false)

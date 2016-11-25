@@ -218,7 +218,6 @@ io.sockets.on('connection', function(socket){
 
                     User.findById(item.user, function(err, user) {
                         var username = user.username;
-                        console.log('username: '+username);
                         arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
                         arr2.push(arr1[item._id]);
 
@@ -355,6 +354,13 @@ io.sockets.on('connection', function(socket){
 
         });
     });
+
+
+    socket.on('image', function (msg) {
+        socket.emit("sendImage", socket.username, msg);
+    });
+
+
 
     socket.on('disconnect', function() {
         console.log('socket disconnected');
