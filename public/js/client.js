@@ -503,12 +503,14 @@ $(function(){
         });
 
 
+        $('#chat-btn-image').on('click touch', function() {
+            $('#incoming').append('<li class="incomingMessage"><input type="file" id="imagefile" accept="image/*"></li>');
+        });
 
-
-        $('#imagefile').on('change', function(e){
+        $(document).on('change', '#imagefile', function(e) {
             var file = e.originalEvent.target.files[0],
                 reader = new FileReader();
-                
+
             reader.onload = function(evt){
                 socket.emit('image', evt.target.result);
             };
@@ -518,8 +520,8 @@ $(function(){
         socket.on('sendImage', image);
 
         function image (from, base64Image) {
-            $('#incoming').append($('<p>').append($('<b>').text(from),
-                '<img src="' + base64Image + '"/>'));
+            $('#incoming').append(
+                '<img src="' + base64Image + '"/>');
         }
 
 });
