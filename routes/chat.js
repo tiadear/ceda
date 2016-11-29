@@ -139,7 +139,17 @@ router.get('/', function(req, res){
 
                 findChatHistory.then(
                     function(val) {
-                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent, blocked);
+                        
+                        var historymessage;
+
+                        if(val[0].isImage === true) {
+                            historymessage = 'image';
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent, blocked);
+                        } else {
+                            historymessage = val[0].message;
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent, blocked);
+                        }
+                        
                     }
                 )
                 .catch(

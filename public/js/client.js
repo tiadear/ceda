@@ -186,6 +186,18 @@ $(function(){
             return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
         }
 
+        socket.on('isOnline', function(user) {
+            if(user != user1username) {
+                $('.chatPartner').prepend('<div class="online"></div>');
+            }
+        });
+
+        socket.on('isOnline', function(user) {
+            if(user != user1username) {
+                $('.online').remove();
+            }
+        });
+
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
                 //console.log('pastItem: '+pastItem);
@@ -201,7 +213,7 @@ $(function(){
                     }
                     
                 } else {
-                    
+
                     //check if it was an image1
                     if(pastItem[5] === true) {
                         $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + pastItem[2] + '"/></li>');

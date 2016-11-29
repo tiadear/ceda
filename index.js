@@ -199,13 +199,13 @@ io.sockets.on('connection', function(socket){
             console.log('added ' + currentuser + ' to room: ' + roomID);
             socket.join(socket.room);
             socket.emit('roomOpened', socket.room, socket.id);
-            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
         } else {
             numClients[socket.room]++;
             console.log('added ' + currentuser + ' to room: ' + roomID);
             socket.join(socket.room);
             socket.emit('channelReady', socket.room, socket.id);
-            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
+            io.sockets.in(socket.room).emit('isOnline', currentuser);
+            socket.emit('isOnline', randomuser);
         }
 
         chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
@@ -250,6 +250,7 @@ io.sockets.on('connection', function(socket){
             }
         });
         socket.leave(socket.room);
+        io.sockets.in(socket.room).emit('isOffline', currentuser);
     });
 
     socket.on('userTyping', function(data) {
@@ -392,6 +393,7 @@ io.sockets.on('connection', function(socket){
                 });
             }
         });
+        io.sockets.in(socket.room).emit('isOffline', currentuser);
     });
 
 });

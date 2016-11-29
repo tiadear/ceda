@@ -251,8 +251,15 @@ router.get('/', function(req, res) {
 
                 findChatHistory.then(
                     function(val) {
-                        //console.log('val counter: '+val[0]);
-                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent);
+                        var historymessage;
+
+                        if(val[0].isImage === true) {
+                            historymessage = 'image';
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                        } else {
+                            historymessage = val[0].message;
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                        }
                     }
                 )
                 .catch(

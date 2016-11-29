@@ -213,7 +213,9 @@ header {
     -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
+    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    z-index: 300; }
     .container .simpleNav a {
       position: absolute;
       padding-top: 5px; }
@@ -328,6 +330,17 @@ header {
     .container .chatRoom .chatPartner {
       width: 100%;
       text-align: center; }
+      .container .chatRoom .chatPartner .online {
+        width: 15px;
+        height: 15px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        border-radius: 10px;
+        background-color: #6ed4b3;
+        margin-right: 20px;
+        position: relative;
+        display: inline-block; }
       .container .chatRoom .chatPartner h1 {
         display: inline-block;
         padding-right: 10px; }
