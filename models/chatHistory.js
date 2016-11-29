@@ -6,6 +6,7 @@ var chatSchema = mongoose.Schema({
 	user: String,
 	room: String,
 	message: String,
+	isImage: Boolean,
 	timesent: {type: Date, default: Date.now}
 });
 

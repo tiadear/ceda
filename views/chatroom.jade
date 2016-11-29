@@ -38,8 +38,9 @@ block content
 				.sendMessagesWrap
 					input#outgoing(type='text')
 					.chatOptions
-						.chat-btn#chat-btn-image
+						label.chat-btn#chat-btn-image(for="imageFile")
 							img(src='/images/icon-image.png')
+						input#imageFile(type="file", accept="image/*")
 						if (vidSettings[1] == false && micSettings[1] == false)
 							.chat-btn#chat-btn-video
 								img(src='/images/icon-switchToVideo-true.png' class="disabled")

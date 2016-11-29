@@ -17,6 +17,7 @@ var userSchema = mongoose.Schema({
 	disconnectTime : Date,
 	defaultMic: {type: Boolean, default: false },
 	defaultVideo: {type: Boolean, default: false },
+	colourScheme: String,
 	provider: String,
 	facebook: {},
 	twitter: {},

@@ -229,7 +229,6 @@ router.get('/', function(req, res){
 
 	], function(err, result){
         if (err) throw err;
-		console.log('result: ' + result);
         req.session.save(function(err){
             if (err) throw err;
             res.render('chat', {
@@ -306,7 +305,17 @@ router.get('/chatpeer*', function(req, res) {
                 User.findById(key, function(err, user) {
                     if (err) throw err;
                     console.log('user to talk to is: ' + user.username);
-                    callback(null, user1, user1name, key, user.username);
+
+                    // if the user they have requested - they have previously blocked
+                    Flag.findOne({ user : key, userWhoFlagged : user1}, function(err, flag) {
+                        if (err) throw err;
+                        if (flag) {
+                            console.log(user1name + ' has flagged ' + user.username + ' as being an arsehole');
+                            // send an alert to the first user to let them know that they have requested to talk to a blocked
+                        } else {
+                            callback(null, user1, user1name, key, user.username);
+                        }
+                    });                    
                 });
             } else {
                 returnRandom(user1);

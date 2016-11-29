@@ -374,6 +374,9 @@ header {
           -moz-border-radius: 5px;
           -ms-border-radius: 5px;
           border-radius: 5px; }
+          .container .chatRoom .displayMessagesWrap #incoming #user1msg #image {
+            max-width: 100%;
+            height: auto; }
         .container .chatRoom .displayMessagesWrap #incoming #user2msg {
           background-color: #213e64;
           color: #ffffff;
@@ -398,6 +401,9 @@ header {
           bottom: -15px; }
           .container .chatRoom .displayMessagesWrap #incoming .speechbubble2 img {
             width: 100%; }
+        .container .chatRoom .displayMessagesWrap #incoming .sentImage {
+          width: 90%;
+          margin: 0 auto; }
     .container .chatRoom .sendMessagesWrap {
       width: 100%;
       position: fixed;
@@ -434,6 +440,8 @@ header {
             .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img.disabled {
               opacity: 0.6;
               pointer-events: none; }
+        .container .chatRoom .sendMessagesWrap .chatOptions #imageFile {
+          display: none; }
     .container .chatRoom .videoWrap {
       display: none;
       width: 100%;

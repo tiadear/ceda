@@ -189,10 +189,25 @@ $(function(){
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
                 //console.log('pastItem: '+pastItem);
+
+                // check which user said the message
                 if(pastItem[0] === user1) {
-                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+
+                    //check if it was an image
+                    if(pastItem[5] === true) {
+                        $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + pastItem[2] + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                    } else {
+                        $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                    }
+                    
                 } else {
-                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
+                    
+                    //check if it was an image1
+                    if(pastItem[5] === true) {
+                        $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + pastItem[2] + '"/></li>');
+                    } else {
+                        $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
+                    }
                 }
 
                 var date = new Date(pastItem[4]);
@@ -502,17 +517,19 @@ $(function(){
             }
         });
 
-
+        /*
         $('#chat-btn-image').on('click touch', function() {
-            $('#incoming').append('<li class="incomingMessage"><input type="file" id="imagefile" accept="image/*"></li>');
+            $('#incoming').append('<li class="incomingMessage" id="user1msg"><label class="imageFileLabel"><input type="file" id="imagefile" accept="image/*">Choose an image</label></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
         });
+        */
 
-        $(document).on('change', '#imagefile', function(e) {
+        $(document).on('change', '#imageFile', function(e) {
             var file = e.originalEvent.target.files[0],
                 reader = new FileReader();
 
             reader.onload = function(evt){
                 socket.emit('image', evt.target.result);
+
             };
             reader.readAsDataURL(file);  
         });
@@ -520,8 +537,11 @@ $(function(){
         socket.on('sendImage', image);
 
         function image (from, base64Image) {
-            $('#incoming').append(
-                '<img src="' + base64Image + '"/>');
+            if(from === user1username) {
+                $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + image + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+            } else {
+                $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + image + '"/></li>');
+            }
         }
 
 });

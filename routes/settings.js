@@ -167,6 +167,16 @@ router.post('/', function(req, res) {
 					}
 				);
 			}
+			else if (field === 'colour') {
+				User.update(
+					{'_id' : id },
+					{ $set : { colourScheme : req.body.colour} },
+					function(err, user) {
+						if (err) throw err;
+						callback(null);
+					}
+				);
+			}
 		}
 		
 	], function(err, result) {

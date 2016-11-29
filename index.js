@@ -15,6 +15,7 @@ var uuid = require('uuid');
 var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
 var favicon = require('serve-favicon');
+var fs = require('fs');
 
 var User = require('./models/account.js');
 var db = require('./db.js');
@@ -172,6 +173,7 @@ var numClients = {};
 var chatHistory = require('./models/chatHistory');
 var Room = require('./models/room.js');
 
+
 io.sockets.on('connection', function(socket){
 
     socket.on('message', function(message) {
@@ -218,7 +220,7 @@ io.sockets.on('connection', function(socket){
 
                     User.findById(item.user, function(err, user) {
                         var username = user.username;
-                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
+                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent, item.isImage];
                         arr2.push(arr1[item._id]);
 
                         arr2.sort(function(a,b){
@@ -276,6 +278,7 @@ io.sockets.on('connection', function(socket){
                 newChatHistory.user = socket.userID;
                 newChatHistory.room = socket.room;
                 newChatHistory.message = data;
+                newChatHistory.isImage = false;
 
                 newChatHistory.save(function(err){
                     if (err) {
@@ -357,7 +360,22 @@ io.sockets.on('connection', function(socket){
 
 
     socket.on('image', function (msg) {
-        socket.emit("sendImage", socket.username, msg);
+        var newChatHistory = new chatHistory();
+        newChatHistory.user = socket.userID;
+        newChatHistory.room = socket.room;
+        newChatHistory.message = msg;
+        newChatHistory.isImage = true;
+
+        newChatHistory.save(function(err, image){
+            if (err) {
+                console.log(err);
+                throw err;
+            } else {
+                console.log('saving image to chat history');
+                socket.emit("sendImage", socket.username, msg);
+
+            }
+        });
     });
 
 
