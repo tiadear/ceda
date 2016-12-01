@@ -250,7 +250,7 @@ io.sockets.on('connection', function(socket){
             }
         });
         socket.leave(socket.room);
-        io.sockets.in(socket.room).emit('isOffline', currentuser);
+        io.sockets.in(socket.room).emit('isOffline', socket.userID);
     });
 
     socket.on('userTyping', function(data) {
@@ -393,7 +393,7 @@ io.sockets.on('connection', function(socket){
                 });
             }
         });
-        io.sockets.in(socket.room).emit('isOffline', currentuser);
+        io.sockets.in(socket.room).emit('isOffline', socket.userID);
     });
 
 });
