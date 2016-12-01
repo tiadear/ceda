@@ -216,6 +216,10 @@ header {
     box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     position: fixed;
     z-index: 300; }
+    @media screen and (min-width: 700px) {
+      .container .simpleNav {
+        width: 500px;
+        margin: 0 auto; } }
     .container .simpleNav a {
       position: absolute;
       padding-top: 5px; }
@@ -326,7 +330,7 @@ header {
         box-shadow: 0 transparent;
         border-bottom: solid 1px #d2d2d2; }
   .container .chatRoom {
-    padding-top: 20px; }
+    padding-top: 50px; }
     .container .chatRoom .chatPartner {
       width: 100%;
       text-align: center; }

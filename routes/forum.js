@@ -316,7 +316,7 @@ router.get('/thread*', function(req, res) {
 				var date = new Date(post.created);
                 var dateformat = formatDate(date);
 
-                findUser(post.user, id, post.content, post.created);
+                findUser(post.user, id, post.content, dateformat);
 			});
 		}
 	], function(err, result) {
