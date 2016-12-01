@@ -139,7 +139,17 @@ router.get('/', function(req, res){
 
                 findChatHistory.then(
                     function(val) {
-                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent, blocked);
+                        
+                        var historymessage;
+
+                        if(val[0].isImage === true) {
+                            historymessage = 'image';
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent, blocked);
+                        } else {
+                            historymessage = val[0].message;
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent, blocked);
+                        }
+                        
                     }
                 )
                 .catch(
@@ -194,6 +204,10 @@ router.get('/', function(req, res){
                         arr2.push(arr1[roomID]);
                         //console.log('arr2: '+arr2);
 
+                        arr2.sort(function(a,b){
+                            return new Date(a[3]) - (b[3]);
+                        });
+
                         if (arr2.length === rooms.length) {
                             //console.log('arr2: '+arr2);
                             req.history = arr2;
@@ -225,7 +239,6 @@ router.get('/', function(req, res){
 
 	], function(err, result){
         if (err) throw err;
-		console.log('result: ' + result);
         req.session.save(function(err){
             if (err) throw err;
             res.render('chat', {
@@ -302,7 +315,17 @@ router.get('/chatpeer*', function(req, res) {
                 User.findById(key, function(err, user) {
                     if (err) throw err;
                     console.log('user to talk to is: ' + user.username);
-                    callback(null, user1, user1name, key, user.username);
+
+                    // if the user they have requested - they have previously blocked
+                    Flag.findOne({ user : key, userWhoFlagged : user1}, function(err, flag) {
+                        if (err) throw err;
+                        if (flag) {
+                            console.log(user1name + ' has flagged ' + user.username + ' as being an arsehole');
+                            // send an alert to the first user to let them know that they have requested to talk to a blocked
+                        } else {
+                            callback(null, user1, user1name, key, user.username);
+                        }
+                    });                    
                 });
             } else {
                 returnRandom(user1);

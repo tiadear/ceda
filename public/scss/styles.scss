@@ -1,9 +1,49 @@
 @import 'vars';
 @import 'mixins';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FIGURE OUT HOW TO CHANGE VARS 
+// FOR ALTERNATE COLOUR SCHEME PURPOSES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * { box-sizing: border-box;}
 body { font-family: $sans; background-color: $grey; margin: 0;}
-header { background-color: $red; 
+header { background-color: $primary; 
     .logo { height: 30px; width: auto;
         img { height: 100%; }
     }
@@ -13,16 +53,16 @@ header { background-color: $red;
 
 
 
-a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $red;
-    &:hover { color: $blue; }
+a { text-decoration: none; padding-top: $pad/2; text-align: center; color: $primary;
+    &:hover { color: $secondary; }
 }
-button { border: none; background-color: $red; color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
-    &:hover { background-color: $blue;  }
+button { border: none; background-color: $primary; color: $white; cursor: pointer; font-family: $sans; font-size: 1em;
+    &:hover { background-color: $secondary;  }
     &:focus { outline: none;}
 }
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
-h1 { @extend .htags; font-size: 1.8em; color: $blue; }
-h2 { @extend .htags; font-size: 1.2em; color: $blue; }
+h1 { @extend .htags; font-size: 1.8em; color: $secondary; }
+h2 { @extend .htags; font-size: 1.2em; color: $secondary; }
 h3 { @extend .htags; font-size: 1.2em; color: $white; }
 ul { -webkit-padding-start: 0px; margin: 0; }
 li { list-style-type: none; }
@@ -32,17 +72,17 @@ p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 
 
 
 form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
-    .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; border: solid 2px $red; @include border-radius(5px); }
+    .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; border: solid 2px $primary; @include border-radius(5px); }
     .form-input { @extend .inputs; 
-        &:focus { border: solid 2px $blue; outline: none; }
+        &:focus { border: solid 2px $secondary; outline: none; }
     }
     .form-submit { @extend .inputs; color: $white;
-        &:hover { background-color: $blue; border: solid 2px $blue; }
+        &:hover { background-color: $secondary; border: solid 2px $secondary; }
     }
 }
 
 header {
-    height: 30px; background-color: $red;
+    height: 30px; background-color: $primary;
     .title { font-size: 0.8em; color: $white; margin: 0 auto; text-align: center; padding: $pad/2 0;}
 }
 
@@ -57,13 +97,13 @@ header {
         .logo { height: 50px; margin: 20px 0 50px 0;
             img { height: 100%; width: auto; margin: 0 auto; }
         }
-        .alert { padding-top: $pad; color: $red; }
+        .alert { padding-top: $pad; color: $primary; }
         .form-login { max-width: 400px;
             .forgot { display: block;}
         }
         .social-login { width: 100%; padding-top: $pad *3; text-align: center;
             .social-btn { @extend button; display: inline-block; width: 40px; height: 40px; margin: 0 $pad; @include border-radius(5px);
-                &:hover { background-color: $blue; border: none; }
+                &:hover { background-color: $secondary; border: none; }
             }
             #login-fb { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
             #login-tw { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
@@ -72,13 +112,13 @@ header {
         .notamember { padding-top: $pad * 3; }
 
         #deleteUser {
-            button#delete { background-color: $white; border: $white; color: $red;
-                &:hover {color: $blue;}
+            button#delete { background-color: $white; border: $white; color: $primary;
+                &:hover {color: $secondary;}
            }
         }
         #appeal {
-            .form-submit { width: 100%; height: 40px; font-family: $sans; font-size: 1em; border: solid 2px $red; @include border-radius(5px); ; padding: $pad/4 $pad; margin-top: $pad;
-                &:hover { background-color: $blue; border: solid 2px $blue;  }
+            .form-submit { width: 100%; height: 40px; font-family: $sans; font-size: 1em; border: solid 2px $primary; @include border-radius(5px); ; padding: $pad/4 $pad; margin-top: $pad;
+                &:hover { background-color: $secondary; border: solid 2px $secondary;  }
             }
         }
     } // end of open
@@ -91,8 +131,8 @@ header {
     // nav display
     nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2));
         ul { width: 100%;
-            li { background-color: $red; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
-                &:hover, &:focus { background-color: $blue; }
+            li { background-color: $primary; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
+                &:hover, &:focus { background-color: $secondary; }
                 a { 
                     .navoption { 
                         img { height: 30px; margin: 10px auto 0 auto; } 
@@ -103,7 +143,7 @@ header {
     } // end of nav
 
 
-    .simpleNav { height: 40px; width: 100%; background-color: $red; padding-top: $pad/2;  @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2));
+    .simpleNav { height: 40px; width: 100%; background-color: $primary; padding-top: $pad/2;  @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); position: fixed; z-index: 300;
         a { position: absolute; padding-top: $pad/4;
             .back { width: 15px; position: relative; margin-left: $pad; display: inline-block; vertical-align: top; 
                 img {width: 100%;}
@@ -146,7 +186,7 @@ header {
         ul { width: 100%; padding: $pad*2 0;
             li { width: 100%; position: relative;
                 //a {
-                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $blue; text-align: left;
+                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $secondary; text-align: left;
                         .top {font-size: 1.4em; padding: $pad 0;}
                         .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; 
                             .icon {width: 22px; display: inline-block; padding-right: $pad/2;
@@ -179,6 +219,7 @@ header {
     // actual chat room
     .chatRoom { padding-top: $pad;
         .chatPartner { width: 100%; text-align: center;
+            .online { width: 15px; height: 15px; @include border-radius($pad/2); background-color: $tertiary; margin-right: $pad; position: relative; display: inline-block; }
             h1 { display: inline-block; padding-right: $pad/2; }
             .defaultSettings { display: inline-block; position: relative;
                 .micSettings, .vidSettings { width: 25px; height: auto; display: inline-block;
@@ -193,27 +234,33 @@ header {
                 .istyping { display: block; font-size: 0.8em;}
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px;}
                 .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;
-                    .videoRequest { display: inline-block; color: $red; padding: $pad/2 $pad/2; cursor: pointer;}
+                    .videoRequest { display: inline-block; color: $primary; padding: $pad/2 $pad/2; cursor: pointer;}
                 }
-                #user1msg { background-color: $white; color: $blue; border: solid 1px $white; @include border-radius(5px); }
-                #user2msg { background-color: $blue; color: $white; border: solid 1px $blue; @include border-radius(5px); }
+                #user1msg { background-color: $white; color: $secondary; border: solid 1px $white; @include border-radius(5px);
+                    #image { max-width: 100%; height: auto; }
+                }
+                #user2msg { background-color: $secondary; color: $white; border: solid 1px $secondary; @include border-radius(5px); }
                 .speechbubble1 { width: 40px; display: inline-block; margin-left: -10px; position: relative; bottom: -15px;
                     img {width: 100%;}
                 }
                 .speechbubble2 { width: 40px; display: inline-block; margin-right: -10px; position: relative; bottom: -15px;
                     img {width: 100%;}
                 }
+                .sentImage {
+                    width: 90%; margin: 0 auto;
+                }
             }
         }
         .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
             #outgoing { height: 40px; width: 100%; border: none; padding: 0 $pad; font-family: $sans;}
             .chatOptions {width: 100%; height: 40px;
-                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
-                    &:hover {background-color:$blue;}
+                .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
+                    &:hover {background-color:$secondary;}
                     img {height: 38px; width: auto; margin: 0 auto;
                         &.disabled { opacity: 0.6; pointer-events: none; }
                     }
                 }
+                #imageFile { display: none; }
             }
         }
 
@@ -229,8 +276,8 @@ header {
             #localScreenContainer { display: none; }
             .connectionstate { position: absolute; top: 0px; width: 100%; text-align: center; color: #fff }
             .videoOptions { width: 100%; height: 40px; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
-                .chat-btn { background-color: $red; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
-                    &:hover {background-color:$blue;}
+                .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
+                    &:hover {background-color:$secondary;}
                     img {height: 38px; width: auto; margin: 0 auto;}
                 }
             }
@@ -253,7 +300,7 @@ header {
         }
     }
     .options { padding: $pad; position: fixed; bottom: 0px; right: 0px;
-        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $mint; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
+        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $tertiary; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
             p { color: $white; text-align: center; padding-top: 21px;}
          }
     }
@@ -270,16 +317,16 @@ header {
         .settingsA, .settingsN, .settingsC {position: relative;
             .settingsAccount, .settingsNotification, .settingsChat { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
                 .setting { text-align: left; display: block; padding-top: $pad;
-                    .settingTitle { color: $blue; display: inline-block; width: 30%; }
+                    .settingTitle { color: $secondary; display: inline-block; width: 30%; }
 
                     .onoffswitch { position: relative; width: 71px; -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none; display: inline-block;
                         .onoffswitch-checkbox { display: none; }
-                        .onoffswitch-label { display: block; overflow: hidden; cursor: pointer; border: solid 2px $blue; @include border-radius(20px); 
+                        .onoffswitch-label { display: block; overflow: hidden; cursor: pointer; border: solid 2px $secondary; @include border-radius(20px); 
                             .onoffswitch-inner { display: block; width: 200%; margin-left: -100%; transition: margin 0.3s ease-in 0s; }
                             .onoffswitch-inner:before, .onoffswitch-inner:after { display: block; float: left; width: 50%; height: 28px; padding: 0; line-height: 28px; font-size: 0.8em; color: $white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold; box-sizing: border-box; }
-                            .onoffswitch-inner:before { content: "ON"; padding-left: $pad/2; background-color: $white; color: $blue; }
+                            .onoffswitch-inner:before { content: "ON"; padding-left: $pad/2; background-color: $white; color: $secondary; }
                             .onoffswitch-inner:after { content: "OFF"; padding-right: $pad/2; background-color: $grey; color: darken($grey, 30%); text-align: right; }
-                            .onoffswitch-switch { display: block; width: 25px; margin: 3px; background: $blue; position: absolute; top: 0; bottom: 0; right: 39px; border: 2px solid $blue; @include border-radius(20px); transition: all 0.3s ease-in 0s; }
+                            .onoffswitch-switch { display: block; width: 25px; margin: 3px; background: $secondary; position: absolute; top: 0; bottom: 0; right: 39px; border: 2px solid $secondary; @include border-radius(20px); transition: all 0.3s ease-in 0s; }
                             
                         }
                         .onoffswitch-checkbox:checked + .onoffswitch-label { 

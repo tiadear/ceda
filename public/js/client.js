@@ -4,11 +4,34 @@ $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
 
-$(document).ready(function() {
-    $('#nav-dash').on('click touch', function(){
-        socket.emit('leaveRoom');
-    });
+
+
+var focus = true;
+$(window).blur(function() {
+    focus = false;
 });
+$(window).focus(function() {
+    focus = true;
+    removeBadge();
+});
+
+var badge = 0;
+var favicon = new Favico({
+    animation : 'popFade',
+    bgcolor: '#ea5455'
+});
+
+function addBadge() {
+    console.log('tried to add badge');
+    badge = badge + 1;
+    favicon.badge(badge);
+}
+function removeBadge() {
+    console.log('tried to remove badge');
+    badge = 0;
+    favicon.reset();
+}
+
 
 var isChannelReady = false;
 var isInitiator = false;
@@ -56,10 +79,7 @@ $(function(){
             socket.emit('message', message);
         }
 
-        function timeoutFunction() {
-            typing = false;
-            socket.emit("userTyping", false);
-        }
+        
 
 
         socket.emit('addUser', user1, user1username, function(data){
@@ -75,7 +95,10 @@ $(function(){
                 var typing = false;
                 var timeout = undefined;
 
-               
+                function timeoutFunction() {
+                    typing = false;
+                    socket.emit("userTyping", false);
+                }
 
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
@@ -89,7 +112,6 @@ $(function(){
                             clearTimeout(timeout);
                             timeout = setTimeout(timeoutFunction, 5000);
                         }
-                        
                     }
 
                     //if enter has been hit
@@ -112,6 +134,15 @@ $(function(){
 
         //If a user is typing
         socket.on('isTyping', function(data){
+
+            var typing = false;
+            var timeout = undefined;
+
+            function timeoutFunction() {
+                typing = false;
+                socket.emit("userTyping", false);
+            }
+
             if(data.isTyping) {
                 if($('#'+data.user+'').length === 0) {
                     $('#incoming').append('<li class="istyping" id='+data.user+'>'+data.user+' is typing</li>');
@@ -155,13 +186,40 @@ $(function(){
             return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
         }
 
+        socket.on('isOnline', function(user) {
+            if(user != user1username) {
+                $('.chatPartner').prepend('<div class="online"></div>');
+            }
+        });
+
+        socket.on('isOnline', function(user) {
+            if(user != user1username) {
+                $('.online').remove();
+            }
+        });
+
         socket.on('addHistory', function(past) {
             past.forEach(function(pastItem) {
                 //console.log('pastItem: '+pastItem);
+
+                // check which user said the message
                 if(pastItem[0] === user1) {
-                    $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+
+                    //check if it was an image
+                    if(pastItem[5] === true) {
+                        $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + pastItem[2] + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                    } else {
+                        $('#incoming').prepend('<li class="incomingMessage" id="user1msg">' + pastItem[2] + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                    }
+                    
                 } else {
-                    $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
+
+                    //check if it was an image1
+                    if(pastItem[5] === true) {
+                        $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + pastItem[2] + '"/></li>');
+                    } else {
+                        $('#incoming').prepend('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + pastItem[2] + '</li>');
+                    }
                 }
 
                 var date = new Date(pastItem[4]);
@@ -186,15 +244,25 @@ $(function(){
 
 
 
+        
+        
+
+        
         //update the incoming chat window
         socket.on('updateChat', function(username, data) {
-
             $('#incoming').append('<li class="msgtime">'+ time +'</li>');
-            if(username == user1username) {
+            if(username === user1username) {
                 $('#incoming').append('<li class="incomingMessage" id="user1msg">' + data + '</li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
             } else {
                 $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg">' + data + '</li>');
+
+                if(focus === false){
+                    addBadge();
+                } else {
+                    removeBadge();
+                }
             }
+
             socket.emit('message', data);
         });
 
@@ -460,5 +528,32 @@ $(function(){
                 $('#videoOffButton > img').attr('src', '/images/icon-switchtoVideo-true.png');
             }
         });
+
+        /*
+        $('#chat-btn-image').on('click touch', function() {
+            $('#incoming').append('<li class="incomingMessage" id="user1msg"><label class="imageFileLabel"><input type="file" id="imagefile" accept="image/*">Choose an image</label></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+        });
+        */
+
+        $(document).on('change', '#imageFile', function(e) {
+            var file = e.originalEvent.target.files[0],
+                reader = new FileReader();
+
+            reader.onload = function(evt){
+                socket.emit('image', evt.target.result);
+
+            };
+            reader.readAsDataURL(file);  
+        });
+
+        socket.on('sendImage', image);
+
+        function image (from, base64Image) {
+            if(from === user1username) {
+                $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + image + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+            } else {
+                $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + image + '"/></li>');
+            }
+        }
 
 });

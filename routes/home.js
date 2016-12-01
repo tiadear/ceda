@@ -237,7 +237,7 @@ router.get('/', function(req, res) {
                             if (!history || history === '' || history.length === 0 || history === null) {
                                 Room.findByIdAndRemove(roomID, function(err) {
                                     if (err) throw err;
-                                    console.log('room: '+ roomID +' delted');
+                                    console.log('room: '+ roomID +' deleted');
                                 });
                             }
                             if(history) {
@@ -251,8 +251,15 @@ router.get('/', function(req, res) {
 
                 findChatHistory.then(
                     function(val) {
-                        //console.log('val counter: '+val[0]);
-                        findUser(roomID, currentuser, user1, user2, val[0].user, val[0].message, val[0].timesent);
+                        var historymessage;
+
+                        if(val[0].isImage === true) {
+                            historymessage = 'image';
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                        } else {
+                            historymessage = val[0].message;
+                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                        }
                     }
                 )
                 .catch(
@@ -309,8 +316,11 @@ router.get('/', function(req, res) {
                         arr2.push(arr1[roomID]);
                         //console.log('arr2: '+arr2);
 
+                        arr2.sort(function(a,b){
+                            return new Date(a[3]) - (b[3]);
+                        });
+
                         if (arr2.length === rooms.length) {
-                            console.log('arr2: '+arr2);
                             req.history = arr2;
                             req.alertsForum = alertsForum;
                             callback(null, req.alertsForum, req.history);

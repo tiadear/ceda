@@ -3,7 +3,6 @@ block content
 	script.
 		$(document).ready(function() {
 			$('.onoffswitch-checkbox').on('click touch', function() {
-
 				var check = $(this).attr('checked');
 				console.log('checked? '+ check);
 
@@ -27,7 +26,23 @@ block content
 						}
 					});
 				}
+			});
 
+			$('#chooseColourScheme').on('click, touch', function() {
+				// I FEEL LIKE THIS WON'T WORK
+				// CHECK THIS PLEASE
+				// PRETY PLEASE
+				// WITH A CHERRY ON TOP
+				// NO REALLY REALLY REALLY CHECK THIS!!!
+				var colour = $('#chooseColourScheme').val();
+
+				$.ajax ({
+					type: 'POST',
+					url: '/settings?field=colour',
+					data: {
+						colour : colour
+					}
+				});
 			});
 		});
 	.container
@@ -62,31 +77,6 @@ block content
 								p account
 							.settingInput
 								p delete account
-			.settingsN
-				.settingsNotification
-					h2 Notifications
-					.setting
-						.settingTitle
-							p messages
-						.onoffswitch
-							if (user.notifyChat === true)
-								input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=true)
-							else
-								input.onoffswitch-checkbox#notifyChat(type='checkbox', name='notifyChat', checked=false)
-							label.onoffswitch-label(for='notifyChat')
-								span.onoffswitch-inner
-								span.onoffswitch-switch
-					.setting
-						.settingTitle
-							p forum replies
-						.onoffswitch
-							if (user.notifyForum === true)
-								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=true)
-							else
-								input.onoffswitch-checkbox#notifyForum(type='checkbox', name='notifyForum', checked=false)
-							label.onoffswitch-label(for='notifyForum')
-								span.onoffswitch-inner
-								span.onoffswitch-switch
 			.settingsC
 				.settingsChat
 					h2 Video Chat
@@ -112,3 +102,20 @@ block content
 							label.onoffswitch-label(for='defaultVideo')
 								span.onoffswitch-inner
 								span.onoffswitch-switch
+			.settingsP
+				.settingsPersonalize
+					h2 Personalize
+					.setting
+						.settingTitle
+							p colour scheme
+							//- CHECK THIS!!!
+        					//- THIS WAS WRITTEN WITHOUT TESTING
+        					//- IT IS REALLY IMPORTANT THAT YOU CHECK THIS
+        					//- I MEAN REALLY SUPER CRAZY IMPORTANT
+        					//- PLEASE PLEASE PLEASE PLEASE PLEASE
+        					//- PLEASE CHECK THIS
+							select#chooseColourScheme(name='colourScheme')
+								option(value='red', default)
+								option(value='blue')
+								option(value='mint')
+								option(value='yellow')

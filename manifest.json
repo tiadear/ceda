@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "114227646298",
+    "firebase_url": "https://ceda-146111.firebaseio.com",
+    "project_id": "ceda-146111",
+    "storage_bucket": "ceda-146111.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114227646298:android:2e7e14c111b37373",
+        "android_client_info": {
+          "package_name": "io.ceda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114227646298-4r9n6f6q235veeie1pe94t08v021ek39.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "114227646298-ineo9336hfjg4q9m3k4n6oiv7s0kuctn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmLoVEVRTC_SJYpiZ9H0bdQKq803Kcs5s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

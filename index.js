@@ -14,12 +14,18 @@ var nodeStatic = require('node-static');
 var uuid = require('uuid');
 var flash = require('connect-flash');
 var debug = require('debug')('ceda:server');
+var favicon = require('serve-favicon');
+var fs = require('fs');
 
 var User = require('./models/account.js');
 var db = require('./db.js');
 
 
+
+
 require('dotenv').config();
+
+
 
 
 // set port
@@ -29,6 +35,7 @@ app.set('port', (process.env.PORT || 3000));
 
 
 // public folder
+//app.use(favicon(__dirname + '/public/images/favicon/favicon.ico'));
 app.use(express.static(__dirname + '/public'));
 
 
@@ -47,8 +54,7 @@ module.exports = app;
 
 
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+
 app.use(flash());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -156,11 +162,17 @@ app.use(function(err, req, res, next) {
 
 
 
+
+
+
+
+
 // socket stuff
 
 var numClients = {};
 var chatHistory = require('./models/chatHistory');
 var Room = require('./models/room.js');
+
 
 io.sockets.on('connection', function(socket){
 
@@ -187,13 +199,13 @@ io.sockets.on('connection', function(socket){
             console.log('added ' + currentuser + ' to room: ' + roomID);
             socket.join(socket.room);
             socket.emit('roomOpened', socket.room, socket.id);
-            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
         } else {
             numClients[socket.room]++;
             console.log('added ' + currentuser + ' to room: ' + roomID);
             socket.join(socket.room);
             socket.emit('channelReady', socket.room, socket.id);
-            io.sockets.in(socket.room).emit('updateChat', currentuser, 'is now online');
+            io.sockets.in(socket.room).emit('isOnline', currentuser);
+            socket.emit('isOnline', randomuser);
         }
 
         chatHistory.find({room : roomID}).sort({'timesent' : -1}).exec(function(err, history) {
@@ -208,11 +220,15 @@ io.sockets.on('connection', function(socket){
 
                     User.findById(item.user, function(err, user) {
                         var username = user.username;
-                        console.log('username: '+username);
-                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent];
+                        arr1[item._id] = [item.user, item.room, item.message, username, item.timesent, item.isImage];
                         arr2.push(arr1[item._id]);
+
+                        arr2.sort(function(a,b){
+                            return new Date(b[4]) - (a[4]);
+                        });
+
                         if(arr2.length === history.length) {
-                            console.log('arr2: '+arr2);
+                            //console.log('arr2: '+arr2);
                             socket.emit('addHistory', arr2);
                         }
                     });
@@ -234,6 +250,7 @@ io.sockets.on('connection', function(socket){
             }
         });
         socket.leave(socket.room);
+        io.sockets.in(socket.room).emit('isOffline', socket.userID);
     });
 
     socket.on('userTyping', function(data) {
@@ -262,6 +279,7 @@ io.sockets.on('connection', function(socket){
                 newChatHistory.user = socket.userID;
                 newChatHistory.room = socket.room;
                 newChatHistory.message = data;
+                newChatHistory.isImage = false;
 
                 newChatHistory.save(function(err){
                     if (err) {
@@ -341,6 +359,28 @@ io.sockets.on('connection', function(socket){
         });
     });
 
+
+    socket.on('image', function (msg) {
+        var newChatHistory = new chatHistory();
+        newChatHistory.user = socket.userID;
+        newChatHistory.room = socket.room;
+        newChatHistory.message = msg;
+        newChatHistory.isImage = true;
+
+        newChatHistory.save(function(err, image){
+            if (err) {
+                console.log(err);
+                throw err;
+            } else {
+                console.log('saving image to chat history');
+                socket.emit("sendImage", socket.username, msg);
+
+            }
+        });
+    });
+
+
+
     socket.on('disconnect', function() {
         console.log('socket disconnected');
         numClients[socket.room]--;
@@ -353,6 +393,7 @@ io.sockets.on('connection', function(socket){
                 });
             }
         });
+        io.sockets.in(socket.room).emit('isOffline', socket.userID);
     });
 
 });
@@ -370,3 +411,6 @@ Array.prototype.contains = function(k, callback) {
         return process.nextTick(check.bind(null, i+1));
     }(0));
 };
+
+
+
