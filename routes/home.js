@@ -81,22 +81,7 @@ router.get('/*', function(req, res) {
                 getLastPost.then(
                     function(val) {
 
-                        function formatDate(date) {
-                            var hours = date.getHours();
-                            var minutes = date.getMinutes();
-                            var ampm = hours >= 12 ? 'pm' : 'am';
-                            hours = hours % 12;
-                            hours = hours ? hours : 12; // the hour '0' should be '12'
-                            minutes = minutes < 10 ? '0'+minutes : minutes;
-                            var strTime = hours + ':' + minutes + ' ' + ampm;
-                            var months = date.getMonth() +1;
-                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-                        }
-
-                        var date = new Date(val[0].created);
-                        var postTime = formatDate(date);
-
-                        findUser(threadId, threadTitle, counter, total, val[0].user, val[0].content, postTime);
+                        findUser(threadId, threadTitle, counter, total, val[0].user, val[0].content, val[0].created);
                     }
                 )
                 .catch(
@@ -314,23 +299,10 @@ router.get('/*', function(req, res) {
                 findLastUser.then(
                     function(val) {
                         console.log('6 rooms.length: '+counter);
-                        function formatDate(date) {
-                            var hours = date.getHours();
-                            var minutes = date.getMinutes();
-                            var ampm = hours >= 12 ? 'pm' : 'am';
-                            hours = hours % 12;
-                            hours = hours ? hours : 12; // the hour '0' should be '12'
-                            minutes = minutes < 10 ? '0'+minutes : minutes;
-                            var strTime = hours + ':' + minutes + ' ' + ampm;
-                            var months = date.getMonth() +1;
-                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-                        }
 
-                        var date = new Date(historyTime);
-                        var newtime = formatDate(date);
 
                         if (String(blocked) != String(currentuser)) {
-                            arr1[roomID] = [val._id, val.username, historyMessage, newtime, blocked];
+                            arr1[roomID] = [val._id, val.username, historyMessage, historyTime, blocked];
                             arr2.push(arr1[roomID]);
                         } else {
                             blockedarr.push(roomID);
@@ -382,6 +354,7 @@ router.get('/*', function(req, res) {
         res.render('home', {
             user : req.user,
             alertsForum : req.alertsForum,
+            message : req.flash('usernameMessage'),
             history : req.history,
             title: 'ceda'
         });

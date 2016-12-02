@@ -92,14 +92,14 @@ router.get('/', function(req, res){
                     function(resolve, reject) {
                         // check if the current user has blocked the user init or user resp
                         Flag.findOne({user: { $in: [user1, user2] }, userWhoFlagged : currentuser}, function(err, flag) {
-                            if(err) throw err;
+                            if (err) throw err;
                             if(flag) {
                                 console.log(currentuser + ' has blocked ' + flag.user);
                                 resolve(flag.user);
                             } else {
                                 // check if the current user has been blocked by the user init or user resp
                                 Flag.findOne({userWhoFlagged: { $in: [user1, user2] }, user : currentuser}, function(err, flag) {
-                                    if(err) throw err;
+                                    if (err) throw err;
                                     if (flag) {
                                         console.log(currentuser + ' has been blocked by ' + flag.userWhoFlagged);
                                         resolve(currentuser);
@@ -127,10 +127,7 @@ router.get('/', function(req, res){
                 var findChatHistory = new Promise(
                     function(resolve, reject) {
                         chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
-                            if (err) {
-                                console.log(err);
-                                throw err;
-                            }
+                            if (err) throw err;
                             resolve(history);
                         });
 

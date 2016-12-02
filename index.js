@@ -140,29 +140,20 @@ mongoose.connection.once('open', function() { console.log("Mongo DB connected!")
 
 
 // 404
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-
-
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
+app.use(function(req, res) {
     res.render('error', {
         message: err.message,
-        error: {}
+        status: 404
     });
 });
 
-
-
-
-
+// 500
+app.use(function(err, req, res, next) {
+    res.render('error', {
+        message: err.message,
+        status: 500
+    });
+});
 
 
 
@@ -224,7 +215,7 @@ io.sockets.on('connection', function(socket){
                         arr2.push(arr1[item._id]);
 
                         arr2.sort(function(a,b){
-                            return new Date(b[4]) - (a[4]);
+                            return new Date(a[4]) - (b[4]);
                         });
 
                         if(arr2.length === history.length) {
