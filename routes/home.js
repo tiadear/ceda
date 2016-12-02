@@ -28,9 +28,7 @@ router.get('/', function(req, res) {
 
             Post.find({user : req.user._id}, function(err, posts) {
                 if (err) throw err;
-                if (posts) {
-                    callback(null, posts);
-                }
+                callback(null, posts);
             });
             
 
