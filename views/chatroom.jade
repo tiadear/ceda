@@ -23,6 +23,12 @@ block content
 		.chatRoom
 			if (room)
 				.chatPartner
+					.blockedAlert
+						.popup
+							h1 You have blocked #{usersInRoom[1]}
+							p Are you sure you want to talk to them?
+							button.popup-btn#acceptArsehole(type='button') Yes
+							button.popup-btn#rejectArsehole(type='button') No
 					h1 #{usersInRoom[1]}
 					.defaultSettings
 						.micSettings

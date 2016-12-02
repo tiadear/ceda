@@ -344,6 +344,7 @@ router.get('/chatpeer*', function(req, res) {
 
         function(user1, user1name, user2, user2name, isBlocked, callback) {
             console.log('looking for a room...');
+            console.log('1 isblocked: '+isBlocked);
             Room.findOne({user_init : user1, user_resp : user2}, function(err, room) {
                 if (err) throw err;
                 if (room) {
@@ -353,8 +354,8 @@ router.get('/chatpeer*', function(req, res) {
                     req.userIDs = [user1, user2];
                     req.micSettings = [room.user_init_mic, room.user_resp_mic];
                     req.vidSettings = [room.user_init_video, room.user_resp_video];
-                   
-                    callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings);
+                    req.isBlocked = isBlocked;
+                    callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings, req.isBlocked);
                 } else {
                     console.log('room was not found, looking again...')
                     Room.findOne({user_init : user2, user_resp : user1}, function(err, room) {
@@ -366,8 +367,8 @@ router.get('/chatpeer*', function(req, res) {
                             req.userIDs = [user1, user2];
                             req.micSettings = [room.user_resp_mic, room.user_init_mic];
                             req.vidSettings = [room.user_resp_video, room.user_init_video];
-
-                            callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings);
+                            req.isBlocked = isBlocked;
+                            callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings, req.isBlocked);
                         } else {
                             console.log('no room found');
                             // create a new room!
@@ -401,6 +402,7 @@ router.get('/chatpeer*', function(req, res) {
                                             req.micSettings = [mic1Setting, mic2Setting];
                                             req.vidSettings = [vid1Setting, vid2Setting];
                                             req.isBlocked = isBlocked;
+                                            console.log('2 isblocked: '+isBlocked);
                                             callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings, req.isBlocked);
                                         }
                                     });
@@ -416,12 +418,12 @@ router.get('/chatpeer*', function(req, res) {
             
         }
     ], function (err, result) {
-
         req.session.save(function(err){
             if (err) {
                 console.log(err);
                 throw err;
             }
+            console.log('3 isblocked: '+req.isBlocked);
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,

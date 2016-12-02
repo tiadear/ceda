@@ -227,6 +227,12 @@ header {
                 }
             }
         }
+        .blockedAlert { display: none; width: 100%; height: 100%; background-color: rgba($black, 0.6); position: fixed; z-index: 300; top: 0;
+            .popup { width: 400px; height: auto; padding: $pad * 2; margin: 0 auto; text-align: center; background-color: $white; margin-top: 40%;
+                h1, p { padding: $pad 0;}
+                .popup-btn {@extend button; width: 40%; max-width: 400px; height: 40px; margin: $pad/2; @include border-radius(5px); }
+            }
+        }
         .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
                 padding-bottom: $pad * 4;

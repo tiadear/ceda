@@ -4,11 +4,23 @@ $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
 
-if(isBlocked === true) {
-    console.log('someone has been blocked')
+if(isBlocked === 'true') {
     $('.blockedAlert').css('display', 'block');
+    $('.simpleNav').css('pointer-events', 'none');
+    $('.sendMessagesWrap').css('pointer-events', 'none');
+    $('body').css('overflow', 'hidden');
 }
 
+$('#acceptArsehole').on('click touch', function() {
+    $('.blockedAlert').css('display', 'none');
+    $('.simpleNav').css('pointer-events', 'auto');
+    $('.sendMessagesWrap').css('pointer-events', 'auto');
+    $('body').css('overflow', 'auto');
+});
+
+$('#rejectArsehole').on('click touch', function() {
+    window.location.href='/chat';
+});
 
 
 var focus = true;
