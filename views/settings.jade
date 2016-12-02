@@ -28,14 +28,9 @@ block content
 				}
 			});
 
-			$('#chooseColourScheme').on('click, touch', function() {
-				// I FEEL LIKE THIS WON'T WORK
-				// CHECK THIS PLEASE
-				// PRETY PLEASE
-				// WITH A CHERRY ON TOP
-				// NO REALLY REALLY REALLY CHECK THIS!!!
+			$('#chooseColourScheme').on('click touch', function() {
 				var colour = $('#chooseColourScheme').val();
-
+				console.log(colour);
 				$.ajax ({
 					type: 'POST',
 					url: '/settings?field=colour',
@@ -108,14 +103,9 @@ block content
 					.setting
 						.settingTitle
 							p colour scheme
-							//- CHECK THIS!!!
-        					//- THIS WAS WRITTEN WITHOUT TESTING
-        					//- IT IS REALLY IMPORTANT THAT YOU CHECK THIS
-        					//- I MEAN REALLY SUPER CRAZY IMPORTANT
-        					//- PLEASE PLEASE PLEASE PLEASE PLEASE
-        					//- PLEASE CHECK THIS
+						.selectChoice
 							select#chooseColourScheme(name='colourScheme')
-								option(value='red', default)
-								option(value='blue')
-								option(value='mint')
-								option(value='yellow')
+								option(value='red', default) Red
+								option(value='blue') Blue
+								option(value='mint') Mint
+								option(value='yellow') Yellow

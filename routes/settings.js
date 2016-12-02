@@ -119,9 +119,12 @@ router.post('/', function(req, res) {
 
 			if (req.body.checked === true) {
 				callback(null, false);
-			} else {
+			} else if (req.body.checked === false) {
 				callback(null, true);
+			} else {
+				callback(null, req.body.colour);
 			}
+
 		}, function(checked, callback) {
 
 			var field = req.query.field;
@@ -168,9 +171,11 @@ router.post('/', function(req, res) {
 				);
 			}
 			else if (field === 'colour') {
+				console.log('yay colour field found!!!');
+				console.log('checked: '+checked);
 				User.update(
 					{'_id' : id },
-					{ $set : { colourScheme : req.body.colour} },
+					{ $set : { colourScheme : checked} },
 					function(err, user) {
 						if (err) throw err;
 						callback(null);
