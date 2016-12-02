@@ -1,6 +1,6 @@
 'use strict';
 
-/*
+
 if(isBlocked === 'true') {
     $('.blockedAlert').css('display', 'block');
     $('.simpleNav').css('pointer-events', 'none');
@@ -19,7 +19,7 @@ $('#acceptArsehole').on('click touch', function() {
 $('#rejectArsehole').on('click touch', function() {
     window.location.href='/chat';
 });
-*/
+
 
 var focus = true;
 $(window).blur(function() {
