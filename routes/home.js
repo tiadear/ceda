@@ -20,7 +20,7 @@ local.strategy(passport);
 
 
 // dashbaord
-router.get('/', function(req, res) {
+router.get('/*', function(req, res) {
 
     async.waterfall([
 
