@@ -16,6 +16,7 @@ $('#acceptArsehole').on('click touch', function() {
     $('.simpleNav').css('pointer-events', 'auto');
     $('.sendMessagesWrap').css('pointer-events', 'auto');
     $('body').css('overflow', 'auto');
+    $('#chat-btn-block img').attr('src', '/images/icon-unblock.png')
 });
 
 $('#rejectArsehole').on('click touch', function() {

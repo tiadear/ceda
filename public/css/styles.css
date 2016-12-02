@@ -404,7 +404,8 @@ header {
           width: 92%;
           display: inline-block;
           padding: 10px;
-          margin-bottom: 20px; }
+          margin-bottom: 20px;
+          word-wrap: break-word; }
           .container .chatRoom .displayMessagesWrap #incoming .incomingMessage .videoRequest {
             display: inline-block;
             color: #ea5455;

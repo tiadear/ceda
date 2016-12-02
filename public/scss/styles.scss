@@ -239,7 +239,7 @@ header {
                 li { list-style-type: none; }
                 .istyping { display: block; font-size: 0.8em;}
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px;}
-                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad;
+                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad; word-wrap: break-word;
                     .videoRequest { display: inline-block; color: $primary; padding: $pad/2 $pad/2; cursor: pointer;}
                 }
                 #user1msg { background-color: $white; color: $secondary; border: solid 1px $white; @include border-radius(5px);

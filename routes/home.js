@@ -5,6 +5,7 @@ const Room = require('../models/room.js');
 var Thread = require('../models/thread.js');
 var Post = require('../models/posts.js');
 var chatHistory = require('../models/chatHistory.js');
+var Flag = require('../models/flagged.js');
 
 const express = require('express');
 const router = express.Router();
@@ -218,15 +219,49 @@ router.get('/', function(req, res) {
         },
 
         function(alertsForum, rooms, callback) {
-
-            if(rooms.length === 0) {
-                req.alertsForum = alertsForum;
-                callback(null, req.alertsForum, null);
+            if (rooms.length === 0) {
+                callback(null);
             }
-
             var arr1 = [];
 
-            function getChatHistory(roomID, currentuser, user1, user2, counter){
+            function isFlagged(roomID, currentuser, user1, user2, counter){
+
+                var flaggedUser = new Promise( 
+                    function(resolve, reject) {
+                        // check if the current user has blocked the user init or user resp
+                        Flag.findOne({user: { $in: [user1, user2] }, userWhoFlagged : currentuser}, function(err, flag) {
+                            if(err) throw err;
+                            if(flag) {
+                                console.log(currentuser + ' has blocked ' + flag.user);
+                                resolve(flag.user);
+                            } else {
+                                // check if the current user has been blocked by the user init or user resp
+                                Flag.findOne({userWhoFlagged: { $in: [user1, user2] }, user : currentuser}, function(err, flag) {
+                                    if(err) throw err;
+                                    if (flag) {
+                                        console.log(currentuser + ' has been blocked by ' + flag.userWhoFlagged);
+                                        resolve(currentuser);
+                                    } else {
+                                        resolve('');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                );
+                flaggedUser.then (
+                    function(val) {
+                        getChatHistory(roomID, currentuser, user1, user2, counter, val);
+                    }
+                )
+                .catch(
+                    function(reason){
+                        console.log('flagged user promise rejected for' + reason);
+                    }
+                );
+            }
+
+            function getChatHistory(roomID, currentuser, user1, user2, counter, blocked){
                 var findChatHistory = new Promise(
                     function(resolve, reject) {
                         chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
@@ -234,16 +269,7 @@ router.get('/', function(req, res) {
                                 console.log(err);
                                 throw err;
                             }
-                            if (!history || history === '' || history.length === 0 || history === null) {
-                                Room.findByIdAndRemove(roomID, function(err) {
-                                    if (err) throw err;
-                                    console.log('room: '+ roomID +' deleted');
-                                });
-                            }
-                            if(history) {
-                                //console.log(history);
-                                resolve(history);
-                            }
+                            resolve(history);
                         });
 
                     }
@@ -255,24 +281,24 @@ router.get('/', function(req, res) {
 
                         if(val[0].isImage === true) {
                             historymessage = 'image';
-                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                            findUser(roomID, currentuser, user1, user2, counter, val[0].user, historymessage, val[0].timesent, blocked);
                         } else {
                             historymessage = val[0].message;
-                            findUser(roomID, currentuser, user1, user2, val[0].user, historymessage, val[0].timesent);
+                            findUser(roomID, currentuser, user1, user2, counter, val[0].user, historymessage, val[0].timesent, blocked);
                         }
+                        
                     }
                 )
                 .catch(
                     function(reason){
-                        console.log('chat history promise rejected for' + reason);
+                        console.log('second chat history promise rejected for' + reason);
                     }
                 );
             }
 
-            function findUser(roomID, currentuser, user1, user2, historyUser, historyMessage, historyTime) {
+            function findUser(roomID, currentuser, user1, user2, counter, historyUser, historyMessage, historyTime, blocked) {
                 var findLastUser = new Promise (
                     function(resolve, reject) {
-
                         if(String(currentuser) === String(historyUser)) {
                             if(String(user1) === String(currentuser)) {
                                 User.findById(user2, function(err, userresp) {
@@ -312,19 +338,23 @@ router.get('/', function(req, res) {
                         var date = new Date(historyTime);
                         var newtime = formatDate(date);
 
-                        arr1[roomID] = [val._id, val.username, historyMessage, newtime];
-                        arr2.push(arr1[roomID]);
-                        //console.log('arr2: '+arr2);
+                        if (String(blocked) != String(currentuser)) {
+                            arr1[roomID] = [val._id, val.username, historyMessage, newtime, blocked];
+                            arr2.push(arr1[roomID]);
+                        } else {
+                            blockedarr.push(roomID);
+                        }
 
                         arr2.sort(function(a,b){
                             return new Date(a[3]) - (b[3]);
                         });
 
-                        if (arr2.length === rooms.length) {
+                        if (arr2.length === (counter - blockedarr.length)) {
+                            //console.log('arr2: '+arr2);
                             req.history = arr2;
-                            req.alertsForum = alertsForum;
-                            callback(null, req.alertsForum, req.history);
+                            callback(null, req.history);
                         }
+                        
                     }
                 )
                 .catch(
@@ -334,7 +364,6 @@ router.get('/', function(req, res) {
                 );
             }
 
-
             for(j = 0; j < rooms.length; j++){
                 var id = rooms[j]._id;
                 var _user1 = rooms[j].user_init;
@@ -342,9 +371,11 @@ router.get('/', function(req, res) {
                 var _currentuser = req.user._id;
                 arr1[id] = [];
                 var arr2 = [];
-
-                getChatHistory(id, _currentuser, _user1, _user2, j);
+                var blockedarr = [];
+                
+                isFlagged(id, _currentuser, _user1, _user2, rooms.length);
             }
+            
         }
 
     ], function(err, result){
