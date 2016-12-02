@@ -25,19 +25,14 @@ router.get('/*', function(req, res) {
     async.waterfall([
 
         function(callback) {
-            console.log('home point 1');
+
             Post.find({user : req.user._id}, function(err, posts) {
                 if (err) throw err;
                 callback(null, posts);
             });
-            
+        }, 
 
-        }, function(posts, callback) {
-            console.log('home point 2');
-            if(posts.length === 0) {
-                var alerts = null;
-                callback(null, alerts);
-            }
+        function(posts, callback) {
 
             arr = [];
             arr2 = [];
@@ -142,15 +137,18 @@ router.get('/*', function(req, res) {
             }
 
             // 1 - loop through all the posts written
-            posts.forEach(function(post, i) {
-                findThreads(post.threadId, i, posts.length);
-            });
-
-
+            if(posts.length === 0) {
+                var alerts = null;
+                callback(null, alerts);
+            } else {
+                posts.forEach(function(post, i) {
+                    findThreads(post.threadId, i, posts.length);
+                });
+            }
         },
 
         function(alertsForum, callback) {
-            console.log('home point 3');
+
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
                 callback(null, alertsForum, rooms);
@@ -158,12 +156,7 @@ router.get('/*', function(req, res) {
         },
 
         function(alertsForum, rooms, callback) {
-            console.log('home point 4');
-            if(rooms.length === 0) {
-                req.alertsForum = alertsForum;
-                callback(null, req.alertsForum);
-            }
-
+            
             function checkIfHistory(roomID, counter){
                 var deleteChatHistory = new Promise(
                     function(resolve, reject) {
@@ -199,15 +192,18 @@ router.get('/*', function(req, res) {
                 );
             }
 
-            for(j = 0; j < rooms.length; j++){                
-                var id = rooms[j]._id;
-                checkIfHistory(id, j);
+            if(rooms.length === 0) {
+                req.alertsForum = alertsForum;
+                callback(null, req.alertsForum);
+            } else {
+                for(j = 0; j < rooms.length; j++){                
+                    var id = rooms[j]._id;
+                    checkIfHistory(id, j);
+                }
             }
-
         },
 
         function(alertsForum, callback) {
-            console.log('home point 5');
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
                 callback(null, alertsForum, rooms);
@@ -217,15 +213,12 @@ router.get('/*', function(req, res) {
         function(alertsForum, rooms, callback) {
             console.log('home point 6');
 
-            
-
             var arr1 = [];
 
             function isFlagged(roomID, currentuser, user1, user2, counter){
 
                 var flaggedUser = new Promise( 
                     function(resolve, reject) {
-                        console.log('3 rooms.length: '+counter);
                         // check if the current user has blocked the user init or user resp
                         Flag.findOne({user: { $in: [user1, user2] }, userWhoFlagged : currentuser}, function(err, flag) {
                             if(err) throw err;
@@ -262,7 +255,6 @@ router.get('/*', function(req, res) {
             function getChatHistory(roomID, currentuser, user1, user2, counter, blocked){
                 var findChatHistory = new Promise(
                     function(resolve, reject) {
-                        console.log('4 rooms.length: '+counter);
                         chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
                             if (err) {
                                 console.log(err);
@@ -298,7 +290,6 @@ router.get('/*', function(req, res) {
             function findUser(roomID, currentuser, user1, user2, counter, historyUser, historyMessage, historyTime, blocked) {
                 var findLastUser = new Promise (
                     function(resolve, reject) {
-                        console.log('5 rooms.length: '+counter);
                         if(String(currentuser) === String(historyUser)) {
                             if(String(user1) === String(currentuser)) {
                                 User.findById(user2, function(err, userresp) {
@@ -367,7 +358,9 @@ router.get('/*', function(req, res) {
 
             if (rooms.length === 0) {
                 console.log('1 rooms.length: '+rooms.length);
-                callback(null, alertsForum);
+                req.history = null;
+                req.alertsForum = alertsForum;
+                callback(null, req.alertsForum, req.history);
             } else {
                 for(j = 0; j < rooms.length; j++){
                     var id = rooms[j]._id;
@@ -377,7 +370,6 @@ router.get('/*', function(req, res) {
                     arr1[id] = [];
                     var arr2 = [];
                     var blockedarr = [];
-                    console.log('2 rooms.length: '+rooms.length);
                     isFlagged(id, _currentuser, _user1, _user2, rooms.length);
                 }
             }
