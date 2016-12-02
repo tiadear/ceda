@@ -239,11 +239,30 @@ router.post('/appeal', function(req, res) {
 
         newAppeal.save(function(err){
             if (err) throw err;
-            req.appeal = true;
-            res.redirect('/appeal', {
-                appeal: req.appeal,
-                user: req.user
-            });
+
+            User.findById(req.user._id, function(err, user){
+                if (err) throw err;
+
+                var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
+                postmark.send({
+                    "From": "admin@ceda.io",
+                    "To": "admin@ceda.io",
+                    "Subject": "Request to appeal blocked status",
+                    "TextBody": 'Hello,\n\n' + user._id + ' at '+ user.email +' wants to appeal their blocked status.',
+                    "Tag": "appeal"
+                }, function(err) {
+                    if(err) {
+                        console.error("Unable to send via postmark: " + err.message);
+                        return done(err);
+                    }
+                    console.info("Sent to postmark for delivery");
+                    req.appeal = true;
+                    res.redirect('/appeal', {
+                        appeal: req.appeal,
+                        user: req.user
+                    });
+                });
+            });     
         });
     } else {
 
