@@ -402,7 +402,7 @@ router.get('/chatpeer*', function(req, res) {
                                             req.micSettings = [mic1Setting, mic2Setting];
                                             req.vidSettings = [vid1Setting, vid2Setting];
                                             req.isBlocked = isBlocked;
-                                            console.log('2 isblocked: '+isBlocked);
+
                                             callback(null, req.room, req.usersInRoom, req.userIDs, req.micSettings, req.vidSettings, req.isBlocked);
                                         }
                                     });

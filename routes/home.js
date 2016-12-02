@@ -218,7 +218,7 @@ router.get('/*', function(req, res) {
             console.log('home point 6');
             if (rooms.length === 0) {
                 console.log('1 rooms.length: '+rooms.length);
-                callback(null);
+                callback(null, alertsForum);
             }
             var arr1 = [];
 
