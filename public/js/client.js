@@ -4,6 +4,11 @@ $(window).on('load', function() {
   window.scrollTo(0,document.body.scrollHeight);
 });
 
+if(isBlocked === true) {
+    console.log('someone has been blocked')
+    $('.blockedAlert').css('display', 'block');
+}
+
 
 
 var focus = true;
@@ -550,9 +555,9 @@ $(function(){
 
         function image (from, base64Image) {
             if(from === user1username) {
-                $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + image + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
+                $('#incoming').append('<li class="incomingMessage" id="user1msg"><img class="sentImage" src="' + base64Image + '"/></li><div class="speechbubble1"><img src="/images/speechtail_white.png"></div>');
             } else {
-                $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + image + '"/></li>');
+                $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage" id="user2msg"><img class="sentImage" src="' + base64Image + '"/></li>');
             }
         }
 
