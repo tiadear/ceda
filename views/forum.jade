@@ -1,5 +1,6 @@
 extends layout
 block content
+	- function formatDate(date) { var hours = date.getHours(); var minutes = date.getMinutes(); var ampm = hours >= 12 ? 'pm' : 'am'; hours = hours % 12; hours = hours ? hours : 12; minutes = minutes < 10 ? '0'+minutes : minutes; var strTime = hours + ':' + minutes + ' ' + ampm; var months = date.getMonth() +1; return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;}
 	.container
 		include includes/nav.jade
 		.forumWrap
@@ -27,4 +28,4 @@ block content
 											.bottom-left
 												p=item[3]
 											.bottom-right
-												p=item[4]
+												p #{formatDate(item[4])}

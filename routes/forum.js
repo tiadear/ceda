@@ -88,23 +88,7 @@ router.get('/', function(req, res) {
 			for(i = 0; i < threads.length; i++) {
 				var id = threads[i]._id;
 				arr[id] = [];
-
-				function formatDate(date) {
-				  	var hours = date.getHours();
-				  	var minutes = date.getMinutes();
-				  	var ampm = hours >= 12 ? 'pm' : 'am';
-				  	hours = hours % 12;
-				  	hours = hours ? hours : 12; // the hour '0' should be '12'
-				  	minutes = minutes < 10 ? '0'+minutes : minutes;
-				  	var strTime = hours + ':' + minutes + ' ' + ampm;
-				  	var months = date.getMonth() +1;
-				  	return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-				}
-                
-                var date = new Date(threads[i].created);
-                var dateformat = formatDate(date);
-
-                findUser(threads[i].user, id, threads[i].title, dateformat);
+                findUser(threads[i].user, id, threads[i].title, threads[i].created);
 			}
 		}
 	], function(err, result){
@@ -301,22 +285,7 @@ router.get('/thread*', function(req, res) {
 				var id = post._id;
 				arr[id] = [];
 
-				function formatDate(date) {
-				  	var hours = date.getHours();
-				  	var minutes = date.getMinutes();
-				  	var ampm = hours >= 12 ? 'pm' : 'am';
-				  	hours = hours % 12;
-				  	hours = hours ? hours : 12; // the hour '0' should be '12'
-				  	minutes = minutes < 10 ? '0'+minutes : minutes;
-				  	var strTime = hours + ':' + minutes + ' ' + ampm;
-				  	var months = date.getMonth() +1;
-				  	return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-				}
-
-				var date = new Date(post.created);
-                var dateformat = formatDate(date);
-
-                findUser(post.user, id, post.content, dateformat);
+                findUser(post.user, id, post.content, post.created);
 			});
 		}
 	], function(err, result) {

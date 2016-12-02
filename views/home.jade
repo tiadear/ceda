@@ -1,5 +1,6 @@
 extends layout
 block content
+	- function formatDate(date) { var hours = date.getHours(); var minutes = date.getMinutes(); var ampm = hours >= 12 ? 'pm' : 'am'; hours = hours % 12; hours = hours ? hours : 12; minutes = minutes < 10 ? '0'+minutes : minutes; var strTime = hours + ':' + minutes + ' ' + ampm; var months = date.getMonth() +1; return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;}
 	.container
 		if (user)
 			if (user.isBlocked)
@@ -31,7 +32,7 @@ block content
 														.bottom-left
 															p=item[3]
 														.bottom-right
-															p=item[5]
+															p #{formatDate(item[5])}
 						if (history)
 							.history
 								h2 Chat History
@@ -47,7 +48,7 @@ block content
 																img(src="/images/icon-block-red.png")
 														p=history[i][1]
 													.middle-right
-														p=history[i][3]
+														p #{formatDate(history[i][3])}
 													.post
 														p=history[i][2]
 						.logout

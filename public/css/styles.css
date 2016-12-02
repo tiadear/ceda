@@ -599,6 +599,10 @@ header {
     position: fixed;
     bottom: 0px;
     width: 100%; }
+    @media screen and (min-width: 700px) {
+      .container .postReply {
+        width: 500px;
+        margin: 0 auto; } }
     .container .postReply form a {
       cursor: pointer; }
   .container .settingsWrap .settingsA, .container .settingsWrap .settingsN, .container .settingsWrap .settingsC {

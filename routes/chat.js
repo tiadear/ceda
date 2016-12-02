@@ -184,24 +184,8 @@ router.get('/', function(req, res){
                 );
                 findLastUser.then(
                     function(val) {
-
-                        function formatDate(date) {
-                            var hours = date.getHours();
-                            var minutes = date.getMinutes();
-                            var ampm = hours >= 12 ? 'pm' : 'am';
-                            hours = hours % 12;
-                            hours = hours ? hours : 12; // the hour '0' should be '12'
-                            minutes = minutes < 10 ? '0'+minutes : minutes;
-                            var strTime = hours + ':' + minutes + ' ' + ampm;
-                            var months = date.getMonth() +1;
-                            return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;
-                        }
-
-                        var date = new Date(historyTime);
-                        var newtime = formatDate(date);
-
                         if (String(blocked) != String(currentuser)) {
-                            arr1[roomID] = [val._id, val.username, historyMessage, newtime, blocked];
+                            arr1[roomID] = [val._id, val.username, historyMessage, historyTime, blocked];
                             arr2.push(arr1[roomID]);
                         } else {
                             blockedarr.push(roomID);
