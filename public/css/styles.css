@@ -557,6 +557,8 @@ header {
             height: 38px;
             width: auto;
             margin: 0 auto; }
+  .container .forumWrap h1 {
+    padding-top: 20px; }
   .container .forumWrap .addPost {
     float: right;
     padding: 20px;

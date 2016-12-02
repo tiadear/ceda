@@ -2,7 +2,7 @@ module.exports = {
   'facebook': {
     clientID: '1095165423893839',
     clientSecret: 'abf555499533da026c2b21a160a131e6',
-    callbackURL: 'http://ceda.io/auth/facebook/callback'
+    callbackURL: 'http://ceda-chat.herokuapp.com/auth/facebook/callback'
   },
   'twitter': {
     consumerKey: 'Q1SlugHBjAO9ipKDDUA8u2cET',

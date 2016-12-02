@@ -296,6 +296,7 @@ header {
 
     // forum
     .forumWrap { @extend .chatWraps;
+        h1 { padding-top: $pad;}
         .threadList {  }
         .addPost { float: right; padding: $pad; position: fixed; bottom: 0px; right: 0px;
             a {
