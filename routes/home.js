@@ -217,6 +217,7 @@ router.get('/*', function(req, res) {
         function(alertsForum, rooms, callback) {
             console.log('home point 6');
             if (rooms.length === 0) {
+                console.log('1 rooms.length: '+rooms.length);
                 callback(null);
             }
             var arr1 = [];
@@ -225,6 +226,7 @@ router.get('/*', function(req, res) {
 
                 var flaggedUser = new Promise( 
                     function(resolve, reject) {
+                        console.log('3 rooms.length: '+counter);
                         // check if the current user has blocked the user init or user resp
                         Flag.findOne({user: { $in: [user1, user2] }, userWhoFlagged : currentuser}, function(err, flag) {
                             if(err) throw err;
@@ -261,6 +263,7 @@ router.get('/*', function(req, res) {
             function getChatHistory(roomID, currentuser, user1, user2, counter, blocked){
                 var findChatHistory = new Promise(
                     function(resolve, reject) {
+                        console.log('4 rooms.length: '+counter);
                         chatHistory.find({ room : roomID}).sort({ 'timesent' : -1}).exec(function(err, history) {
                             if (err) {
                                 console.log(err);
@@ -296,6 +299,7 @@ router.get('/*', function(req, res) {
             function findUser(roomID, currentuser, user1, user2, counter, historyUser, historyMessage, historyTime, blocked) {
                 var findLastUser = new Promise (
                     function(resolve, reject) {
+                        console.log('5 rooms.length: '+counter);
                         if(String(currentuser) === String(historyUser)) {
                             if(String(user1) === String(currentuser)) {
                                 User.findById(user2, function(err, userresp) {
@@ -319,7 +323,7 @@ router.get('/*', function(req, res) {
                 );
                 findLastUser.then(
                     function(val) {
-
+                        console.log('6 rooms.length: '+counter);
                         function formatDate(date) {
                             var hours = date.getHours();
                             var minutes = date.getMinutes();
@@ -345,9 +349,10 @@ router.get('/*', function(req, res) {
                         arr2.sort(function(a,b){
                             return new Date(a[3]) - (b[3]);
                         });
-
+                        console.log('arr2 length: '+arr2.length);
+                        console.log('blockedarr length: '+blockedarr.length);
                         if (arr2.length === (counter - blockedarr.length)) {
-                            //console.log('arr2: '+arr2);
+                            console.log('arr2: '+arr2);
                             req.history = arr2;
                             callback(null, req.history);
                         }
@@ -369,7 +374,7 @@ router.get('/*', function(req, res) {
                 arr1[id] = [];
                 var arr2 = [];
                 var blockedarr = [];
-                
+                console.log('2 rooms.length: '+rooms.length);
                 isFlagged(id, _currentuser, _user1, _user2, rooms.length);
             }
             
