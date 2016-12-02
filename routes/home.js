@@ -25,7 +25,7 @@ router.get('/*', function(req, res) {
     async.waterfall([
 
         function(callback) {
-
+            console.log('home point 1');
             Post.find({user : req.user._id}, function(err, posts) {
                 if (err) throw err;
                 callback(null, posts);
@@ -33,7 +33,7 @@ router.get('/*', function(req, res) {
             
 
         }, function(posts, callback) {
-
+            console.log('home point 2');
             if(posts.length === 0) {
                 var alerts = null;
                 callback(null, alerts);
@@ -150,16 +150,15 @@ router.get('/*', function(req, res) {
         },
 
         function(alertsForum, callback) {
-
+            console.log('home point 3');
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
-                if(rooms) {
-                    callback(null, alertsForum, rooms);
-                }
+                callback(null, alertsForum, rooms);
             });
         },
 
         function(alertsForum, rooms, callback) {
+            console.log('home point 2');
             if(rooms.length === 0) {
                 req.alertsForum = alertsForum;
                 callback(null, req.alertsForum);
