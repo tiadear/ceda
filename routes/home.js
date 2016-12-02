@@ -216,10 +216,9 @@ router.get('/*', function(req, res) {
 
         function(alertsForum, rooms, callback) {
             console.log('home point 6');
-            if (rooms.length === 0) {
-                console.log('1 rooms.length: '+rooms.length);
-                callback(null, alertsForum);
-            }
+
+            
+
             var arr1 = [];
 
             function isFlagged(roomID, currentuser, user1, user2, counter){
@@ -366,22 +365,28 @@ router.get('/*', function(req, res) {
                 );
             }
 
-            for(j = 0; j < rooms.length; j++){
-                var id = rooms[j]._id;
-                var _user1 = rooms[j].user_init;
-                var _user2 = rooms[j].user_resp;
-                var _currentuser = req.user._id;
-                arr1[id] = [];
-                var arr2 = [];
-                var blockedarr = [];
-                console.log('2 rooms.length: '+rooms.length);
-                isFlagged(id, _currentuser, _user1, _user2, rooms.length);
+            if (rooms.length === 0) {
+                console.log('1 rooms.length: '+rooms.length);
+                callback(null, alertsForum);
+            } else {
+                for(j = 0; j < rooms.length; j++){
+                    var id = rooms[j]._id;
+                    var _user1 = rooms[j].user_init;
+                    var _user2 = rooms[j].user_resp;
+                    var _currentuser = req.user._id;
+                    arr1[id] = [];
+                    var arr2 = [];
+                    var blockedarr = [];
+                    console.log('2 rooms.length: '+rooms.length);
+                    isFlagged(id, _currentuser, _user1, _user2, rooms.length);
+                }
             }
             
         }
 
     ], function(err, result){
         if (err) throw err;
+        console.log('result: '+result);
         res.render('home', {
             user : req.user,
             alertsForum : req.alertsForum,
