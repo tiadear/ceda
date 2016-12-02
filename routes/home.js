@@ -158,7 +158,7 @@ router.get('/*', function(req, res) {
         },
 
         function(alertsForum, rooms, callback) {
-            console.log('home point 2');
+            console.log('home point 4');
             if(rooms.length === 0) {
                 req.alertsForum = alertsForum;
                 callback(null, req.alertsForum);
@@ -207,15 +207,15 @@ router.get('/*', function(req, res) {
         },
 
         function(alertsForum, callback) {
+            console.log('home point 5');
             Room.find({ $or: [{ user_init : req.user._id}, { user_resp : req.user._id }]}, function(err, rooms) {
                 if (err) throw err;
-                if(rooms) {
-                    callback(null, alertsForum, rooms);
-                }
+                callback(null, alertsForum, rooms);
             });
         },
 
         function(alertsForum, rooms, callback) {
+            console.log('home point 6');
             if (rooms.length === 0) {
                 callback(null);
             }
