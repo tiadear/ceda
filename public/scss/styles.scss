@@ -322,8 +322,8 @@ header {
 
 
     .settingsWrap { @extend .chatWraps;
-        .settingsA, .settingsN, .settingsC {position: relative;
-            .settingsAccount, .settingsNotification, .settingsChat { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
+        .settingsA, .settingsN, .settingsC, .settingsP {position: relative;
+            .settingsAccount, .settingsNotification, .settingsChat, .settingsPersonalize { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
                 .setting { text-align: left; display: block; padding-top: $pad;
                     .settingTitle { color: $secondary; display: inline-block; width: 30%; }
 
@@ -342,7 +342,11 @@ header {
                             .onoffswitch-switch { right: 0px; }
                         }
                     }
-
+                    .selectChoice { display: inline-block; 
+                        #chooseColourScheme { width: 150px; font-family: $sans; font-size: 1em; color: $secondary; border: solid 2px $secondary; @include border-radius(10px); padding: $pad/4; cursor: pointer; 
+                            &:focus { border: solid 2px $primary; outline: none; }
+                        }
+                    }
                     .settingInput { display: inline-block; }
                 }
                 input {}
@@ -359,6 +363,7 @@ header {
         .settingsC { z-index: 25; 
              .settingTitle { vertical-align: middle; padding-bottom: $pad; }
         }
+        .settingsP { z-index: 20; }
     }
 
 
