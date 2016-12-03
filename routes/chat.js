@@ -412,6 +412,7 @@ router.get('/chatpeer*', function(req, res) {
                 micSettings : req.micSettings,
                 vidSettings : req.vidSettings,
                 isBlocked : req.isBlocked,
+                user: req.user,
                 title: 'ceda',
                 pageTitle: 'chat'
             });
