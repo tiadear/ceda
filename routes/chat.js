@@ -370,12 +370,12 @@ router.get('/chatpeer*', ensureAuthenticated, function(req, res) {
                             var newRoom = new Room();
 
                             User.findById(user1, function(err, user) {
-                                var mic1Setting = user1.defaultMic;
-                                var vid1Setting = user1.defaultMic;
+                                var mic1Setting = user.defaultMic;
+                                var vid1Setting = user.defaultMic;
 
                                 User.findById(user2, function(err, user) {
-                                    var mic2Setting = user1.defaultMic;
-                                    var vid2Setting = user1.defaultMic;
+                                    var mic2Setting = user.defaultMic;
+                                    var vid2Setting = user.defaultMic;
 
                                     newRoom.user_init = user1;
                                     newRoom.user_resp = user2;
