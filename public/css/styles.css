@@ -608,6 +608,8 @@ header {
         margin: 0 auto; } }
     .container .postReply form a {
       cursor: pointer; }
+  .container .settingsWrap h1 {
+    padding-top: 20px; }
   .container .settingsWrap .settingsA, .container .settingsWrap .settingsN, .container .settingsWrap .settingsC, .container .settingsWrap .settingsP {
     position: relative; }
     .container .settingsWrap .settingsA .settingsAccount, .container .settingsWrap .settingsA .settingsNotification, .container .settingsWrap .settingsA .settingsChat, .container .settingsWrap .settingsA .settingsPersonalize, .container .settingsWrap .settingsN .settingsAccount, .container .settingsWrap .settingsN .settingsNotification, .container .settingsWrap .settingsN .settingsChat, .container .settingsWrap .settingsN .settingsPersonalize, .container .settingsWrap .settingsC .settingsAccount, .container .settingsWrap .settingsC .settingsNotification, .container .settingsWrap .settingsC .settingsChat, .container .settingsWrap .settingsC .settingsPersonalize, .container .settingsWrap .settingsP .settingsAccount, .container .settingsWrap .settingsP .settingsNotification, .container .settingsWrap .settingsP .settingsChat, .container .settingsWrap .settingsP .settingsPersonalize {

@@ -8,8 +8,19 @@ var async = require('async');
 
 
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { 
+        console.log('is authenticated');
+        return next(); 
+    }
+    res.redirect('/');
+}
+
+
+
+
 //forum page
-router.get('/', function(req, res) {
+router.get('/', ensureAuthenticated, function(req, res) {
 	async.waterfall([
 		function(callback) {
 			Thread.find().sort({'created' : -1}).exec(function(err, threads){
@@ -119,7 +130,7 @@ router.get('/', function(req, res) {
 	
 
 
-router.get('/new', function(req, res) {
+router.get('/new', ensureAuthenticated, function(req, res) {
 	res.render('new', {
 		user : req.user,
 		message : req.flash('forumMessage'),
@@ -130,7 +141,7 @@ router.get('/new', function(req, res) {
 
 
 // edit a post
-router.get('/edit*', function(req, res) {
+router.get('/edit*', ensureAuthenticated, function(req, res) {
 	async.waterfall([
 		function(callback){
 			// get post id
@@ -214,7 +225,7 @@ router.post('/', function(req, res) {
 });
 
 // view all the posts in a thread
-router.get('/thread*', function(req, res) {
+router.get('/thread*', ensureAuthenticated, function(req, res) {
 	async.waterfall([
 		function(callback){
 
@@ -291,6 +302,7 @@ router.get('/thread*', function(req, res) {
 	], function(err, result) {
 		if(err) throw err;
 		//console.log('result: '+result);
+		console.log('user: '+req.user._id);
 		req.session.save(function(err){
 			if(err) throw err;
 			res.render('post', {
@@ -404,7 +416,7 @@ router.post('/thread*', function(req, res) {
 });
 
 
-router.get('/delete*', function(req, res) {
+router.get('/delete*', ensureAuthenticated, function(req, res) {
 	
 	// get post id
     var key = req.query.id;

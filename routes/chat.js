@@ -11,7 +11,21 @@ var async = require('async');
 
 
 
-router.get('/', function(req, res){
+
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { 
+        console.log('is authenticated');
+        return next(); 
+    }
+    res.redirect('/');
+}
+
+
+
+
+
+router.get('/', ensureAuthenticated, function(req, res){
 
 	async.waterfall([
 
@@ -240,7 +254,7 @@ router.get('/', function(req, res){
 
 
 
-router.get('/chatpeer*', function(req, res) {
+router.get('/chatpeer*', ensureAuthenticated, function(req, res) {
     async.waterfall([
         function(callback) {
 
@@ -424,7 +438,7 @@ router.get('/chatpeer*', function(req, res) {
 
 
 
-router.get('/chatprof*', function(req, res) {
+router.get('/chatprof*', ensureAuthenticated, function(req, res) {
     async.waterfall([
         function(callback) {
 
@@ -543,7 +557,7 @@ router.get('/chatprof*', function(req, res) {
 
 
 
-router.get('/blockuser', function(req, res){
+router.get('/blockuser', ensureAuthenticated, function(req, res){
     async.waterfall([
 
         function(callback) {

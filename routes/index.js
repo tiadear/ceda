@@ -273,22 +273,6 @@ router.post('/appeal', function(req, res) {
 
 
 
-
-router.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account');
-});
-
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  console.log('is authenticated');
-  res.redirect('/');
-}
-
-
-
-
-
 // logout
 
 router.get('/logout', function(req, res, next) {

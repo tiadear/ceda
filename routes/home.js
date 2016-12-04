@@ -19,8 +19,20 @@ local.strategy(passport);
 
 
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { 
+        console.log('is authenticated');
+        return next(); 
+    }
+    
+    res.redirect('/');
+}
+
+
+
+
 // dashbaord
-router.get('/*', function(req, res) {
+router.get('/*', ensureAuthenticated, function(req, res) {
 
     async.waterfall([
 

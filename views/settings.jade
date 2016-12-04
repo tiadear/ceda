@@ -2,7 +2,6 @@ extends layout
 block content
 	script.
 		$(document).ready(function() {
-			var numClicks = 0;
 
 			$('.onoffswitch-checkbox').on('click touch', function() {
 				numClicks++;
@@ -34,59 +33,60 @@ block content
 		});
 	.container
 		include includes/nav.jade
-		.settingsWrap
-			h1 Settings
-			.settingsA
-				.settingsAccount
-					h2 Account
-					a(href='/settings/change?field=username')
-						.setting
-							.settingTitle
-								p username
-							.settingInput
-								p #{user.username}	
-					a(href='/settings/change?field=email')
-						.setting
-							.settingTitle
-								p email
-							.settingInput
-								p #{user.email}
-					if (user.provider === 'local')
-						a(href='/settings/change?field=password')
+		if (user)
+			.settingsWrap
+				h1 Settings
+				.settingsA
+					.settingsAccount
+						h2 Account
+						a(href='/settings/change?field=username')
 							.setting
 								.settingTitle
-									p password
+									p username
 								.settingInput
-									p ***********
-					a(href='/delete')
+									p #{user.username}	
+						a(href='/settings/change?field=email')
+							.setting
+								.settingTitle
+									p email
+								.settingInput
+									p #{user.email}
+						if (user.provider === 'local')
+							a(href='/settings/change?field=password')
+								.setting
+									.settingTitle
+										p password
+									.settingInput
+										p ***********
+						a(href='/delete')
+							.setting
+								.settingTitle
+									p account
+								.settingInput
+									p delete account
+				.settingsC
+					.settingsChat
+						h2 Video Chat
 						.setting
 							.settingTitle
-								p account
-							.settingInput
-								p delete account
-			.settingsC
-				.settingsChat
-					h2 Video Chat
-					.setting
-						.settingTitle
-							p microphone
-							p #{user.defaultMic}
-						.onoffswitch
-							if (user.defaultMic === true)
-								input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=true)
-							else
-								input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=false)
-							label.onoffswitch-label(for='defaultMic')
-								span.onoffswitch-inner
-								span.onoffswitch-switch
-					.setting
-						.settingTitle
-							p webcam
-						.onoffswitch
-							if (user.defaultVideo === true)
-								input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=true)
-							else
-								input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=false)
-							label.onoffswitch-label(for='defaultVideo')
-								span.onoffswitch-inner
-								span.onoffswitch-switch
+								p microphone
+								p #{user.defaultMic}
+							.onoffswitch
+								if (user.defaultMic === true)
+									input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=true)
+								else
+									input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=false)
+								label.onoffswitch-label(for='defaultMic')
+									span.onoffswitch-inner
+									span.onoffswitch-switch
+						.setting
+							.settingTitle
+								p webcam
+							.onoffswitch
+								if (user.defaultVideo === true)
+									input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=true)
+								else
+									input.onoffswitch-checkbox#defaultVideo(type='checkbox', name='defaultVideo', checked=false)
+								label.onoffswitch-label(for='defaultVideo')
+									span.onoffswitch-inner
+									span.onoffswitch-switch

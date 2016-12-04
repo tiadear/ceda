@@ -7,6 +7,17 @@ var async = require('async');
 
 
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { 
+        console.log('is authenticated');
+        return next(); 
+    }
+    res.redirect('/');
+}
+
+
+
+
 
 router.get('/', function(req, res) {
 	res.render('settings', {
@@ -17,14 +28,15 @@ router.get('/', function(req, res) {
 
 
 // display the page to change the account settings
-router.get('/change*', function(req, res) {
+router.get('/change*', ensureAuthenticated, function(req, res) {
 	//var id = req.query.id;
 	var field = req.query.field;
 	res.render('settingschange', {
 		user : req.user,
 		field : field,
 		message : req.flash('settingsMessage'),
-		title : 'ceda'
+		title : 'ceda',
+		pageTitle: 'settings'
 	});
 });
 
@@ -92,7 +104,10 @@ router.post('/change*', function(req, res, done) {
 							function(err, user) {
 								if(err) throw err;
 								console.log('user details updated');
-								res.redirect('/settings');
+								res.render('settings', {
+									user : req.user,
+									title : 'ceda'
+								});
 							}
 						);
 					}
@@ -101,8 +116,7 @@ router.post('/change*', function(req, res, done) {
 			});
 					
 		} else {
-			console.log('no field');
-			return done(err)
+			res.redirect('/settings');
 		}
 	}
 		

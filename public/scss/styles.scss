@@ -322,6 +322,7 @@ header {
 
 
     .settingsWrap { @extend .chatWraps;
+        h1 { padding-top: $pad;}
         .settingsA, .settingsN, .settingsC, .settingsP {position: relative;
             .settingsAccount, .settingsNotification, .settingsChat, .settingsPersonalize { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
                 .setting { text-align: left; display: block; padding-top: $pad;

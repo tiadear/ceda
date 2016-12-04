@@ -12,9 +12,6 @@ block content
 				$('.options').show();
 			});
 		});
-		//user 1 is current user
-		currentuser = '#{user._id}';
-		postuser = '#{posts[1]}';
 	- function formatDate(date) { var hours = date.getHours(); var minutes = date.getMinutes(); var ampm = hours >= 12 ? 'pm' : 'am'; hours = hours % 12; hours = hours ? hours : 12; minutes = minutes < 10 ? '0'+minutes : minutes; var strTime = hours + ':' + minutes + ' ' + ampm; var months = date.getMonth() +1; return date.getDate() + "/" + months + "/" + date.getFullYear() + "  " + strTime;}
 	.container
 		include includes/nav-simple.jade	
