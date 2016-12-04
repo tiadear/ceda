@@ -2,12 +2,16 @@ extends layout
 block content
 	script.
 		$(document).ready(function() {
+			var numClicks = 0;
+
 			$('.onoffswitch-checkbox').on('click touch', function() {
-				var check = $(this).attr('checked');
-				console.log('checked? '+ check);
+				numClicks++;
 
+				var check = $(this).prop('checked');
+				console.log(this.id + ' checked? '+ check);
+			
 				if(check === true) {
-
+				console.log('true reached');
 					$.ajax ({
 						type : 'POST',
 						url : '/settings?field='+ this.id,
@@ -16,8 +20,8 @@ block content
 						}
 					});
 				} 
-				if(check === undefined) {
-				console.log('undefined reached');
+				if(check === false) {
+				console.log('false reached');
 					$.ajax ({
 						type : 'POST',
 						url : '/settings?field='+ this.id,
@@ -26,18 +30,6 @@ block content
 						}
 					});
 				}
-			});
-
-			$('#chooseColourScheme').on('click touch', function() {
-				var colour = $('#chooseColourScheme').val();
-				console.log(colour);
-				$.ajax ({
-					type: 'POST',
-					url: '/settings?field=colour',
-					data: {
-						colour : colour
-					}
-				});
 			});
 		});
 	.container
@@ -78,6 +70,7 @@ block content
 					.setting
 						.settingTitle
 							p microphone
+							p #{user.defaultMic}
 						.onoffswitch
 							if (user.defaultMic === true)
 								input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=true)
@@ -97,15 +90,3 @@ block content
 							label.onoffswitch-label(for='defaultVideo')
 								span.onoffswitch-inner
 								span.onoffswitch-switch
-			// .settingsP
-				.settingsPersonalize
-					h2 Personalize
-					.setting
-						.settingTitle
-							p colour scheme
-						.selectChoice
-							select#chooseColourScheme(name='colourScheme')
-								option(value='red', default) Red
-								option(value='blue') Blue
-								option(value='mint') Mint
-								option(value='yellow') Yellow

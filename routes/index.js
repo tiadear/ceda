@@ -87,8 +87,7 @@ router.post('/login', function(req, res, next) {
 
 router.get('/forgot', function(req,res){
     res.render('forgot', {
-        message : req.flash('forgotMessage'),
-        user : req.user
+        message : req.flash('forgotMessage')
     });
 });
 router.post('/forgot', local.forgot,

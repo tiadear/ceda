@@ -111,18 +111,17 @@ router.post('/change*', function(req, res, done) {
 
 // notification settings
 router.post('/', function(req, res) {
-	console.log('checked: ' + req.body.checked);
 
 	async.waterfall([
 
 		function(callback) {
 
 			if (req.body.checked === true) {
-				callback(null, false);
-			} else if (req.body.checked === false) {
+				console.log('is true? ' + req.body.checked);
 				callback(null, true);
 			} else {
-				callback(null, req.body.colour);
+				console.log('is true? ' + req.body.checked);
+				callback(null, false);
 			}
 
 		}, function(checked, callback) {
@@ -130,27 +129,7 @@ router.post('/', function(req, res) {
 			var field = req.query.field;
 			var id = req.user._id;
 
-			if (field === 'notifyChat') {
-				User.update(
-					{ '_id' : id },
-					{ $set: { notifyChat : checked } },
-					function(err, user) {
-						if(err) throw err;
-						callback(null);
-					}
-				);
-			}
-			else if (field === 'notifyForum') {
-				User.update(
-					{ '_id' : id },
-					{ $set: { notifyForum : checked } },
-					function(err, user) {
-						if(err) throw err;
-						callback(null);
-					}
-				);
-			}
-			else if (field === 'defaultMic') {
+			if (field === 'defaultMic') {
 				User.update(
 					{ '_id' : id },
 					{ $set: { defaultMic : checked } },
@@ -166,18 +145,6 @@ router.post('/', function(req, res) {
 					{ $set: { defaultVideo : checked } },
 					function(err, user) {
 						if(err) throw err;
-						callback(null);
-					}
-				);
-			}
-			else if (field === 'colour') {
-				console.log('yay colour field found!!!');
-				console.log('checked: '+checked);
-				User.update(
-					{'_id' : id },
-					{ $set : { colourScheme : checked} },
-					function(err, user) {
-						if (err) throw err;
 						callback(null);
 					}
 				);
