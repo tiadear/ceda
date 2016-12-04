@@ -371,11 +371,11 @@ router.get('/chatpeer*', ensureAuthenticated, function(req, res) {
 
                             User.findById(user1, function(err, user) {
                                 var mic1Setting = user.defaultMic;
-                                var vid1Setting = user.defaultMic;
+                                var vid1Setting = user.defaultVideo;
 
                                 User.findById(user2, function(err, user) {
                                     var mic2Setting = user.defaultMic;
-                                    var vid2Setting = user.defaultMic;
+                                    var vid2Setting = user.defaultVideo;
 
                                     newRoom.user_init = user1;
                                     newRoom.user_resp = user2;
