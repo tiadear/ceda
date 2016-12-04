@@ -24,7 +24,6 @@ function ensureAuthenticated(req, res, next) {
         console.log('is authenticated');
         return next(); 
     }
-    
     res.redirect('/');
 }
 

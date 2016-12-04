@@ -50,7 +50,10 @@ block content
 								.settingTitle
 									p email
 								.settingInput
-									p #{user.email}
+									if (user.email)
+										p #{user.email}
+									else
+										p You have not specified an email address
 						if (user.provider === 'local')
 							a(href='/settings/change?field=password')
 								.setting
@@ -70,7 +73,6 @@ block content
 						.setting
 							.settingTitle
 								p microphone
-								p #{user.defaultMic}
 							.onoffswitch
 								if (user.defaultMic === true)
 									input.onoffswitch-checkbox#defaultMic(type='checkbox', name='defaultMic', checked=true)

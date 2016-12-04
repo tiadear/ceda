@@ -26,7 +26,6 @@ module.exports = new TwitterStrategy({
                 console.log('create new user');
 
                 var newUser = new User ();
-                newUser.email = String;
                 newUser.password = String;
                 newUser.firstName = profile.displayName;
                 newUser.notifyChat = 1;
