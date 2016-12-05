@@ -132,6 +132,9 @@ header {
     -moz-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
     -ms-box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1);
     box-shadow: 5px 5px 15px 1px rgba(0, 0, 0, 0.1); }
+    @media screen and (max-width: 450px) {
+      .container .open {
+        padding: 10px; } }
     .container .open .logo {
       height: 50px;
       margin: 20px 0 50px 0; }
@@ -285,7 +288,7 @@ header {
     text-align: center; }
     .container .history ul, .container .threadList ul {
       width: 100%;
-      padding: 0 0 40px; }
+      padding: 0 0 90px; }
       .container .history ul li, .container .threadList ul li {
         width: 100%;
         position: relative; }
@@ -414,7 +417,7 @@ header {
         margin: 0 auto;
         text-align: center;
         background-color: #ffffff;
-        margin-top: 40%; }
+        margin-top: 20%; }
         @media screen and (max-width: 450px) {
           .container .chatRoom .blockedAlert .popup {
             padding: 10px;

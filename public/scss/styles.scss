@@ -55,10 +55,12 @@ header {
 
 
 
-.container { width: 100%; min-height: 100%; margin-bottom: -50px; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+.container { width: 100%; min-height: 100%; margin-bottom: -50px; 
+    @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
     .alert { padding-top: $pad; color: $primary; }
     // opening app
     .open { width: 95%; margin: 10px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
+        @media screen and (max-width: 450px) {padding: $pad/2; }
         .logo { height: 50px; margin: 20px 0 50px 0;
             img { height: 100%; width: auto; margin: 0 auto; }
         }
@@ -151,7 +153,7 @@ header {
     }
     .threadList {padding-top: $pad;}
     .history, .threadList { width: 100%; text-align: center;
-        ul { width: 100%; padding: 0 0 $pad*2;
+        ul { width: 100%; padding: 0 0 $pad*4.5;
             li { width: 100%; position: relative;
                 //a {
                     ul, .postItem { width: 90%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $secondary; text-align: left; 
@@ -204,7 +206,8 @@ header {
             }
         }
         .blockedAlert { display: none; width: 100%; height: 100%; background-color: rgba($black, 0.6); position: fixed; z-index: 300; top: 0;
-            .popup { width: 400px; height: auto; padding: $pad * 2; margin: 0 auto; text-align: center; background-color: $white; margin-top: 40%; @media screen and (max-width: 450px) {padding: $pad /2; width: 90%; }
+            .popup { width: 400px; height: auto; padding: $pad * 2; margin: 0 auto; text-align: center; background-color: $white; margin-top: 20%; 
+                @media screen and (max-width: 450px) {padding: $pad /2; width: 90%; }
                 h1, p { padding: $pad 0;}
                 .popup-btn {@extend button; width: 40%; max-width: 400px; height: 40px; margin: $pad/2; @include border-radius(5px); }
             }

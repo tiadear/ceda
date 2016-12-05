@@ -153,9 +153,10 @@ $(function(){
                         typing = false;
 
                         $('#outgoing').attr('rows', '3');
+                        $('#outgoing').blur();
                     }
 
-                     $('#outgoingSubmit').on('click touch', function() {
+                    $('#outgoingSubmit').on('click touch', function() {
                         if( $('#outgoing').val() != '') {
 
                             socket.emit('sendChat', $('#outgoing').val());
@@ -166,6 +167,7 @@ $(function(){
                             typing = false;
                         }
                         $('#outgoing').attr('rows', '3');
+                        $('#outgoing').blur();
                     });
                     
                 });

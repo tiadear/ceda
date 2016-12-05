@@ -52,7 +52,7 @@ block content
 						input#imageFile(type="file", accept="image/*")
 						if (vidSettings[1] == false && micSettings[1] == false)
 							.chat-btn#chat-btn-video
-								img(src='/images/icon-switchToVideo-true.png' class="disabled")
+								img(src='/images/icon-switchToVideo-true.png')
 						else if (vidSettings[1] == false && micSettings[1] == true)
 							//-enable chat but make sure video is turned off
 							.chat-btn#chat-btn-video
