@@ -2,17 +2,27 @@ nav
 	ul
 		li
 			a(href="/")
-				.navoption#nav-dash
+				.navoption#home
 					img(src="/images/icon-dashboard.png")
 		li
 			a(href="/forum")
-				.navoption#nav-forum
+				.navoption#forum
 					img(src="/images/icon-forum.png")
 		li 
 			a(href="/chat")
-				.navoption#nav-chat
+				.navoption#chat
 					img(src="/images/icon-chat.png")
 		li
 			a(href="/settings")
-				.navoption#nav-settings
+				.navoption#settings
 					img(src="/images/icon-settings.png")
+script.
+	pageTitle = '#{pageTitle}';
+
+	$('li').each(function(){
+		if($(this).find('.navoption').attr('id') === pageTitle){
+			$(this).find('.navoption').addClass('current');
+		} else {
+			$(this).find('.navoption').removeClass('current');
+		}
+	});

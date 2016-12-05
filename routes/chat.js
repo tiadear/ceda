@@ -243,7 +243,8 @@ router.get('/', ensureAuthenticated, function(req, res){
             res.render('chat', {
                 history : req.history,
                 user : req.user,
-				title : 'ceda'
+				title : 'ceda',
+                pageTitle: 'chat'
             });
         });
 	});

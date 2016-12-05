@@ -367,7 +367,8 @@ router.get('/*', ensureAuthenticated, function(req, res) {
             alertsForum : req.alertsForum,
             message : req.flash('usernameMessage'),
             history : req.history,
-            title: 'ceda'
+            title: 'ceda',
+            pageTitle: 'home'
         });
     });
 });

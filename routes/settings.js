@@ -22,7 +22,8 @@ function ensureAuthenticated(req, res, next) {
 router.get('/', function(req, res) {
 	res.render('settings', {
 		user : req.user,
-		title : 'ceda'
+		title : 'ceda',
+		pageTitle: 'settings'
 	});
 });
 
@@ -169,7 +170,8 @@ router.post('/', function(req, res) {
 		if(err) throw err;
 		res.render('settings', {
 			user : req.user,
-			title : 'ceda'
+			title : 'ceda',
+			pageTitle: 'settings'
 		});
 	});
 });

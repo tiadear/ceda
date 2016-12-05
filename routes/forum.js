@@ -122,7 +122,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
 			res.render('forum', {
 				threads: req.threads,
 				user : req.user,
-				title : 'ceda'
+				title : 'ceda',
+				pageTitle: 'forum'
 			});
 		});
 	});

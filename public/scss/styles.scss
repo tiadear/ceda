@@ -5,42 +5,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// FIGURE OUT HOW TO CHANGE VARS 
-// FOR ALTERNATE COLOUR SCHEME PURPOSES
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 * { box-sizing: border-box;}
 body { font-family: $sans; background-color: $grey; margin: 0;}
 header { background-color: $primary; 
@@ -82,7 +46,7 @@ form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
 }
 
 header {
-    height: 30px; background-color: $primary;
+    height: 30px; background-color: darken($primary, 5%); 
     .title { font-size: 0.8em; color: $white; margin: 0 auto; text-align: center; padding: $pad/2 0;}
 }
 
@@ -129,15 +93,17 @@ header {
 
 
     // nav display
-    nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2));
+    nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); 
         ul { width: 100%;
-            li { background-color: $primary; list-style-type: none; width: 25%; height: 100%; display: inline-block; padding-bottom: 7px;
-                &:hover, &:focus { background-color: $secondary; }
+            li { background-color: $primary; list-style-type: none; width: 25%; height: 50px; display: inline-block; padding: 5px 0 7px 0; position: relative; 
+                &:hover, &:focus { background-color: darken($primary, 5%); }
                 a { 
-                    .navoption { 
-                        img { height: 30px; margin: 10px auto 0 auto; } 
-                    } 
+                    .navoption { position: absolute; width: 100%; top: 0; height: 50px;
+                        img { height: 25px; margin: 10px auto 0 auto; } 
+                        &.current { border-bottom: solid 5px $white; }
+                    }
                 }
+                
             }
         }
     } // end of nav
@@ -168,7 +134,10 @@ header {
 
             }
         }
-        .logout { text-align: right; position: absolute; bottom: 20px; right: 20px;}
+        .logout { @extend button; right: 20px; position: absolute; bottom: 20px; margin: 0 auto; border: solid 2px $primary; @include border-radius(5px); ; padding: $pad/4 $pad; margin-top: $pad;
+            &:hover { background-color: $secondary; border: solid 2px $secondary; }
+            a {color: $white; text-align: center;}
+        }
     }
     
 

@@ -11,8 +11,6 @@ html
     script(src='/js/lib/adapter.js')
     script(src='/js/favico.min.js')
   body
-    if (user)
-      include includes/head.jade
     if (error && error.length > 0)
       br
       h4.error-msg= error
