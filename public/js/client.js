@@ -124,6 +124,8 @@ $(function(){
                     socket.emit("userTyping", false);
                 }
 
+
+
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
 
@@ -149,7 +151,22 @@ $(function(){
                         $('#outgoing').val('');
                         socket.emit('userTyping', false);
                         typing = false;
+
+                        $('#outgoing').attr('rows', '3');
                     }
+
+                     $('#outgoingSubmit').on('click touch', function() {
+                        if( $('#outgoing').val() != '') {
+
+                            socket.emit('sendChat', $('#outgoing').val());
+
+                            //reset the outgoing chat to null
+                            $('#outgoing').val('');
+                            socket.emit('userTyping', false);
+                            typing = false;
+                        }
+                        $('#outgoing').attr('rows', '3');
+                    });
                     
                 });
             }

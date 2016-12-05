@@ -94,7 +94,7 @@ header {
 
 
     // nav display
-    nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); 
+    nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); position: fixed; z-index:500; 
         ul { width: 100%; padding: 0px;
             li { background-color: $primary; list-style-type: none; width: 25%; height: 50px; display: inline-block; padding: 5px 0 7px 0; position: relative; 
                 &:hover, &:focus { background-color: darken($primary, 5%); }
@@ -110,7 +110,8 @@ header {
     } // end of nav
 
 
-    .simpleNav { height: 40px; width: 100%; background-color: $primary; padding-top: $pad/2;  @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); position: fixed; z-index: 300; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+    .simpleNav { height: 40px; width: 100%; background-color: $primary; padding-top: $pad/2;  @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); position: fixed; z-index: 300; margin-bottom: $pad;
+        @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
         a { position: absolute; padding-top: $pad/4;
             .back { width: 15px; position: relative; margin-left: $pad; display: inline-block; vertical-align: top; 
                 img {width: 100%;}
@@ -124,7 +125,7 @@ header {
 
 
     // dash
-    .chatWraps { width: 100%; padding: $pad*2 0 0; text-align: center; }
+    .chatWraps { width: 100%; padding: $pad*4 0 0; text-align: center; }
     .dash {
         @extend .chatWraps;
         .alerts {
@@ -148,11 +149,13 @@ header {
             .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
         }
     }
-    .history, .threadList {@extend .chatWraps;
+    .threadList {padding-top: $pad;}
+    .history, .threadList { width: 100%; text-align: center;
         ul { width: 100%; padding: 0 0 $pad*2;
             li { width: 100%; position: relative;
                 //a {
-                    ul, .postItem { width: 90%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $secondary; text-align: left;
+                    ul, .postItem { width: 90%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $secondary; text-align: left; 
+                        @media screen and (max-width: 450px) {width: 100%;}
                         .top {font-size: 1.4em; padding: $pad 0;}
                         .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; 
                              @media screen and (max-width: 500px) {font-size: 0.7em;}
@@ -178,7 +181,7 @@ header {
                         
                         
                     }
-                    ul { background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); }
+                    ul { background-color: white; @include box-shadow( 0px 3px 14px 0px rgba(0,0,0,0.1)); }
                     .postItem { background-color: none; @include box-shadow(0 rgba(0,0,0,0)); border-bottom: solid 1px darken($grey, 10%); }
                 //}
             }
@@ -235,7 +238,7 @@ header {
             #outgoing { width: 100%; border: none; padding: $pad/2 $pad; font-family: $sans; @include box-shadow(0px -5px 14px -5px rgba(0,0,0,0.2)); margin-bottom: -5px; }
             .chatOptions {width: 100%; height: 40px;
                 .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
-                    &:hover {background-color:$secondary;}
+                    &:hover { background-color: darken($primary, 5%); }
                     img {height: 38px; width: auto; margin: 0 auto;
                         &.disabled { opacity: 0.6; pointer-events: none; }
                     }
@@ -285,11 +288,12 @@ header {
         }
     }
     .options { padding: $pad; position: fixed; bottom: 0px; right: 0px;
-        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $tertiary; cursor: pointer; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); bottom: 20px;
+        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $tertiary; cursor: pointer; @include box-shadow( 0px 3px 14px 0px rgba(0,0,0,0.1)); bottom: 20px;
             p { color: $white; text-align: center; padding-top: 21px;}
          }
     }
-    .postReply {display :none; position: fixed; bottom: 0px; width: 100%; background-color: $white; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+    .postReply {display :none; position: fixed; bottom: 0px; width: 100%; background-color: $white; z-index: 300;
+        @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
         form {
             a {cursor: pointer; text-align: center; display: block; }
         }
@@ -300,7 +304,7 @@ header {
 
     .settingsWrap { @extend .chatWraps;
         .settingsA, .settingsN, .settingsC, .settingsP {position: relative;
-            .settingsAccount, .settingsNotification, .settingsChat, .settingsPersonalize { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
+            .settingsAccount, .settingsNotification, .settingsChat, .settingsPersonalize { text-align: left; background-color: white; @include box-shadow( 0px 3px 14px 0px rgba(0,0,0,0.1)); padding: $pad;
                 .setting { text-align: left; display: block; padding-top: $pad;
                     .settingTitle { color: $secondary; display: inline-block; width: 30%; }
 

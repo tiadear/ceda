@@ -314,9 +314,6 @@ router.get('/*', ensureAuthenticated, function(req, res) {
                 );
                 findLastUser.then(
                     function(val) {
-                        console.log('6 rooms.length: '+counter);
-
-
                         if (String(blocked) != String(currentuser)) {
                             arr1[roomID] = [val._id, val.username, historyMessage, historyTime, blocked];
                             arr2.push(arr1[roomID]);
@@ -327,10 +324,7 @@ router.get('/*', ensureAuthenticated, function(req, res) {
                         arr2.sort(function(a,b){
                             return new Date(a[3]) - (b[3]);
                         });
-                        console.log('arr2 length: '+arr2.length);
-                        console.log('blockedarr length: '+blockedarr.length);
                         if (arr2.length === (counter - blockedarr.length)) {
-                            console.log('arr2: '+arr2);
                             req.history = arr2.slice(0,6);
                             callback(null, req.history);
                         }
@@ -345,7 +339,6 @@ router.get('/*', ensureAuthenticated, function(req, res) {
             }
 
             if (rooms.length === 0) {
-                console.log('1 rooms.length: '+rooms.length);
                 req.history = null;
                 req.alertsForum = alertsForum;
                 callback(null, req.alertsForum, req.history);
@@ -366,7 +359,6 @@ router.get('/*', ensureAuthenticated, function(req, res) {
 
     ], function(err, result){
         if (err) throw err;
-        console.log('result: '+result);
         res.render('home', {
             user : req.user,
             alertsForum : req.alertsForum,

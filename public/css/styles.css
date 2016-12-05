@@ -203,7 +203,9 @@ header {
     -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
+    box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    z-index: 500; }
     .container nav ul {
       width: 100%;
       padding: 0px; }
@@ -237,7 +239,8 @@ header {
     -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     position: fixed;
-    z-index: 300; }
+    z-index: 300;
+    margin-bottom: 20px; }
     @media screen and (min-width: 700px) {
       .container .simpleNav {
         width: 500px;
@@ -260,9 +263,9 @@ header {
       width: 100%;
       position: absolute;
       pointer-events: none; }
-  .container .chatWraps, .container .dash, .container .chatChoiceWrap, .container .history, .container .threadList, .container .forumWrap, .container .settingsWrap, .container .errorWrap {
+  .container .chatWraps, .container .dash, .container .chatChoiceWrap, .container .forumWrap, .container .settingsWrap, .container .errorWrap {
     width: 100%;
-    padding: 40px 0 0;
+    padding: 80px 0 0;
     text-align: center; }
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
@@ -275,91 +278,99 @@ header {
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       border-radius: 5px; }
-  .container .history ul, .container .threadList ul {
+  .container .threadList {
+    padding-top: 20px; }
+  .container .history, .container .threadList {
     width: 100%;
-    padding: 0 0 40px; }
-    .container .history ul li, .container .threadList ul li {
+    text-align: center; }
+    .container .history ul, .container .threadList ul {
       width: 100%;
-      position: relative; }
-      .container .history ul li ul, .container .history ul li .postItem, .container .threadList ul li ul, .container .threadList ul li .postItem {
-        width: 90%;
-        padding: 0 40px 10px;
-        margin: 0 auto;
-        color: #213e64;
-        text-align: left; }
-        .container .history ul li ul .top, .container .history ul li .postItem .top, .container .threadList ul li ul .top, .container .threadList ul li .postItem .top {
-          font-size: 1.4em;
-          padding: 20px 0; }
-        .container .history ul li ul .middle-left, .container .history ul li .postItem .middle-left, .container .threadList ul li ul .middle-left, .container .threadList ul li .postItem .middle-left {
-          font-size: 0.8em;
-          padding: 20px 0 10px;
-          width: 50%;
-          display: inline-block; }
-          @media screen and (max-width: 500px) {
-            .container .history ul li ul .middle-left, .container .history ul li .postItem .middle-left, .container .threadList ul li ul .middle-left, .container .threadList ul li .postItem .middle-left {
-              font-size: 0.7em; } }
-          .container .history ul li ul .middle-left .icon, .container .history ul li .postItem .middle-left .icon, .container .threadList ul li ul .middle-left .icon, .container .threadList ul li .postItem .middle-left .icon {
-            width: 22px;
-            display: inline-block;
-            padding-right: 10px; }
-            .container .history ul li ul .middle-left .icon img, .container .history ul li .postItem .middle-left .icon img, .container .threadList ul li ul .middle-left .icon img, .container .threadList ul li .postItem .middle-left .icon img {
-              width: 100%; }
-          .container .history ul li ul .middle-left p, .container .history ul li .postItem .middle-left p, .container .threadList ul li ul .middle-left p, .container .threadList ul li .postItem .middle-left p {
-            display: inline-block; }
-        .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
-          font-size: 0.8em;
-          width: 50%;
-          display: inline-block;
-          text-align: right; }
-          @media screen and (max-width: 500px) {
-            .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
-              font-size: 0.7em; } }
-        .container .history ul li ul .post, .container .history ul li .postItem .post, .container .threadList ul li ul .post, .container .threadList ul li .postItem .post {
-          padding: 10px 0 10px; }
-        .container .history ul li ul .postnumber, .container .history ul li .postItem .postnumber, .container .threadList ul li ul .postnumber, .container .threadList ul li .postItem .postnumber {
-          font-size: 0.7em;
-          padding-bottom: 10px; }
-        .container .history ul li ul .bottom-left, .container .history ul li .postItem .bottom-left, .container .threadList ul li ul .bottom-left, .container .threadList ul li .postItem .bottom-left {
-          font-size: 0.8em;
-          padding: 10px 0;
-          width: 50%;
-          display: inline-block; }
-          @media screen and (max-width: 500px) {
-            .container .history ul li ul .bottom-left, .container .history ul li .postItem .bottom-left, .container .threadList ul li ul .bottom-left, .container .threadList ul li .postItem .bottom-left {
-              font-size: 0.7em; } }
-        .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
-          font-size: 0.8em;
-          width: 50%;
-          text-align: right;
-          padding: 10px 5px;
-          display: inline-block; }
-          @media screen and (max-width: 500px) {
-            .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
-              font-size: 0.7em; } }
-          .container .history ul li ul .bottom-right a, .container .history ul li .postItem .bottom-right a, .container .threadList ul li ul .bottom-right a, .container .threadList ul li .postItem .bottom-right a {
-            padding: 0 5px; }
-        .container .history ul li ul .blocked, .container .history ul li .postItem .blocked, .container .threadList ul li ul .blocked, .container .threadList ul li .postItem .blocked {
+      padding: 0 0 40px; }
+      .container .history ul li, .container .threadList ul li {
+        width: 100%;
+        position: relative; }
+        .container .history ul li ul, .container .history ul li .postItem, .container .threadList ul li ul, .container .threadList ul li .postItem {
           width: 90%;
-          height: 40px;
-          font-size: 0.6em;
-          text-transform: uppercase;
-          color: #b8b8b8;
-          text-align: right; }
-      .container .history ul li ul, .container .threadList ul li ul {
-        background-color: white;
-        -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-        -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-        -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-        box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
-      .container .history ul li .postItem, .container .threadList ul li .postItem {
-        background-color: none;
-        -webkit-box-shadow: 0 transparent;
-        -moz-box-shadow: 0 transparent;
-        -ms-box-shadow: 0 transparent;
-        box-shadow: 0 transparent;
-        border-bottom: solid 1px #d2d2d2; }
-  .container .history h2, .container .threadList h2 {
-    padding: 0 0 40px; }
+          padding: 0 40px 10px;
+          margin: 0 auto;
+          color: #213e64;
+          text-align: left; }
+          @media screen and (max-width: 450px) {
+            .container .history ul li ul, .container .history ul li .postItem, .container .threadList ul li ul, .container .threadList ul li .postItem {
+              width: 100%; } }
+          .container .history ul li ul .top, .container .history ul li .postItem .top, .container .threadList ul li ul .top, .container .threadList ul li .postItem .top {
+            font-size: 1.4em;
+            padding: 20px 0; }
+          .container .history ul li ul .middle-left, .container .history ul li .postItem .middle-left, .container .threadList ul li ul .middle-left, .container .threadList ul li .postItem .middle-left {
+            font-size: 0.8em;
+            padding: 20px 0 10px;
+            width: 50%;
+            display: inline-block; }
+            @media screen and (max-width: 500px) {
+              .container .history ul li ul .middle-left, .container .history ul li .postItem .middle-left, .container .threadList ul li ul .middle-left, .container .threadList ul li .postItem .middle-left {
+                font-size: 0.7em; } }
+            .container .history ul li ul .middle-left .icon, .container .history ul li .postItem .middle-left .icon, .container .threadList ul li ul .middle-left .icon, .container .threadList ul li .postItem .middle-left .icon {
+              width: 22px;
+              display: inline-block;
+              padding-right: 10px; }
+              .container .history ul li ul .middle-left .icon img, .container .history ul li .postItem .middle-left .icon img, .container .threadList ul li ul .middle-left .icon img, .container .threadList ul li .postItem .middle-left .icon img {
+                width: 100%; }
+            .container .history ul li ul .middle-left p, .container .history ul li .postItem .middle-left p, .container .threadList ul li ul .middle-left p, .container .threadList ul li .postItem .middle-left p {
+              display: inline-block; }
+          .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
+            font-size: 0.8em;
+            width: 50%;
+            display: inline-block;
+            text-align: right; }
+            @media screen and (max-width: 500px) {
+              .container .history ul li ul .middle-right, .container .history ul li .postItem .middle-right, .container .threadList ul li ul .middle-right, .container .threadList ul li .postItem .middle-right {
+                font-size: 0.7em; } }
+          .container .history ul li ul .post, .container .history ul li .postItem .post, .container .threadList ul li ul .post, .container .threadList ul li .postItem .post {
+            padding: 10px 0 10px; }
+          .container .history ul li ul .postnumber, .container .history ul li .postItem .postnumber, .container .threadList ul li ul .postnumber, .container .threadList ul li .postItem .postnumber {
+            font-size: 0.7em;
+            padding-bottom: 10px; }
+          .container .history ul li ul .bottom-left, .container .history ul li .postItem .bottom-left, .container .threadList ul li ul .bottom-left, .container .threadList ul li .postItem .bottom-left {
+            font-size: 0.8em;
+            padding: 10px 0;
+            width: 50%;
+            display: inline-block; }
+            @media screen and (max-width: 500px) {
+              .container .history ul li ul .bottom-left, .container .history ul li .postItem .bottom-left, .container .threadList ul li ul .bottom-left, .container .threadList ul li .postItem .bottom-left {
+                font-size: 0.7em; } }
+          .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
+            font-size: 0.8em;
+            width: 50%;
+            text-align: right;
+            padding: 10px 5px;
+            display: inline-block; }
+            @media screen and (max-width: 500px) {
+              .container .history ul li ul .bottom-right, .container .history ul li .postItem .bottom-right, .container .threadList ul li ul .bottom-right, .container .threadList ul li .postItem .bottom-right {
+                font-size: 0.7em; } }
+            .container .history ul li ul .bottom-right a, .container .history ul li .postItem .bottom-right a, .container .threadList ul li ul .bottom-right a, .container .threadList ul li .postItem .bottom-right a {
+              padding: 0 5px; }
+          .container .history ul li ul .blocked, .container .history ul li .postItem .blocked, .container .threadList ul li ul .blocked, .container .threadList ul li .postItem .blocked {
+            width: 90%;
+            height: 40px;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            color: #b8b8b8;
+            text-align: right; }
+        .container .history ul li ul, .container .threadList ul li ul {
+          background-color: white;
+          -webkit-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+          -moz-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+          -ms-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1); }
+        .container .history ul li .postItem, .container .threadList ul li .postItem {
+          background-color: none;
+          -webkit-box-shadow: 0 transparent;
+          -moz-box-shadow: 0 transparent;
+          -ms-box-shadow: 0 transparent;
+          box-shadow: 0 transparent;
+          border-bottom: solid 1px #d2d2d2; }
+    .container .history h2, .container .threadList h2 {
+      padding: 0 0 40px; }
   .container .chatRoom {
     padding-top: 50px; }
     .container .chatRoom .chatPartner {
@@ -526,7 +537,7 @@ header {
           vertical-align: top;
           text-align: center; }
           .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn:hover {
-            background-color: #213e64; }
+            background-color: #e73d3e; }
           .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img {
             height: 38px;
             width: auto;
@@ -639,10 +650,10 @@ header {
       border-radius: 30px;
       background-color: #6ed4b3;
       cursor: pointer;
-      -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      -ms-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
       bottom: 20px; }
       .container .options .reply p {
         color: #ffffff;
@@ -653,7 +664,8 @@ header {
     position: fixed;
     bottom: 0px;
     width: 100%;
-    background-color: #ffffff; }
+    background-color: #ffffff;
+    z-index: 300; }
     @media screen and (min-width: 700px) {
       .container .postReply {
         width: 500px;
@@ -667,10 +679,10 @@ header {
     .container .settingsWrap .settingsA .settingsAccount, .container .settingsWrap .settingsA .settingsNotification, .container .settingsWrap .settingsA .settingsChat, .container .settingsWrap .settingsA .settingsPersonalize, .container .settingsWrap .settingsN .settingsAccount, .container .settingsWrap .settingsN .settingsNotification, .container .settingsWrap .settingsN .settingsChat, .container .settingsWrap .settingsN .settingsPersonalize, .container .settingsWrap .settingsC .settingsAccount, .container .settingsWrap .settingsC .settingsNotification, .container .settingsWrap .settingsC .settingsChat, .container .settingsWrap .settingsC .settingsPersonalize, .container .settingsWrap .settingsP .settingsAccount, .container .settingsWrap .settingsP .settingsNotification, .container .settingsWrap .settingsP .settingsChat, .container .settingsWrap .settingsP .settingsPersonalize {
       text-align: left;
       background-color: white;
-      -webkit-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
-      box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      -ms-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
       padding: 20px; }
       .container .settingsWrap .settingsA .settingsAccount .setting, .container .settingsWrap .settingsA .settingsNotification .setting, .container .settingsWrap .settingsA .settingsChat .setting, .container .settingsWrap .settingsA .settingsPersonalize .setting, .container .settingsWrap .settingsN .settingsAccount .setting, .container .settingsWrap .settingsN .settingsNotification .setting, .container .settingsWrap .settingsN .settingsChat .setting, .container .settingsWrap .settingsN .settingsPersonalize .setting, .container .settingsWrap .settingsC .settingsAccount .setting, .container .settingsWrap .settingsC .settingsNotification .setting, .container .settingsWrap .settingsC .settingsChat .setting, .container .settingsWrap .settingsC .settingsPersonalize .setting, .container .settingsWrap .settingsP .settingsAccount .setting, .container .settingsWrap .settingsP .settingsNotification .setting, .container .settingsWrap .settingsP .settingsChat .setting, .container .settingsWrap .settingsP .settingsPersonalize .setting {
         text-align: left;
