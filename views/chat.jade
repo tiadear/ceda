@@ -27,5 +27,5 @@ block content
 									.middle-right
 										p #{formatDate(history[i][3])}
 									.post
-										p=history[i][2]
+										p=history[i][2].substr(0,100) + '...'
 									

@@ -104,6 +104,14 @@ $(function(){
 
                 socket.emit('joinRoom', roomID, user1username, user2username);
 
+                $('#outgoing').on('focus', function(){
+                    $(this).attr('rows', '10');
+                });
+
+                $('#outgoing').on('blur', function(){
+                    $(this).attr('rows', '3');
+                });
+
                 msgSubmit.disabled = false;
 
                 $('#outgoing').unbind('keypress');
@@ -439,6 +447,8 @@ $(function(){
                     $('.displayMessagesWrap').show();
                     $('.sendMessagesWrap').show();
                     $('#user2').show();
+
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
                 });
 
 
@@ -574,6 +584,7 @@ $(function(){
             } else {
                 $('#incoming').append('<div class="speechbubble2"><img src="/images/speechtail_blue.png"></div><li class="incomingMessage incomingImage" id="user2msg"><div class="sentImage"><img src="' + base64Image + '"></div></li>');
             }
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         }
 
 });

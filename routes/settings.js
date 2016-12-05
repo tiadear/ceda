@@ -57,7 +57,27 @@ router.post('/change*', function(req, res, done) {
 				function(err, user) {
 					if(err) throw err;
 					console.log('user details updated');
-					res.redirect('/settings');
+
+					var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
+					postmark.send({
+						"From": "admin@ceda.io",
+						"To": req.body.update,
+						"Subject": "Email Change",
+						"TextBody": 'Hello,\n\n' + 'This is confirmation that your email address was changed at Ceda. If this was not you, please advise us immediately. If this was you, please ignore this email.',
+						"Tag": "email"
+					}, function(err) {
+						if(err) {
+							console.error("Unable to send via postmark: " + err.message);
+							return done(err);
+						}
+						console.info("Sent to postmark for delivery");
+					
+						res.render('settings', {
+							user : req.user,
+							title : 'ceda',
+							pageTitle: 'settings'
+						});
+					});
 				}
 			);
 		}
@@ -84,6 +104,7 @@ router.post('/change*', function(req, res, done) {
 
 				if (user) {
 					req.user = user;
+					var email = user.email;
 					//confirm current password matches db
 					if(!user.validPassword(req.body.current)) {
 					console.log('wrong password');
@@ -104,10 +125,28 @@ router.post('/change*', function(req, res, done) {
 							{ $set: { password : newPassword } },
 							function(err, user) {
 								if(err) throw err;
+
 								console.log('user details updated');
-								res.render('settings', {
-									user : req.user,
-									title : 'ceda'
+
+								var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
+					        	postmark.send({
+									"From": "admin@ceda.io",
+									"To": email,
+									"Subject": "Password Change",
+									"TextBody": 'Hello,\n\n' + 'This is confirmation that your password was changed at Ceda. If this was not you, please advise us immediately. If this was you, please ignore this email.',
+									"Tag": "password"
+								}, function(err) {
+									if(err) {
+										console.error("Unable to send via postmark: " + err.message);
+										return done(err);
+									}
+									console.info("Sent to postmark for delivery");
+									
+									res.render('settings', {
+										user : req.user,
+										title : 'ceda',
+										pageTitle: 'settings'
+									});
 								});
 							}
 						);

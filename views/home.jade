@@ -28,7 +28,7 @@ block content
 														.top
 															p=item[1]
 														.post
-															p=item[4]
+															p=item[4].substr(0,100) + '...'
 														.bottom-left
 															p=item[3]
 														.bottom-right
@@ -50,9 +50,7 @@ block content
 													.middle-right
 														p #{formatDate(history[i][3])}
 													.post
-														p=history[i][2]
-						.logout
-							a(href="/logout") Logout
+														p=history[i][2].substr(0,100) + '...'
 				else
 					.open
 						.logo
@@ -68,3 +66,5 @@ block content
 							input.form-input(type='text', name='username', placeholder='Username')
 							input(type='hidden', name='email', value='#{user.email}')
 							button.form-submit(type="submit") Submit
+	.logout
+		a(href="/logout") Logout

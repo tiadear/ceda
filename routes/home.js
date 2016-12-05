@@ -117,9 +117,14 @@ router.get('/*', ensureAuthenticated, function(req, res) {
                         arr[threadId] = [threadId, threadTitle, postUser, val, postContent, postTime];
                         arr2.push(arr[threadId]);
 
+                        arr2.sort(function(a,b){
+                            return new Date(a[5]) - (b[5]);
+                        });
+
                         //console.log('counter: '+counter);
                         if(counter === (total -1)) {
-                            req.alertsForum = uniq(arr2);
+                            uniq(arr2);
+                            req.alertsForum = arr2.slice(0,6);
                             //console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
@@ -326,7 +331,7 @@ router.get('/*', ensureAuthenticated, function(req, res) {
                         console.log('blockedarr length: '+blockedarr.length);
                         if (arr2.length === (counter - blockedarr.length)) {
                             console.log('arr2: '+arr2);
-                            req.history = arr2;
+                            req.history = arr2.slice(0,6);
                             callback(null, req.history);
                         }
                         

@@ -378,7 +378,9 @@ io.sockets.on('connection', function(socket){
                 throw err;
             } else {
                 console.log('saving image to chat history');
-                socket.emit("sendImage", socket.username, msg);
+
+                //socket.emit("sendImage", socket.username, msg);
+                io.sockets.in(socket.room).emit("sendImage", socket.username, msg);
 
             }
         });

@@ -6,7 +6,8 @@
 
 
 * { box-sizing: border-box;}
-body { font-family: $sans; background-color: $grey; margin: 0;}
+html, body { height: 100%; }
+body { font-family: $sans; background-color: $grey; margin: 0; }
 header { background-color: $primary; 
     .logo { height: 30px; width: auto;
         img { height: 100%; }
@@ -30,7 +31,7 @@ h2 { @extend .htags; font-size: 1.2em; color: $secondary; margin: 0px; }
 h3 { @extend .htags; font-size: 1.2em; color: $white; margin: 0px; }
 ul { -webkit-padding-start: 0px; margin: 0; }
 li { list-style-type: none; }
-p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; margin: 0px; }
+p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; margin: 0px; line-height: 1.2em; }
 
 
 
@@ -54,8 +55,8 @@ header {
 
 
 
-.container { width: 100%; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
-
+.container { width: 100%; min-height: 100%; margin-bottom: -50px; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+    .alert { padding-top: $pad; color: $primary; }
     // opening app
     .open { width: 95%; margin: 10px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
         .logo { height: 50px; margin: 20px 0 50px 0;
@@ -123,7 +124,7 @@ header {
 
 
     // dash
-    .chatWraps { width: 100%; padding: $pad*2 0; text-align: center; }
+    .chatWraps { width: 100%; padding: $pad*2 0 0; text-align: center; }
     .dash {
         @extend .chatWraps;
         .alerts {
@@ -133,10 +134,6 @@ header {
             .chatAlerts {
 
             }
-        }
-        .logout { @extend button; right: 20px; position: absolute; bottom: 20px; margin: 0 auto; border: solid 2px $primary; @include border-radius(5px); ; padding: $pad/4 $pad; margin-top: $pad;
-            &:hover { background-color: $secondary; border: solid 2px $secondary; }
-            a {color: $white; text-align: center;}
         }
     }
     
@@ -152,22 +149,28 @@ header {
         }
     }
     .history, .threadList {@extend .chatWraps;
-        ul { width: 100%; padding: $pad*2 0;
+        ul { width: 100%; padding: 0 0 $pad*2;
             li { width: 100%; position: relative;
                 //a {
-                    ul, .postItem { width: 90%; padding: 0 $pad*2; margin: 0 auto; color: $secondary; text-align: left;
+                    ul, .postItem { width: 90%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $secondary; text-align: left;
                         .top {font-size: 1.4em; padding: $pad 0;}
                         .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; 
+                             @media screen and (max-width: 500px) {font-size: 0.7em;}
                             .icon {width: 22px; display: inline-block; padding-right: $pad/2;
                                 img {width: 100%; }
                             }
                             p {display: inline-block;}
                         }
-                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right;}
+                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right; 
+                            @media screen and (max-width: 500px) {font-size: 0.7em;}
+                        }
                         .post { padding: $pad/2 0 $pad/2; }
                         .postnumber {font-size : 0.7em; padding-bottom: $pad/2;}
-                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;}
+                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;
+                             @media screen and (max-width: 500px) {font-size: 0.7em;}
+                        }
                         .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block;
+                             @media screen and (max-width: 500px) {font-size: 0.7em;}
                             a {padding: 0 $pad/4;}
                         }
                         .blocked { width: 90%; height: 40px; font-size: 0.6em; text-transform: uppercase; color: darken($grey, 20%); text-align: right;
@@ -180,6 +183,7 @@ header {
                 //}
             }
         }
+        h2 { padding: 0 0 $pad*2; }
     }
 
 
@@ -208,7 +212,7 @@ header {
                 li { list-style-type: none; }
                 .istyping { display: block; font-size: 0.8em;}
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px; position: relative; }
-                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad; word-wrap: break-word; @media screen and (max-width: 450px) {width: 85%;}
+                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; word-wrap: break-word; margin: $pad 0; @media screen and (max-width: 450px) {width: 85%;}
                     .videoRequest { display: inline-block; color: $primary; padding: $pad/2 $pad/2; cursor: pointer;}
                     .sentImage { width: 90%; margin: 0 auto; position: relative;
                         img {width: 100%;}
@@ -228,7 +232,7 @@ header {
             }
         }
         .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
-            #outgoing { height: 40px; width: 100%; border: none; padding: 0 $pad; font-family: $sans;}
+            #outgoing { width: 100%; border: none; padding: $pad/2 $pad; font-family: $sans; @include box-shadow(0px -5px 14px -5px rgba(0,0,0,0.2)); margin-bottom: -5px; }
             .chatOptions {width: 100%; height: 40px;
                 .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                     &:hover {background-color:$secondary;}
@@ -266,11 +270,10 @@ header {
 
     // forum
     .forumWrap { @extend .chatWraps;
-        h1 { padding-top: $pad;}
         .threadList {  }
-        .addPost { float: right; padding: $pad; position: fixed; bottom: 0px; right: 0px;
+        .addPost { float: right; padding: $pad; position: relative; bottom: 0px; right: 0px; 
             a {
-                .add {  width: 50px; height: auto;
+                .add {  width: 50px; height: auto; position: fixed; bottom: 20px; right: 10px; z-index: 500;
                     img {width: 100%;}
                 }
             }
@@ -296,7 +299,6 @@ header {
 
 
     .settingsWrap { @extend .chatWraps;
-        h1 { padding-top: $pad;}
         .settingsA, .settingsN, .settingsC, .settingsP {position: relative;
             .settingsAccount, .settingsNotification, .settingsChat, .settingsPersonalize { text-align: left; background-color: white; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); padding: $pad;
                 .setting { text-align: left; display: block; padding-top: $pad;
@@ -349,8 +351,14 @@ header {
             .errorImage { width: 80%; margin: 0 auto; padding-top: $pad*4;
                 img {width: 100%;}
             }
+            #retry { @extend button; height: 40px; margin: $pad/2 auto; @include border-radius(5px); }
         }
     }
 
 } // end of container
 
+
+.logout { @extend button; position: relative; margin: $pad*2.5 $pad $pad 0; border: solid 2px $primary; @include border-radius(5px); padding: $pad/4 $pad; max-width: 140px; float: right; text-align:center; width: 40%;
+    &:hover { background-color: $secondary; border: solid 2px $secondary; }
+    a {color: $white; text-align: center;}
+}
