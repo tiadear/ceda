@@ -5,15 +5,16 @@ if(isBlocked === 'true') {
     $('.blockedAlert').css('display', 'block');
     $('.simpleNav').css('pointer-events', 'none');
     $('.sendMessagesWrap').css('pointer-events', 'none');
-    //$('body').css('overflow', 'hidden');
+    $('body').css('overflow', 'hidden');
 }
 
 $('#acceptArsehole').on('click touch', function() {
     $('.blockedAlert').css('display', 'none');
     $('.simpleNav').css('pointer-events', 'auto');
     $('.sendMessagesWrap').css('pointer-events', 'auto');
-    //$('body').css('overflow', 'auto');
-    $('#chat-btn-block img').attr('src', '/images/icon-unblock.png');
+    $('body').css('overflow', 'auto');
+
+    socket.emit('unblockUser', user1, user2);
 });
 
 $('#rejectArsehole').on('click touch', function() {
@@ -281,6 +282,7 @@ $(function(){
             }
 
             socket.emit('message', data);
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         });
 
 

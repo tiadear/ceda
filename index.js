@@ -18,6 +18,7 @@ var favicon = require('serve-favicon');
 var fs = require('fs');
 
 var User = require('./models/account.js');
+
 var db = require('./db.js');
 
 
@@ -163,6 +164,7 @@ app.use(function(err, req, res, next) {
 var numClients = {};
 var chatHistory = require('./models/chatHistory');
 var Room = require('./models/room.js');
+var Flag = require('./models/flagged.js');
 
 
 io.sockets.on('connection', function(socket){
@@ -347,6 +349,18 @@ io.sockets.on('connection', function(socket){
                 );
             }
 
+        });
+    });
+
+    socket.on('unblockUser', function(currentuser, blockedUser) {
+        Flag.findOne({user : blockedUser, userWhoFlagged : currentuser}, function(err, flag) {
+            if(err) throw err;
+            if(flag) {
+                Flag.findByIdAndRemove(flag._id, function(err) {
+                    if (err) throw err;
+                    console.log(blockedUser + ' has been unblocked by ' + currentuser);
+                });
+            }
         });
     });
 

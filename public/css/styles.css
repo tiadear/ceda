@@ -399,6 +399,10 @@ header {
         text-align: center;
         background-color: #ffffff;
         margin-top: 40%; }
+        @media screen and (max-width: 450px) {
+          .container .chatRoom .blockedAlert .popup {
+            padding: 10px;
+            width: 90%; } }
         .container .chatRoom .blockedAlert .popup h1, .container .chatRoom .blockedAlert .popup p {
           padding: 20px 0; }
         .container .chatRoom .blockedAlert .popup .popup-btn {
@@ -415,7 +419,8 @@ header {
       padding: 20px;
       text-align: left; }
       .container .chatRoom .displayMessagesWrap #incoming {
-        padding-bottom: 80px; }
+        padding-bottom: 80px;
+        padding-left: 0px; }
         .container .chatRoom .displayMessagesWrap #incoming li {
           list-style-type: none; }
         .container .chatRoom .displayMessagesWrap #incoming .istyping {
@@ -433,6 +438,9 @@ header {
           padding: 10px;
           margin-bottom: 20px;
           word-wrap: break-word; }
+          @media screen and (max-width: 450px) {
+            .container .chatRoom .displayMessagesWrap #incoming .incomingMessage {
+              width: 85%; } }
           .container .chatRoom .displayMessagesWrap #incoming .incomingMessage .videoRequest {
             display: inline-block;
             color: #ea5455;
@@ -454,6 +462,9 @@ header {
           -moz-border-radius: 5px;
           -ms-border-radius: 5px;
           border-radius: 5px; }
+          @media screen and (max-width: 450px) {
+            .container .chatRoom .displayMessagesWrap #incoming #user1msg {
+              margin-left: 10px; } }
         .container .chatRoom .displayMessagesWrap #incoming #user2msg {
           background-color: #213e64;
           color: #ffffff;

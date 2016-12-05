@@ -197,25 +197,25 @@ header {
             }
         }
         .blockedAlert { display: none; width: 100%; height: 100%; background-color: rgba($black, 0.6); position: fixed; z-index: 300; top: 0;
-            .popup { width: 400px; height: auto; padding: $pad * 2; margin: 0 auto; text-align: center; background-color: $white; margin-top: 40%;
+            .popup { width: 400px; height: auto; padding: $pad * 2; margin: 0 auto; text-align: center; background-color: $white; margin-top: 40%; @media screen and (max-width: 450px) {padding: $pad /2; width: 90%; }
                 h1, p { padding: $pad 0;}
                 .popup-btn {@extend button; width: 40%; max-width: 400px; height: 40px; margin: $pad/2; @include border-radius(5px); }
             }
         }
         .displayMessagesWrap { width: 100%; padding: $pad; text-align: left;
             #incoming {
-                padding-bottom: $pad * 4;
+                padding-bottom: $pad * 4; padding-left: 0px;
                 li { list-style-type: none; }
                 .istyping { display: block; font-size: 0.8em;}
                 .msgtime { width: 100%; display: block; font-size: 0.6em; margin-bottom: -10px; position: relative; }
-                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad; word-wrap: break-word;
+                .incomingMessage { width: 92%; display: inline-block; padding: $pad/2; margin-bottom: $pad; word-wrap: break-word; @media screen and (max-width: 450px) {width: 85%;}
                     .videoRequest { display: inline-block; color: $primary; padding: $pad/2 $pad/2; cursor: pointer;}
                     .sentImage { width: 90%; margin: 0 auto; position: relative;
                         img {width: 100%;}
                     }
                 }
                 .incomingImage {margin-top: 15px;}
-                #user1msg { background-color: $white; color: $secondary; border: solid 1px $white; @include border-radius(5px);
+                #user1msg { background-color: $white; color: $secondary; border: solid 1px $white; @include border-radius(5px); @media screen and (max-width: 450px) {margin-left: 10px;}
                 }
                 #user2msg { background-color: $secondary; color: $white; border: solid 1px $secondary; @include border-radius(5px); }
                 .speechbubble1 { width: 40px; display: inline-block; margin-left: -10px; position: relative; bottom: -15px;
