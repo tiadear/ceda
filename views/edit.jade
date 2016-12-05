@@ -9,8 +9,8 @@ block content
 			if (post.top === true)
 				.newPost
 					form.form-post(role='form', action="/forum/thread?id=#{thread._id}", method="POST")
-						input.form-input(type="text", name="title", placeholder="#{thread.title}", )
-						input.form-input(type="text", name="content", placeholder="#{post.content}")
+						input.form-input(type="text", name="title", placeholder="#{thread.title}", value="#{thread.title}")
+						textarea.form-input(cols="30", rows="10", name="content", placeholder="#{post.content}", style="height: auto;") #{post.content}
 						input(type="hidden", name="postID", value="#{post._id}")
 						input(type="hidden", name="postTime", value="#{post.created}")
 						button.form-submit(type="submit") Submit
@@ -18,7 +18,7 @@ block content
 			else 
 				.newPost
 					form.form-post(role='form', action="/forum/thread?id=#{thread._id}", method="POST")
-						input.form-input(type="text", name="content", placeholder="#{post.content}")
+						textarea.form-input(cols="30", rows="10", name="content", placeholder="#{post.content}", style="height: auto;") #{post.content}
 						input(type="hidden", name="postID", value="#{post._id}")
 						input(type="hidden", name="postTime", value="#{post.created}")
 						button.form-submit(type="submit") Submit

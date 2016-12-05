@@ -9,6 +9,6 @@ block content
 			.newPost
 				form.form-post(role='form', action="/forum", method="POST")
 					input.form-input(type="text", name="title", placeholder="Title")
-					input.form-input(type="text", name="content", placeholder="What did you want to say?")
+					textarea.form-input(cols="30", rows="10", name="content", placeholder="What did you want to say?", style="height: auto;")
 					button.form-submit(type="submit") Submit
 					a.forgot(href="/") Cancel

@@ -56,6 +56,6 @@ block content
 				p Reply
 		.postReply
 			form.form-post(role='form', action="/forum/thread?id=#{thread[0]}", method="POST")
-				input.form-input#replytext(type="text", name="content", placeholder="Your reply")
+				textarea.form-input#replytext(cols="30", rows="10", name="content", placeholder="Your reply", style="height: auto;")
 				button.form-submit(type="submit") Submit
 				a.forgot Cancel
