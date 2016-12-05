@@ -19,7 +19,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 
-router.get('/', function(req, res) {
+router.get('/', ensureAuthenticated, function(req, res) {
 	res.render('settings', {
 		user : req.user,
 		title : 'ceda',
@@ -131,18 +131,18 @@ router.post('/', function(req, res) {
 
 		function(callback) {
 
-			if (req.body.checked === true) {
-				console.log('is true? ' + req.body.checked);
+			if (String(req.body.checked) === String(true)) {
+				console.log('1 ' + req.body.checked);
 				callback(null, true);
 			} else {
-				console.log('is true? ' + req.body.checked);
+				console.log('2 ' + req.body.checked);
 				callback(null, false);
 			}
 
 		}, function(checked, callback) {
 
 			var field = req.query.field;
-			var id = req.user._id;
+			var id = req.body.id;
 
 			if (field === 'defaultMic') {
 				User.update(
@@ -150,6 +150,7 @@ router.post('/', function(req, res) {
 					{ $set: { defaultMic : checked } },
 					function(err, user) {
 						if(err) throw err;
+						console.log('user details updated');
 						callback(null);
 					}
 				);
@@ -160,6 +161,7 @@ router.post('/', function(req, res) {
 					{ $set: { defaultVideo : checked } },
 					function(err, user) {
 						if(err) throw err;
+						console.log('user details updated');
 						callback(null);
 					}
 				);

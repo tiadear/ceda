@@ -25,12 +25,12 @@ button { border: none; background-color: $primary; color: $white; cursor: pointe
     &:focus { outline: none;}
 }
 .htags { font-family: $sans; font-weight: 300; @include webkit-margin(0px); }
-h1 { @extend .htags; font-size: 1.8em; color: $secondary; }
-h2 { @extend .htags; font-size: 1.2em; color: $secondary; }
-h3 { @extend .htags; font-size: 1.2em; color: $white; }
+h1 { @extend .htags; font-size: 1.8em; color: $secondary; margin: 0px; }
+h2 { @extend .htags; font-size: 1.2em; color: $secondary; margin: 0px; }
+h3 { @extend .htags; font-size: 1.2em; color: $white; margin: 0px; }
 ul { -webkit-padding-start: 0px; margin: 0; }
 li { list-style-type: none; }
-p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px;}
+p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; margin: 0px; }
 
 
 
@@ -94,7 +94,7 @@ header {
 
     // nav display
     nav { height: 50px; width: 100%; @include box-shadow( 0px 7px 14px 0px rgba(0,0,0,0.2)); 
-        ul { width: 100%;
+        ul { width: 100%; padding: 0px;
             li { background-color: $primary; list-style-type: none; width: 25%; height: 50px; display: inline-block; padding: 5px 0 7px 0; position: relative; 
                 &:hover, &:focus { background-color: darken($primary, 5%); }
                 a { 
@@ -281,9 +281,9 @@ header {
             p { color: $white; text-align: center; padding-top: 21px;}
          }
     }
-    .postReply {display :none; position: fixed; bottom: 0px; width: 100%; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+    .postReply {display :none; position: fixed; bottom: 0px; width: 100%; background-color: $white; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
         form {
-            a {cursor: pointer;}
+            a {cursor: pointer; text-align: center; display: block; }
         }
     }
 
@@ -323,6 +323,7 @@ header {
                 form { width: 80%; margin: 0 auto;
                     .inactive {pointer-events: none;}
                     .active {pointer-events: auto;}
+                    a { text-align: center; display: block; }
                 }
             }
         }

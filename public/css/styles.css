@@ -44,15 +44,18 @@ button, .container .open .social-login .social-btn, .container .dash .logout, .c
 
 h1 {
   font-size: 1.8em;
-  color: #213e64; }
+  color: #213e64;
+  margin: 0px; }
 
 h2 {
   font-size: 1.2em;
-  color: #213e64; }
+  color: #213e64;
+  margin: 0px; }
 
 h3 {
   font-size: 1.2em;
-  color: #ffffff; }
+  color: #ffffff;
+  margin: 0px; }
 
 ul {
   -webkit-padding-start: 0px;
@@ -65,7 +68,8 @@ p {
   -webkit-margin-before: 0px;
   -webkit-margin-after: 0px;
   -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px; }
+  -webkit-margin-end: 0px;
+  margin: 0px; }
 
 form {
   padding: 20px;
@@ -192,7 +196,8 @@ header {
     -ms-box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 7px 14px 0px rgba(0, 0, 0, 0.2); }
     .container nav ul {
-      width: 100%; }
+      width: 100%;
+      padding: 0px; }
       .container nav ul li {
         background-color: #ea5455;
         list-style-type: none;
@@ -622,13 +627,16 @@ header {
     display: none;
     position: fixed;
     bottom: 0px;
-    width: 100%; }
+    width: 100%;
+    background-color: #ffffff; }
     @media screen and (min-width: 700px) {
       .container .postReply {
         width: 500px;
         margin: 0 auto; } }
     .container .postReply form a {
-      cursor: pointer; }
+      cursor: pointer;
+      text-align: center;
+      display: block; }
   .container .settingsWrap h1 {
     padding-top: 20px; }
   .container .settingsWrap .settingsA, .container .settingsWrap .settingsN, .container .settingsWrap .settingsC, .container .settingsWrap .settingsP {
@@ -740,6 +748,9 @@ header {
           pointer-events: none; }
         .container .settingsWrap .settingsA .settingsAccount form .active, .container .settingsWrap .settingsA .settingsNotification form .active, .container .settingsWrap .settingsA .settingsChat form .active, .container .settingsWrap .settingsA .settingsPersonalize form .active, .container .settingsWrap .settingsN .settingsAccount form .active, .container .settingsWrap .settingsN .settingsNotification form .active, .container .settingsWrap .settingsN .settingsChat form .active, .container .settingsWrap .settingsN .settingsPersonalize form .active, .container .settingsWrap .settingsC .settingsAccount form .active, .container .settingsWrap .settingsC .settingsNotification form .active, .container .settingsWrap .settingsC .settingsChat form .active, .container .settingsWrap .settingsC .settingsPersonalize form .active, .container .settingsWrap .settingsP .settingsAccount form .active, .container .settingsWrap .settingsP .settingsNotification form .active, .container .settingsWrap .settingsP .settingsChat form .active, .container .settingsWrap .settingsP .settingsPersonalize form .active {
           pointer-events: auto; }
+        .container .settingsWrap .settingsA .settingsAccount form a, .container .settingsWrap .settingsA .settingsNotification form a, .container .settingsWrap .settingsA .settingsChat form a, .container .settingsWrap .settingsA .settingsPersonalize form a, .container .settingsWrap .settingsN .settingsAccount form a, .container .settingsWrap .settingsN .settingsNotification form a, .container .settingsWrap .settingsN .settingsChat form a, .container .settingsWrap .settingsN .settingsPersonalize form a, .container .settingsWrap .settingsC .settingsAccount form a, .container .settingsWrap .settingsC .settingsNotification form a, .container .settingsWrap .settingsC .settingsChat form a, .container .settingsWrap .settingsC .settingsPersonalize form a, .container .settingsWrap .settingsP .settingsAccount form a, .container .settingsWrap .settingsP .settingsNotification form a, .container .settingsWrap .settingsP .settingsChat form a, .container .settingsWrap .settingsP .settingsPersonalize form a {
+          text-align: center;
+          display: block; }
   .container .settingsWrap .settingsA {
     z-index: 100;
     margin: 40px 0 0; }

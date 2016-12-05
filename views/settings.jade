@@ -4,8 +4,6 @@ block content
 		$(document).ready(function() {
 
 			$('.onoffswitch-checkbox').on('click touch', function() {
-				numClicks++;
-
 				var check = $(this).prop('checked');
 				console.log(this.id + ' checked? '+ check);
 			
@@ -15,7 +13,8 @@ block content
 						type : 'POST',
 						url : '/settings?field='+ this.id,
 						data : {
-							checked : true
+							checked : true,
+							id : '#{user._id}'
 						}
 					});
 				} 
@@ -25,7 +24,8 @@ block content
 						type : 'POST',
 						url : '/settings?field='+ this.id,
 						data : {
-							checked : false
+							checked : false,
+							id : '#{user._id}'
 						}
 					});
 				}
