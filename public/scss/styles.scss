@@ -67,6 +67,7 @@ header {
         .alert { padding-top: $pad; color: $primary; }
         .form-login { max-width: 400px;
             .forgot { display: block;}
+            .passwordHint { display: none; font-size: 0.8em; color: $primary; }
         }
         .social-login { width: 100%; padding-top: $pad *3; text-align: center;
             .social-btn { @extend button; display: inline-block; width: 40px; height: 40px; margin: 0 $pad; @include border-radius(5px);
@@ -331,10 +332,11 @@ header {
                             &:focus { border: solid 2px $primary; outline: none; }
                         }
                     }
-                    .settingInput { display: inline-block; }
+                    .settingInput { display: inline-block; width: 69%; }
                 }
                 input {}
                 form { width: 80%; margin: 0 auto;
+                    @media screen and (max-width: 450px) {width: 95%;}
                     .inactive {pointer-events: none;}
                     .active {pointer-events: auto;}
                     a { text-align: center; display: block; }
@@ -358,7 +360,7 @@ header {
             .errorImage { width: 80%; margin: 0 auto; padding-top: $pad*4;
                 img {width: 100%;}
             }
-            #retry { @extend button; height: 40px; margin: $pad/2 auto; @include border-radius(5px); }
+            #retry { @extend button; margin: $pad*2 auto; @include border-radius(10px); padding: $pad/2 $pad; }
         }
     }
 

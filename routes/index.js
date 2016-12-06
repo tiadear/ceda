@@ -7,8 +7,11 @@ var chatHistory = require('../models/chatHistory.js');
 var Appeal = require('../models/appeal.js');
 
 // express
+var util = require('util');
 var express = require('express');
 var router = express.Router();
+var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 
 // passport
 var passport = require('passport');
@@ -53,7 +56,9 @@ router.get('/signup', function(req, res) {
         title : 'ceda'
     });
 });
+
 router.post('/signup', function(req, res, next) {
+    
     if(!req.body.username || !req.body.email || !req.body.password || !req.body.confirmPassword) {
         req.flash('signupMessage', 'Please complete all fields');
         res.redirect('/signup');

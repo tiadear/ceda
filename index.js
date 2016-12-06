@@ -1,5 +1,8 @@
 var path = require('path');
+var util = require('util');
 var express = require('express');
+var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
@@ -9,7 +12,6 @@ var expressSession = require('express-session');
 var mongoose = require('mongoose');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 var nodeStatic = require('node-static');
 var uuid = require('uuid');
 var flash = require('connect-flash');
@@ -18,7 +20,6 @@ var favicon = require('serve-favicon');
 var fs = require('fs');
 
 var User = require('./models/account.js');
-
 var db = require('./db.js');
 
 
@@ -66,6 +67,7 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }));
+app.use(expressValidator());
 
 app.use(passport.initialize());
 app.use(passport.session());

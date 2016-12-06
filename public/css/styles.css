@@ -149,6 +149,10 @@ header {
       max-width: 400px; }
       .container .open .form-login .forgot {
         display: block; }
+      .container .open .form-login .passwordHint {
+        display: none;
+        font-size: 0.8em;
+        color: #ea5455; }
     .container .open .social-login {
       width: 100%;
       padding-top: 60px;
@@ -778,10 +782,14 @@ header {
               border: solid 2px #ea5455;
               outline: none; }
         .container .settingsWrap .settingsA .settingsAccount .setting .settingInput, .container .settingsWrap .settingsA .settingsNotification .setting .settingInput, .container .settingsWrap .settingsA .settingsChat .setting .settingInput, .container .settingsWrap .settingsA .settingsPersonalize .setting .settingInput, .container .settingsWrap .settingsN .settingsAccount .setting .settingInput, .container .settingsWrap .settingsN .settingsNotification .setting .settingInput, .container .settingsWrap .settingsN .settingsChat .setting .settingInput, .container .settingsWrap .settingsN .settingsPersonalize .setting .settingInput, .container .settingsWrap .settingsC .settingsAccount .setting .settingInput, .container .settingsWrap .settingsC .settingsNotification .setting .settingInput, .container .settingsWrap .settingsC .settingsChat .setting .settingInput, .container .settingsWrap .settingsC .settingsPersonalize .setting .settingInput, .container .settingsWrap .settingsP .settingsAccount .setting .settingInput, .container .settingsWrap .settingsP .settingsNotification .setting .settingInput, .container .settingsWrap .settingsP .settingsChat .setting .settingInput, .container .settingsWrap .settingsP .settingsPersonalize .setting .settingInput {
-          display: inline-block; }
+          display: inline-block;
+          width: 69%; }
       .container .settingsWrap .settingsA .settingsAccount form, .container .settingsWrap .settingsA .settingsNotification form, .container .settingsWrap .settingsA .settingsChat form, .container .settingsWrap .settingsA .settingsPersonalize form, .container .settingsWrap .settingsN .settingsAccount form, .container .settingsWrap .settingsN .settingsNotification form, .container .settingsWrap .settingsN .settingsChat form, .container .settingsWrap .settingsN .settingsPersonalize form, .container .settingsWrap .settingsC .settingsAccount form, .container .settingsWrap .settingsC .settingsNotification form, .container .settingsWrap .settingsC .settingsChat form, .container .settingsWrap .settingsC .settingsPersonalize form, .container .settingsWrap .settingsP .settingsAccount form, .container .settingsWrap .settingsP .settingsNotification form, .container .settingsWrap .settingsP .settingsChat form, .container .settingsWrap .settingsP .settingsPersonalize form {
         width: 80%;
         margin: 0 auto; }
+        @media screen and (max-width: 450px) {
+          .container .settingsWrap .settingsA .settingsAccount form, .container .settingsWrap .settingsA .settingsNotification form, .container .settingsWrap .settingsA .settingsChat form, .container .settingsWrap .settingsA .settingsPersonalize form, .container .settingsWrap .settingsN .settingsAccount form, .container .settingsWrap .settingsN .settingsNotification form, .container .settingsWrap .settingsN .settingsChat form, .container .settingsWrap .settingsN .settingsPersonalize form, .container .settingsWrap .settingsC .settingsAccount form, .container .settingsWrap .settingsC .settingsNotification form, .container .settingsWrap .settingsC .settingsChat form, .container .settingsWrap .settingsC .settingsPersonalize form, .container .settingsWrap .settingsP .settingsAccount form, .container .settingsWrap .settingsP .settingsNotification form, .container .settingsWrap .settingsP .settingsChat form, .container .settingsWrap .settingsP .settingsPersonalize form {
+            width: 95%; } }
         .container .settingsWrap .settingsA .settingsAccount form .inactive, .container .settingsWrap .settingsA .settingsNotification form .inactive, .container .settingsWrap .settingsA .settingsChat form .inactive, .container .settingsWrap .settingsA .settingsPersonalize form .inactive, .container .settingsWrap .settingsN .settingsAccount form .inactive, .container .settingsWrap .settingsN .settingsNotification form .inactive, .container .settingsWrap .settingsN .settingsChat form .inactive, .container .settingsWrap .settingsN .settingsPersonalize form .inactive, .container .settingsWrap .settingsC .settingsAccount form .inactive, .container .settingsWrap .settingsC .settingsNotification form .inactive, .container .settingsWrap .settingsC .settingsChat form .inactive, .container .settingsWrap .settingsC .settingsPersonalize form .inactive, .container .settingsWrap .settingsP .settingsAccount form .inactive, .container .settingsWrap .settingsP .settingsNotification form .inactive, .container .settingsWrap .settingsP .settingsChat form .inactive, .container .settingsWrap .settingsP .settingsPersonalize form .inactive {
           pointer-events: none; }
         .container .settingsWrap .settingsA .settingsAccount form .active, .container .settingsWrap .settingsA .settingsNotification form .active, .container .settingsWrap .settingsA .settingsChat form .active, .container .settingsWrap .settingsA .settingsPersonalize form .active, .container .settingsWrap .settingsN .settingsAccount form .active, .container .settingsWrap .settingsN .settingsNotification form .active, .container .settingsWrap .settingsN .settingsChat form .active, .container .settingsWrap .settingsN .settingsPersonalize form .active, .container .settingsWrap .settingsC .settingsAccount form .active, .container .settingsWrap .settingsC .settingsNotification form .active, .container .settingsWrap .settingsC .settingsChat form .active, .container .settingsWrap .settingsC .settingsPersonalize form .active, .container .settingsWrap .settingsP .settingsAccount form .active, .container .settingsWrap .settingsP .settingsNotification form .active, .container .settingsWrap .settingsP .settingsChat form .active, .container .settingsWrap .settingsP .settingsPersonalize form .active {
@@ -815,12 +823,12 @@ header {
         .container .errorWrap .error .errorImage img {
           width: 100%; }
       .container .errorWrap .error #retry {
-        height: 40px;
-        margin: 10px auto;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        -ms-border-radius: 5px;
-        border-radius: 5px; }
+        margin: 40px auto;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        border-radius: 10px;
+        padding: 10px 20px; }
 
 .logout {
   position: relative;

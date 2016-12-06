@@ -1,5 +1,4 @@
 extends layout
-
 block content
 	.container
 		.open
@@ -9,9 +8,23 @@ block content
 			if (message.length > 0)
 				.alert #{message}
 			form.form-login(role='form', action="/signup", method="POST")
-				input.form-input(type='text', name="username", placeholder='Username')
-				input.form-input(type="text", name="email", placeholder="Email")
-				input.form-input(type='password', name="password", placeholder='Password')
-				input.form-input(type='password', name='confirmPassword', placeholder='Confirm Password')
+				.formError#usernameError
+				input.form-input#username(type='text', name="username", placeholder='Username', onblur='validateUsername("username")')
+				.formError#emailError
+				input.form-input#email(type="text", name="email", placeholder="Email", onblur='validateEmail("email")')
+				.formError#password1Error
+				input.form-input#password1(type='password', name="password", placeholder='Password', onblur='validatePassword1("password1")')
+				.formError#password2Error
+				input.form-input#password2(type='password', name='confirmPassword', placeholder='Confirm Password', onblur='validatePassword2("password2")')
 				button.form-submit(type="submit") Submit
 				a.forgot(href='/') Cancel
+	script(src='/js/validation.js')
+	script.
+		$('#password1').focus(function() {
+			$('.passwordHint').css('display', 'block');
+		});
+		$('#username, #email, #password1, #password2').on('focus', function() {
+			var id = String($(this).attr("id") + 'Error');
+			var elem = document.getElementById(id)
+			$('#'+id).empty();
+		});
