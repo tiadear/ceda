@@ -58,6 +58,7 @@ header {
 .container { width: 100%; min-height: 100%; margin-bottom: -50px; 
     @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
     .alert { padding-top: $pad; color: $primary; }
+    .formError { font-size:0.8em; color: $primary; text-align: left; padding-top: $pad/2; }
     // opening app
     .open { width: 95%; margin: 10px auto; padding: $pad *2; background-color: $white; text-align: center; @include box-shadow(5px 5px 15px 1px rgba(0,0,0,0.1));
         @media screen and (max-width: 450px) {padding: $pad/2; }

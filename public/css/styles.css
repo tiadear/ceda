@@ -122,6 +122,11 @@ header {
   .container .alert {
     padding-top: 20px;
     color: #ea5455; }
+  .container .formError {
+    font-size: 0.8em;
+    color: #ea5455;
+    text-align: left;
+    padding-top: 10px; }
   .container .open {
     width: 95%;
     margin: 10px auto;
