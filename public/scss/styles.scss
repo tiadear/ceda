@@ -110,7 +110,7 @@ header {
                                     @media (max-width: 450px) {padding: $pad/2 0;}
                                 }
                             }
-                            .onboardImage { width: 80%; margin: 0 auto; @include transform(translateZ(0)); padding: $pad*2;
+                            .onboardImage { width: 80%; margin: $pad auto; @include transform(translateZ(0)); 
                                 @media (max-width: 450px) {width: 100%; padding: $pad/2;}
                                 img {width: 100%;}
                             }
@@ -132,7 +132,7 @@ header {
                 nav { height: 100%; display: inline-block; position: relative; box-shadow: none; width: auto;
                     ul { height: 100%; 
                         &::after { clear: both; content: ""; display: table;}
-                        li { height: 100%; display: inline-block; width: $pad; margin: 0 $pad/2; float: left; background-color: $tertiary; @include border-radius($pad/2); border: solid 2px $tertiary; cursor: pointer; }
+                        li { height: 100%; display: inline-block; width: $pad; margin: 0 $pad/2; float: left; background-color: $white; @include border-radius($pad/2); border: solid 2px $tertiary; cursor: pointer; }
                     }
                     .marker { position: absolute; z-index: 40; bottom: 0; left: 0; margin: 0 $pad/2; width: $pad; height: $pad; background-color: $secondary; border: solid 2px darken($secondary, 10%); @include border-radius(50%); @include transition(transform 0.2s); }
                     .item-2 { @include transform(translateX(200%)); }
@@ -235,7 +235,7 @@ header {
             }
         }
         h2 { padding: 0 0 $pad*2; }
-        .moveOn { @extend button;  margin: $pad auto $pad*4; @include border-radius(10px); padding: $pad/2 $pad; width: 80%;}
+        .moveOn { @extend button;  margin: $pad auto $pad*4; @include border-radius(10px); padding: $pad/2 $pad; width: 80%; max-width: 300px; }
     }
 
 
@@ -418,7 +418,8 @@ header {
 } // end of container
 
 
-.logout { @extend button; position: relative; margin: $pad*2.5 $pad $pad 0; border: solid 2px $primary; @include border-radius(5px); padding: $pad/4 $pad; max-width: 140px; float: right; text-align:center; width: 40%;
-    &:hover { background-color: $secondary; border: solid 2px $secondary; }
-    a {color: $white; text-align: center;}
+.logout { position: relative; margin: $pad*2.5 $pad $pad 0; float: right; text-align:center; 
+    a { color: $secondary; text-align: center;
+        &:hover { color: $primary; }
+    }
 }

@@ -90,7 +90,7 @@ jQuery(document).ready(function($){
 					flogin: true
 				},
 				success:function(res) {
-					//window.location.reload();
+					window.location.reload();
 				}
 			});
 		}
