@@ -20,7 +20,14 @@ module.exports = new GoogleStrategy({
             }
             if (user) {
                 console.log('user found');
-                return done(null, user);
+                User.update(
+                    { '_id' : user._id },
+                    { $currentDate: { lastLogin: true } },
+                    function(err, user) {
+                        if (err) throw err;
+                        return done(null, user);
+                    }
+                );
             }
             else {
                 console.log('create new user');

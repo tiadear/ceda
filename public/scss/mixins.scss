@@ -18,3 +18,18 @@
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
 }
+
+@mixin transition($transition) {
+	transition: 			$transition;
+	-moz-transition: 		$transition;
+	-webkit-transition: 	$transition;
+	-o-transition: 			$transition;
+}
+
+@mixin transform($transform) {
+	-webkit-transform: 		$transform;
+  	-moz-transform: 		$transform;
+  	-ms-transform: 			$transform;
+  	-o-transform: 			$transform;
+  	transform: 				$transform;
+}

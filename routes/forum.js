@@ -20,8 +20,9 @@ function ensureAuthenticated(req, res, next) {
 
 
 //forum page
-router.get('/', ensureAuthenticated, function(req, res) {
+router.get('/*', ensureAuthenticated, function(req, res) {
 	async.waterfall([
+
 		function(callback) {
 			Thread.find().sort({'created' : -1}).exec(function(err, threads){
 				if(err) throw err;
@@ -186,9 +187,10 @@ router.post('/', function(req, res) {
 	async.waterfall([
 		function(callback){
 			if(!req.body.title || !req.body.content) {
-				req.flash('forumMessage', "Missing something?");
+				req.flash('forumMessage', "Please fill in both fields");
 				res.redirect('/forum/new');
-			} else {
+			}
+			else {
 				var newThread = new Thread();
 				newThread.user = req.user._id;
 				newThread.title = req.body.title;

@@ -76,10 +76,10 @@ exports.strategy = function(passport) {
 		},
 		function(req, email, password, done) {
 			User.findOne({email : email}, function(err, user) {
-				console.log('found user');
+
 				if(err) {
-					return done(err);
 					console.log('something went horribly wrong #2');
+					return done(err);
 				}
 
 				if(!user) {
@@ -89,9 +89,22 @@ exports.strategy = function(passport) {
 				if(!user.validPassword(password)) {
 					console.log('invalid password');
 					return done(null, false, req.flash('loginMessage', 'Wrong password'));
-				} 
-
-				return done(null, user);
+				}
+				if (user) {
+					console.log('found user: '+ user._id);
+					User.update(
+						{ '_id' : user._id },
+						{ $currentDate: { lastLogin: true } },
+						function(err, useragain) {
+							console.log('user updated');
+							if (err) {
+								console.log('err: '+ err);
+								return done(err);
+							}
+							return done(null, user);
+						}
+					);
+				}
 			});
 		}
 	));

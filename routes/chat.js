@@ -25,7 +25,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 
-router.get('/', ensureAuthenticated, function(req, res){
+router.get('/*', ensureAuthenticated, function(req, res){
 
 	async.waterfall([
 

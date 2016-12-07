@@ -7,6 +7,7 @@ block content
     br
     form(role='form', action="/login", method="POST", style="max-width: 300px;")
       .form-group
+        .formError#emailError
         input.form-control(type="text", name="email", placeholder="Email")
       .form-group
         input.form-control(type="password", name="password", placeholder="Password")
@@ -15,3 +16,4 @@ block content
         button.btn.btn-primary(type="button") Cancel
       a(href="forgot")
         button.btn.btn-primary(type='button') I forgot my password
+  

@@ -13,15 +13,57 @@ block content
 						button.form-submit(type='button') Appeal
 			else
 				if (user.username)
-					include includes/nav.jade
-					.dash
-						h1 Hi #{user.username}
-						if (alertsForum)
-							.threadList
-								h2 Recent forum posts
-								ul.threads
-									for item,i in alertsForum
-										- var z = (100) - [i]
+					if (user.lastLogin === null)
+						.welcomeWrap.hero
+							h1 Hi #{user.username}
+							.welcomeWrapper.hero-wrapper
+								ul.welcome.autoplay.hero-slider
+									li.selected
+										.onboardMessage
+											h1 Welcome to Ceda
+											.onboardText
+												p Ceda is a safe space to talk, vent and seek help. 
+											.onboardImage
+												img(src="/images/onboard_1.png")
+									li
+										.onboardMessage
+											h1 Forum
+											.onboardText
+												p Share your thoughts or problems on our supportive and welcoming forum.
+											.onboardImage
+												img(src="/images/onboard_2.png")
+									li
+										.onboardMessage
+											h1 Chat
+											.onboardText
+												p Feel like venting to an understanding stranger? We're all here to help each other out.
+											.onboardImage
+												img(src="/images/onboard_3.png")
+									li
+										.onboardMessage
+											h1 Ready?
+											.onboardText
+												p asdfads
+											.onboardImage
+													img(src="/images/onboard_4.png")
+							.slider-nav
+								nav
+									.marker.item-1
+									ul
+										li.selected
+										li
+										li
+										li
+					else
+						include includes/nav.jade
+						.dash
+							h1 Hi #{user.username}
+							if (alertsForum)
+								.threadList
+									h2 Recent forum posts
+									ul.threads
+										for item,i in alertsForum
+											- var z = (100) - [i]
 											li(style="z-index: #{z};")
 												a(href="/forum/thread?id=#{item[0]}")
 													ul.threadItem
@@ -33,24 +75,36 @@ block content
 															p=item[3]
 														.bottom-right
 															p #{formatDate(item[5])}
-						if (history)
-							.history
-								h2 Chat History
-								ul.historyconvo
-									for item,i in history
-										- var z = (100) - [i];
-										li(style="z-index: #{z};")
-											a(href="/chat/chatpeer?user=#{history[i][0]}")
-												ul.historyitem
-													.middle-left
-														if (history[i][4] == history[i][0])
-															.icon
-																img(src="/images/icon-block-red.png")
-														p=history[i][1]
-													.middle-right
-														p #{formatDate(history[i][3])}
-													.post
-														p=history[i][2].substr(0,100) + '...'
+							else
+								.threadList
+									h2 Recent forum posts
+									p You haven't posted anything!
+									a(href='/forum')
+										button.moveOn(type="button") Check out the forum
+							if (history)
+								.history
+									h2 Chat History
+									ul.historyconvo
+										for item,i in history
+											- var z = (100) - [i];
+											li(style="z-index: #{z};")
+												a(href="/chat/chatpeer?user=#{history[i][0]}")
+													ul.historyitem
+														.middle-left
+															if (history[i][4] == history[i][0])
+																.icon
+																	img(src="/images/icon-block-red.png")
+															p=history[i][1]
+														.middle-right
+															p #{formatDate(history[i][3])}
+														.post
+															p=history[i][2].substr(0,100) + '...'
+							else
+								.history
+									h2 Chat History
+									p You have no chat history
+									a(href='/chat')
+										button.moveOn(type="button") Get Talking
 				else
 					.open
 						.logo
@@ -68,3 +122,12 @@ block content
 							button.form-submit(type="submit") Submit
 	.logout
 		a(href="/logout") Logout
+	script(src='/js/jquery-ui.min.js')
+	script(src='/js/onboard.js')
+	script.
+		lastLogin = '#{user.lastLogin}';
+		userID = '#{user._id}';
+
+		if (!lastLogin) {
+			$('.logout').css('display', 'none');
+		}

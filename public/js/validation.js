@@ -16,7 +16,7 @@ var validateEmail = function(_email) {
 	}
 	else {
 		$('#emailError').empty();
-		$('#emailError').append('<p>Please enter a valid email address</p>');
+		$('#emailError').append("<p>Are you sure that's your email address? It looks like it's missing something.</p>");
 		return false; 
 	}
 };
@@ -25,7 +25,7 @@ var validatePassword1 = function(str) {
 	var pw1 = document.getElementById(str).value;
 	if (pw1.length < 6) {
 		$('#password1Error').empty();
-		$('#password1Error').append('<p>Sorry, that password is too short</p>');
+		$('#password1Error').append('<p>Sorry, that password is a bit too short</p>');
 		return false; 
 	} else if (pw1.length > 50) {
 		$('#password1Error').empty();
@@ -37,7 +37,7 @@ var validatePassword1 = function(str) {
 		return false; 
 	} else if (pw1.search(/[a-zA-Z]/) == -1) {
 		$('#password1Error').empty();
-		$('#password1Error').append('<p>Please include some letters in your password</p>');
+		$('#password1Error').append("<p>Please include some letters in your password</p>");
 		return false; 
 	} else if (pw1.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) != -1) {
 		$('#password1Error').empty();

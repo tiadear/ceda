@@ -22,10 +22,28 @@ local.strategy(passport);
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { 
         console.log('is authenticated');
-        return next(); 
+        return next();
     }
     res.redirect('/');
 }
+
+
+
+router.post('/', function(req, res) {
+
+    console.log('flogin: '+req.body.flogin);
+    var id = req.body.id;
+
+    User.update(
+        { '_id' : id },
+        { $currentDate: { lastLogin: true } },
+        function(err, useragain) {
+            console.log('user updated');
+            if (err) throw err;
+            res.redirect('/home');
+        }
+    );
+});
 
 
 
@@ -212,8 +230,6 @@ router.get('/*', ensureAuthenticated, function(req, res) {
         },
 
         function(alertsForum, rooms, callback) {
-            console.log('home point 6');
-
             var arr1 = [];
 
             function isFlagged(roomID, currentuser, user1, user2, counter){
@@ -369,7 +385,6 @@ router.get('/*', ensureAuthenticated, function(req, res) {
         });
     });
 });
-
 
 
 

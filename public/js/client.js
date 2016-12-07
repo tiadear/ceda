@@ -105,7 +105,7 @@ $(function(){
                 socket.emit('joinRoom', roomID, user1username, user2username);
 
                 $('#outgoing').on('focus', function(){
-                    $(this).attr('rows', '10');
+                    $(this).attr('rows', '7');
                 });
 
                 $('#outgoing').on('blur', function(){

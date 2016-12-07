@@ -63,11 +63,12 @@ router.post('/signup', function(req, res, next) {
         req.flash('signupMessage', 'Please complete all fields');
         res.redirect('/signup');
     } else {
-        passport.authenticate('local-signup', {
-            successRedirect: '/home',
-            failureRedirect: '/signup',
-            failureFlash: true
-        }) (req, res);
+
+       passport.authenticate('local-signup', {
+                    successRedirect: '/home',
+                    failureRedirect: '/signup',
+                    failureFlash: true
+                }) (req, res);
     }
 });
 

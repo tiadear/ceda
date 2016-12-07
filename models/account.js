@@ -18,6 +18,7 @@ var userSchema = mongoose.Schema({
 	defaultMic: {type: Boolean, default: false },
 	defaultVideo: {type: Boolean, default: false },
 	colourScheme: String,
+	lastLogin: {type: Date, default: null},
 	provider: String,
 	facebook: {},
 	twitter: {},
