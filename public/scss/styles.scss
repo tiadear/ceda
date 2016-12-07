@@ -116,7 +116,6 @@ header {
                                 @media (max-width: 450px) {width: 100%; padding: $pad/2;}
                                 img {width: 100%;}
                             }
-                            .moveOn { @extend button; margin: $pad auto; @include border-radius(10px); padding: $pad/2 $pad; width: 80%; }
                         }
                     }
                     li.selected { position: relative; @include transform(translateX(0)); }
@@ -184,6 +183,13 @@ header {
     .chatWraps { width: 100%; padding: $pad*4 0 0; text-align: center; }
     .dash {
         @extend .chatWraps;
+        .emptyHistory {margin: 0 auto $pad; padding: $pad*2; width: 80%; 
+            p { margin: 0 auto $pad*2; padding: $pad;}
+            .emptyImage { width: 80%; margin: $pad auto; @include transform(translateZ(0)); 
+                @media (max-width: 450px) {width: 100%;}
+                img {width: 100%;}
+            }
+        }
     }
 
 
@@ -205,25 +211,25 @@ header {
         ul { width: 100%; padding: 0 0 $pad*4.5;
             li { width: 100%; position: relative;
                 //a {
-                    ul, .postItem { width: 90%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $secondary; text-align: left; 
+                    ul, .postItem { width: 100%; padding: 0 $pad*2 $pad/2; margin: 0 auto; color: $darkgrey; text-align: left; 
                         @media screen and (max-width: 450px) {width: 100%;}
                         .top {font-size: 1.4em; padding: $pad 0;}
-                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; 
+                        .middle-left { font-size: 0.8em; padding: $pad 0 $pad/2; width: 50%; display: inline-block; color: $tertiary;
                              @media screen and (max-width: 500px) {font-size: 0.7em;}
                             .icon {width: 22px; display: inline-block; padding-right: $pad/2;
                                 img {width: 100%; }
                             }
                             p {display: inline-block;}
                         }
-                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right; 
+                        .middle-right {font-size: 0.8em; width: 50%; display: inline-block; text-align: right; color: $tertiary;
                             @media screen and (max-width: 500px) {font-size: 0.7em;}
                         }
                         .post { padding: $pad/2 0 $pad/2; }
                         .postnumber {font-size : 0.7em; padding-bottom: $pad/2;}
-                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block;
+                        .bottom-left {font-size: 0.8em; padding: $pad/2 0; width: 50%; display: inline-block; color: $tertiary;
                              @media screen and (max-width: 500px) {font-size: 0.7em;}
                         }
-                        .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block;
+                        .bottom-right { font-size: 0.8em; width: 50%; text-align: right; padding: $pad/2 $pad/4; display: inline-block; color: $tertiary;
                              @media screen and (max-width: 500px) {font-size: 0.7em;}
                             a {padding: 0 $pad/4;}
                         }
@@ -238,7 +244,6 @@ header {
             }
         }
         h2 { padding: 0 0 $pad*2; }
-        .moveOn { @extend button;  margin: $pad auto $pad*4; @include border-radius(10px); padding: $pad/2 $pad; width: 80%; max-width: 300px; }
     }
 
 
@@ -329,7 +334,7 @@ header {
         .threadList {  }
         .addPost { float: right; padding: $pad; position: relative; bottom: 0px; right: 0px; 
             a {
-                .add {  width: 50px; height: auto; position: fixed; bottom: 20px; right: 10px; z-index: 500;
+                .add {  width: 70px; height: auto; position: fixed; bottom: 20px; right: 10px; z-index: 500;
                     img {width: 100%;}
                 }
             }

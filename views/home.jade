@@ -75,12 +75,6 @@ block content
 															p=item[3]
 														.bottom-right
 															p #{formatDate(item[5])}
-							else
-								.threadList
-									h2 Recent forum posts
-									p You haven't posted anything!
-									a(href='/forum')
-										button.moveOn(type="button") Check out the forum
 							if (history)
 								.history
 									h2 Chat History
@@ -99,12 +93,13 @@ block content
 															p #{formatDate(history[i][3])}
 														.post
 															p=history[i][2].substr(0,100) + '...'
-							else
-								.history
-									h2 Chat History
-									p You have no chat history
-									a(href='/chat')
-										button.moveOn(type="button") Get Talking
+							if (!history && !alertsForum)
+								.threadList
+								.emptyHistory
+									h2 Recent Activity
+									p No activity yet.
+									.emptyImage
+										img(src="/images/empty.png")
 				else
 					.open
 						.logo
