@@ -20,7 +20,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 //forum page
-router.get('/*', ensureAuthenticated, function(req, res) {
+router.get('/', ensureAuthenticated, function(req, res) {
 	async.waterfall([
 
 		function(callback) {
@@ -228,7 +228,7 @@ router.post('/', function(req, res) {
 });
 
 // view all the posts in a thread
-router.get('/thread*', ensureAuthenticated, function(req, res) {
+router.get('/thread*', function(req, res) {
 	async.waterfall([
 		function(callback){
 
@@ -419,7 +419,7 @@ router.post('/thread*', function(req, res) {
 });
 
 
-router.get('/delete*', ensureAuthenticated, function(req, res) {
+router.get('/delete*', function(req, res) {
 	
 	// get post id
     var key = req.query.id;

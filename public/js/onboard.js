@@ -8,7 +8,7 @@ jQuery(document).ready(function($){
 			slidesNumber = slidesWrapper.children('li').length,
 			visibleSlidePosition = 0,
 			autoPlayId,
-			autoPlayDelay = 4000;
+			autoPlayDelay = 5000;
 
 		//autoplay slider
 		setAutoplay(slidesWrapper, slidesNumber, autoPlayDelay);

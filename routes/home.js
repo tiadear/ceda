@@ -49,7 +49,7 @@ router.post('/', function(req, res) {
 
 
 // dashbaord
-router.get('/*', ensureAuthenticated, function(req, res) {
+router.get('/', ensureAuthenticated, function(req, res) {
 
     async.waterfall([
 

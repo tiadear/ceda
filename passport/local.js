@@ -179,7 +179,7 @@ exports.strategy = function(passport) {
 							"From": "admin@ceda.io",
 							"To": user.email,
 							"Subject": "Password Change",
-							"TextBody": 'Hello,\n\n' + 'This is a confirmation that the password for ' + user.email + 'has been changed.',
+							"TextBody": 'Hello,\n\n' + 'This is a confirmation that the password for ' + user.email + ' has been changed.',
 							"Tag": "password"
 						}, function(err) {
 							if(err) {

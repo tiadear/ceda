@@ -25,7 +25,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 
-router.get('/*', ensureAuthenticated, function(req, res){
+router.get('/', ensureAuthenticated, function(req, res){
 
 	async.waterfall([
 
@@ -255,7 +255,7 @@ router.get('/*', ensureAuthenticated, function(req, res){
 
 
 
-router.get('/chatpeer*', ensureAuthenticated, function(req, res) {
+router.get('/chatpeer*', function(req, res) {
     async.waterfall([
         function(callback) {
 
@@ -439,7 +439,7 @@ router.get('/chatpeer*', ensureAuthenticated, function(req, res) {
 
 
 
-router.get('/chatprof*', ensureAuthenticated, function(req, res) {
+router.get('/chatprof*', function(req, res) {
     async.waterfall([
         function(callback) {
 
@@ -558,7 +558,7 @@ router.get('/chatprof*', ensureAuthenticated, function(req, res) {
 
 
 
-router.get('/blockuser', ensureAuthenticated, function(req, res){
+router.get('/blockuser', function(req, res){
     async.waterfall([
 
         function(callback) {

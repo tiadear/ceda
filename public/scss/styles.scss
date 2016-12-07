@@ -39,11 +39,11 @@ p {-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 
 
 
 form { padding: $pad; margin: 0 auto; font-size: 1em; text-align: left;
-    .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; border: solid 2px $primary; @include border-radius(5px); }
-    .form-input { @extend .inputs; 
-        &:focus { border: solid 2px $secondary; outline: none; }
+    .inputs { width: 100%; height: 40px; font-family: $sans; font-size: 1em; padding: $pad/4; margin: $pad/4 auto; @include border-radius(5px); }
+    .form-input { @extend .inputs; border: solid 2px $secondary;
+        &:focus { border: solid 2px $primary; outline: none; }
     }
-    .form-submit { @extend .inputs; color: $white;
+    .form-submit { @extend .inputs; color: $white; border: solid 2px $primary; 
         &:hover { background-color: $secondary; border: solid 2px $secondary; }
     }
 }
@@ -80,7 +80,9 @@ header {
             #login-tw { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
             #login-go { img { height: 70%; padding-top: 25%; margin: 0 auto; } }
         }
-        .notamember { padding-top: $pad * 3; }
+        .notamember { padding-top: $pad * 3; 
+            @media screen and (max-width: 450px) {padding-top: $pad*2}
+        }
 
         #deleteUser {
             button#delete { background-color: $white; border: $white; color: $primary;
@@ -129,6 +131,7 @@ header {
 
             .slider-nav { position: fixed; width: 100%; height: $pad; bottom: 50px; text-align: center;
                 @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+                @media (max-width: 450px) { bottom: $pad; }
                 nav { height: 100%; display: inline-block; position: relative; box-shadow: none; width: auto;
                     ul { height: 100%; 
                         &::after { clear: both; content: ""; display: table;}
