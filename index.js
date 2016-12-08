@@ -193,11 +193,13 @@ io.sockets.on('connection', function(socket){
         if(numClients[socket.room] === undefined || (numClients[socket.room] = 0)) {
             numClients[socket.room] = 1;
             console.log('added ' + currentuser + ' to room: ' + roomID);
+            console.log('1. socket room: ' + socket.room);
             socket.join(socket.room);
             socket.emit('roomOpened', socket.room, socket.id);
         } else {
             numClients[socket.room]++;
             console.log('added ' + currentuser + ' to room: ' + roomID);
+            console.log('2. socket room: ' + socket.room);
             socket.join(socket.room);
             socket.emit('channelReady', socket.room, socket.id);
             io.sockets.in(socket.room).emit('isOnline', currentuser);
@@ -210,7 +212,7 @@ io.sockets.on('connection', function(socket){
                 arr1 = [];
                 arr2 = [];
                 console.log('history length: '+history.length);
-
+                console.log('3. socket room: ' + socket.room);
                 history.forEach(function(item, i) {
                     arr1[item._id] =[];
 
@@ -255,6 +257,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('sendChat', function(data) {
         //send a msg
+        console.log('4. socket room: ' + socket.room);
         if(socket.room !== undefined){
             if(data === 'video request') {
                 socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+" has requested to video chat. Do you accept?<br><br><div class='videoRequest' id='acceptVideo'>yes</div><div class='videoRequest' id='rejectVideo'>no</div>");
