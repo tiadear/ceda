@@ -1,5 +1,7 @@
 extends layout
 block content
+	script(src='/js/simplewebrtc.js')
+	script(src='/js/client.js')
 	script.
 		isBlocked = '#{isBlocked}';
 
@@ -89,5 +91,3 @@ block content
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
 								img(src='/images/icon-block.png')
-	script(src='/js/simplewebrtc.js')
-	script(src='/js/client.js')
