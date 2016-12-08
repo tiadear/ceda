@@ -462,7 +462,7 @@ router.get('/chatprof*', function(req, res) {
 
                     if(String(user._id) != String(currentuser)) {
 
-                        if(user.userType === 0) {
+                        if(user.userType === false) {
                             console.log('incorrect user type');
                             returnRandom(currentuser);
                         } else {
