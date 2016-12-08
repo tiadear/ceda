@@ -203,7 +203,7 @@ header {
     // choose who to chat with
     .chatChoiceWrap { @extend .chatWraps;
         .chatChoices { padding: $pad*2 0;
-            .chatChoice { @extend button; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px);}
+            .chatChoice { @extend button; background-color: $tertiary; width: 80%; max-width: 400px; height: 40px; margin: $pad/2 auto; @include border-radius(5px); color: $grey; }
         }
     }
     .threadList {padding-top: $pad;}

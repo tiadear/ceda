@@ -317,10 +317,10 @@ $(function(){
             console.log('1. run web rtc reached');
 
             if (!hasWebRTC) {
-              alert('This browser does not support this feature');
-              socket.emit('safari', roomID);
-              $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false');
-              $('#chat-btn-video img').addClass('disabled');
+                alert('This browser does not support this feature');
+                socket.emit('safari', roomID);
+                $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false.png');
+                $('#chat-btn-video img').addClass('disabled');
             }
 
             else {

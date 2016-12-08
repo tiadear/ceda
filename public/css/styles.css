@@ -467,6 +467,7 @@ header {
   .container .chatChoiceWrap .chatChoices {
     padding: 40px 0; }
     .container .chatChoiceWrap .chatChoices .chatChoice {
+      background-color: #5dc4be;
       width: 80%;
       max-width: 400px;
       height: 40px;
@@ -474,7 +475,8 @@ header {
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
-      border-radius: 5px; }
+      border-radius: 5px;
+      color: #ebebeb; }
   .container .threadList {
     padding-top: 20px; }
   .container .history, .container .threadList {
