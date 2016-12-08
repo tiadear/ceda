@@ -309,7 +309,20 @@ $(function(){
 
         // request to swap to video chat
         $('#chat-btn-video').on('click touch', function() {
-            socket.emit('sendChat', 'video request');
+            var hasWebRTC = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia;
+
+            if (!hasWebRTC) {
+                alert('This browser does not support this feature');
+                socket.emit('safari', roomID);
+                $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false.png');
+                $('#chat-btn-video').addClass('disabled');
+            }
+            else {
+                socket.emit('sendChat', 'video request');
+            }
         });
 
 
@@ -325,7 +338,7 @@ $(function(){
                 alert('This browser does not support this feature');
                 socket.emit('safari', roomID);
                 $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false.png');
-                $('#chat-btn-video img').addClass('disabled');
+                $('#chat-btn-video').addClass('disabled');
             }
 
             else {
@@ -537,16 +550,9 @@ $(function(){
             }
         }
 
-        socket.on('killVideo', function() {
-            console.log('video killed');
-            webrtc.stopLocalVideo();
-            $('.videoWrap').hide();
-            $('.chatRoom').css('padding-top', '20px');
-            $('.displayMessagesWrap').show();
-            $('.sendMessagesWrap').show();
-            $('#user2').show();
-
-            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        socket.on('incompatibleBrowser', function() {
+            $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false.png');
+            $('#chat-btn-video').addClass('disabled');
         });
 
         socket.on('videoAccepted', function() {

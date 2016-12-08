@@ -297,9 +297,8 @@ header {
             .chatOptions {width: 100%; height: 40px;
                 .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                     &:hover { background-color: darken($primary, 5%); }
-                    img {height: 38px; width: auto; margin: 0 auto;
-                        &.disabled { pointer-events: none; }
-                    }
+                    img {height: 38px; width: auto; margin: 0 auto; }
+                    &.disabled { pointer-events: none; }
                 }
                 #imageFile { display: none; }
             }

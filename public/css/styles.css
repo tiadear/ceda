@@ -746,8 +746,8 @@ header {
             height: 38px;
             width: auto;
             margin: 0 auto; }
-            .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img.disabled {
-              pointer-events: none; }
+          .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn.disabled {
+            pointer-events: none; }
         .container .chatRoom .sendMessagesWrap .chatOptions #imageFile {
           display: none; }
     .container .chatRoom .videoWrap {
