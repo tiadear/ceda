@@ -413,11 +413,11 @@ router.get('/chatpeer*', function(req, res) {
             
         }
     ], function (err, result) {
-        req.session.save(function(err){
-            if (err) {
-                console.log(err);
-                throw err;
-            }
+        if (err) throw err
+
+        console.log('result: '+ result);
+
+
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
@@ -429,8 +429,7 @@ router.get('/chatpeer*', function(req, res) {
                 title: 'ceda',
                 pageTitle: 'chat'
             });
-            
-        });
+
     });
 });
 

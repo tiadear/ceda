@@ -171,6 +171,7 @@ var Flag = require('./models/flagged.js');
 
 io.sockets.on('connection', function(socket){
     console.log('socket connected');
+    
     socket.on('message', function(message) {
         // for a real app, would be room-only (not broadcast)
         socket.emit('message', message);
