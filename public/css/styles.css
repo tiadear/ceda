@@ -745,7 +745,6 @@ header {
             width: auto;
             margin: 0 auto; }
             .container .chatRoom .sendMessagesWrap .chatOptions .chat-btn img.disabled {
-              opacity: 0.6;
               pointer-events: none; }
         .container .chatRoom .sendMessagesWrap .chatOptions #imageFile {
           display: none; }

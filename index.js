@@ -301,6 +301,10 @@ io.sockets.on('connection', function(socket){
         socket.broadcast.to(socket.room).emit('videoAccepted', room);
     });
 
+    socket.on('safari', function(room) {
+        socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+"'s browser does not support the video chat function.");
+    });
+
 
     socket.on('micChangeSetting', function(roomid, user, data) {
         Room.findById(roomid, function(err, room) {

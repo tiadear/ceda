@@ -127,7 +127,6 @@ $(function(){
 
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
-                    console.log('keypress');
                     //if enter has not been hit
                     if(e.which !== 13) {
                         if(typing === false && $('#outgoing').is(':focus')) {
@@ -317,22 +316,28 @@ $(function(){
         function runWebRTC(userAccepted, userInitiated) {
             console.log('1. run web rtc reached');
 
-            $('.displayMessagesWrap').hide();
-            $('.sendMessagesWrap').hide();
-            $('.chatPartner').hide();
-            $('.chatRoom').css('padding-top', '0px');
-            $('.videoWrap').show();
-
-
-            var hasWebRTC = navigator.getUserMedia ||
-                navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia ||
-                navigator.msGetUserMedia;
-
             if (!hasWebRTC) {
               alert('This browser does not support this feature');
+              socket.emit('safari', roomID);
+              $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false');
+              $('#chat-btn-video img').addClass('disabled');
             }
+
             else {
+
+                $('.displayMessagesWrap').hide();
+                $('.sendMessagesWrap').hide();
+                $('.chatPartner').hide();
+                $('.chatRoom').css('padding-top', '0px');
+                $('.videoWrap').show();
+
+
+                var hasWebRTC = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia;
+
+            
                 var webrtc = new SimpleWebRTC({
                     localVideoEl: 'localVideo',
                     remoteVideosEl: '',
