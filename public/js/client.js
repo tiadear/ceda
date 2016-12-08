@@ -127,7 +127,7 @@ $(function(){
 
                 //when something is entered into the outgoing message box
                 $('#outgoing').keypress(function(e) {
-
+                    console.log('keypress');
                     //if enter has not been hit
                     if(e.which !== 13) {
                         if(typing === false && $('#outgoing').is(':focus')) {
@@ -207,12 +207,6 @@ $(function(){
             isInitiator = true;
         });
 
-        socket.on('alertPeer', function(peerToBeAlerted, chatInitiator){
-            //send notification
-            console.log(chatInitiator + ' has sent a message to ' + peerToBeAlerted);
-        });
-
-
 
         // getting chat history and displaying
 
@@ -234,7 +228,7 @@ $(function(){
             }
         });
 
-        socket.on('isOnline', function(user) {
+        socket.on('isOffline', function(user) {
             if(user != user1username) {
                 $('.online').remove();
             }

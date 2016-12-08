@@ -230,7 +230,7 @@ io.sockets.on('connection', function(socket){
                             socket.emit('addHistory', arr2);
                         }
                     });
-                });   
+                });
             }
             //new convo
         });
@@ -252,12 +252,13 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('userTyping', function(data) {
+        console.log('4. socket room: ' + socket.room);
         io.sockets.in(socket.room).emit('isTyping', {isTyping: data, user: socket.username});
     });
 
     socket.on('sendChat', function(data) {
         //send a msg
-        console.log('4. socket room: ' + socket.room);
+        console.log('45 socket room: ' + socket.room);
         if(socket.room !== undefined){
             if(data === 'video request') {
                 socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+" has requested to video chat. Do you accept?<br><br><div class='videoRequest' id='acceptVideo'>yes</div><div class='videoRequest' id='rejectVideo'>no</div>");
