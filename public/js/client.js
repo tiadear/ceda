@@ -316,8 +316,13 @@ $(function(){
         function runWebRTC(userAccepted, userInitiated) {
             console.log('1. run web rtc reached');
 
+            var hasWebRTC = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia;
+
             if (!hasWebRTC) {
-                alert('This browser does not support this feature');
+                //alert('This browser does not support this feature');
                 socket.emit('safari', roomID);
                 $('#chat-btn-video img').attr('src', '/images/icon-switchToVideo-false.png');
                 $('#chat-btn-video img').addClass('disabled');
@@ -331,13 +336,6 @@ $(function(){
                 $('.chatRoom').css('padding-top', '0px');
                 $('.videoWrap').show();
 
-
-                var hasWebRTC = navigator.getUserMedia ||
-                    navigator.webkitGetUserMedia ||
-                    navigator.mozGetUserMedia ||
-                    navigator.msGetUserMedia;
-
-            
                 var webrtc = new SimpleWebRTC({
                     localVideoEl: 'localVideo',
                     remoteVideosEl: '',
