@@ -228,8 +228,10 @@ router.post('/delete', function(req, res) {
             // delete any rooms they were in
             Room.find({ $or: [{ user_init : userid}, { user_resp : userid }]}, function(err, rooms) {
                     if (err) throw err;
+                    if(rooms.length === 0) {
+                        callback(null, userid);
+                    }
                     if(rooms) {
-
                         // delete each room
                         for(i=0; i<rooms.length; i++) {
                             var id = rooms[i]._id;
@@ -240,10 +242,7 @@ router.post('/delete', function(req, res) {
                                     callback(null, userid);
                                 }
                             });
-                        } 
-                    }
-                    else {
-                        callback(null, userid);
+                        }
                     }
                 }
             );
