@@ -39,8 +39,17 @@ block content
 								form#passReset(role='form', method='POST', action='change?field=#{field}')
 									#error
 									input.form-input#pass0(type='password', name='current', placeholder='current #{field}')
-									input.form-input#pass1(type='password', name='update', placeholder='new #{field}')
-									input.form-input#pass2(type='password', name='confirm', placeholder='confirm your #{field}')
+									.formError#password1Error
+									input.form-input#password1(type='password', name="update", placeholder='new #{field}', onblur='validatePassword1("password1")')
+									.formError#password2Error
+									input.form-input#password2(type='password', name='confirm', placeholder='confirm your #{field}', onblur='validatePassword2("password2")')
 									input(type='hidden', name='userId', value='#{user._id}')
 									button.form-submit#passSubmit.inactive(type="submit") Submit
 									a(href='/settings') Cancel
+	script(src='/js/validation.js')
+	script.
+		$('#password1, #password2').on('focus', function() {
+			var id = String($(this).attr("id") + 'Error');
+			var elem = document.getElementById(id)
+			$('#'+id).empty();
+		});

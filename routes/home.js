@@ -148,7 +148,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
                         //console.log('counter: '+counter);
                         if(counter === (total -1)) {
                             req.alertsForum = uniq(arr2).slice(0,6);
-                            console.log('req.alertsForum: '+ req.alertsForum);
+                            //console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
                     }

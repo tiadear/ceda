@@ -236,7 +236,7 @@ router.post('/delete', function(req, res) {
                             Room.findByIdAndRemove(id, function(err) {
                                 if (err) throw err;
                                 console.log('room deleted: '+ id);
-                                if(i == (rooms.length -1)) {
+                                if(i == rooms.length) {
                                     callback(null, userid);
                                 }
                             });

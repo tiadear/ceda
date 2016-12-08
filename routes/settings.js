@@ -123,7 +123,7 @@ router.post('/change*', function(req, res, done) {
 						User.update(
 							{ '_id' : id },
 							{ $set: { password : newPassword } },
-							function(err, user) {
+							function(err, useragain) {
 								if(err) throw err;
 
 								console.log('user details updated');
@@ -131,7 +131,7 @@ router.post('/change*', function(req, res, done) {
 								var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
 					        	postmark.send({
 									"From": "admin@ceda.io",
-									"To": email,
+									"To": user.email,
 									"Subject": "Password Change",
 									"TextBody": 'Hello,\n\n' + 'This is confirmation that your password was changed at Ceda. If this was not you, please advise us immediately. If this was you, please ignore this email.',
 									"Tag": "password"
@@ -142,6 +142,7 @@ router.post('/change*', function(req, res, done) {
 									}
 									console.info("Sent to postmark for delivery");
 									
+									req.user = useragain;
 									res.render('settings', {
 										user : req.user,
 										title : 'ceda',
