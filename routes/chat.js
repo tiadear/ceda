@@ -419,6 +419,9 @@ router.get('/chatpeer*', function(req, res) {
         console.log('req.usersInRoom: ' + req.usersInRoom);
         console.log('req.userIDs: ' + req.userIDs);
 
+        req.session.save(function(err){
+            if (err) throw err;
+
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
@@ -430,7 +433,7 @@ router.get('/chatpeer*', function(req, res) {
                 title: 'ceda',
                 pageTitle: 'chat'
             });
-
+        });
     });
 });
 
