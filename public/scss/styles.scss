@@ -293,7 +293,7 @@ header {
             }
         }
         .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
-            #outgoing { width: 100%; border: none; padding: $pad/2 $pad; font-family: $sans; @include box-shadow(0px -5px 14px -5px rgba(0,0,0,0.2)); margin-bottom: -5px; }
+            #outgoing { width: 100%; border: none; padding: $pad/2 $pad; font-family: $sans; font-size: 1em; @include box-shadow(0px -5px 14px -5px rgba(0,0,0,0.2)); margin-bottom: -5px; }
             .chatOptions {width: 100%; height: 40px;
                 .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
                     &:hover { background-color: darken($primary, 5%); }
@@ -305,13 +305,13 @@ header {
             }
         }
 
-        .videoWrap { display: none; width: 100%; height: 100%; padding-top: $pad*2; background-color: $black; position: fixed;
+        .videoWrap { display: none; width: 100%; height: 100%; background-color: $black; position: fixed;
             #remotes { height: 100%; width: 100%;
-                .videoDisplay { position: relative; text-align: center; margin-top: 100px;
+                .videoDisplay { position: relative; text-align: center; margin-top: 60px;
                     video { top: 0; left: 0; @include border-radius(20px); margin: 0 auto; width: 92%;}
                 }
             }
-            .localDisplay { width: 200px; height: 150px; position: fixed; bottom: 60px; right: 0px; margin-right: $pad;
+            .localDisplay { width: 150px; height: 120px; position: fixed; bottom: 60px; right: 0px; margin-right: $pad;
                 video { width: 100%; position: absolute; @include border-radius(20px); }
             }
             #localScreenContainer { display: none; }
