@@ -240,8 +240,10 @@ router.post('/delete', function(req, res) {
                                     callback(null, userid);
                                 }
                             });
-                        }
-                        
+                        } 
+                    }
+                    else {
+                        callback(null, userid);
                     }
                 }
             );
