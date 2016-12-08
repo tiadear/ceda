@@ -16,6 +16,7 @@ block content
 		user2username = '#{usersInRoom[1]}';
 		micSettings2 = '#{micSettings[1]}';
 		vidSettings2 = '#{vidSettings[1]}';
+
 	script(src='/js/simplewebrtc.js')
 	script(src='/js/client.js')
 	.container
@@ -83,9 +84,9 @@ block content
 								img(src="/images/icon-microphone-false.png")
 						.chat-btn#videoOffButton
 							if (vidSettings[0] == false)
-								img(src="/images/icon-switchtoVideo-true.png")
+								img(src="/images/icon-switchToVideo-true.png")
 							else
-								img(src="/images/icon-switchtoVideo-false.png")
+								img(src="/images/icon-switchToVideo-false.png")
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
 								img(src='/images/icon-block.png')

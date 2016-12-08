@@ -97,7 +97,7 @@ $(function(){
 
     
         socket.emit('addUser', user1, user1username, function(data){
-            
+
             if(data) {
                 console.log(user1username + ' has been added');
 
