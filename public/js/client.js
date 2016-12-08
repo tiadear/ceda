@@ -580,9 +580,9 @@ $(function(){
         socket.on('vidSettingChanged', function(data) {
             //-change image in vid settings
             if (String(data) === String(true)) {
-                $('#videoOffButton > img').attr('src', '/images/icon-switchtoVideo-false.png');
+                $('#videoOffButton > img').attr('src', '/images/icon-switchToVideo-false.png');
             } else {
-                $('#videoOffButton > img').attr('src', '/images/icon-switchtoVideo-true.png');
+                $('#videoOffButton > img').attr('src', '/images/icon-switchToVideo-true.png');
             }
         });
 

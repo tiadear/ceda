@@ -48,7 +48,6 @@ router.get('/', ensureAuthenticated, function(req, res) {
 							if (!user || user == null || user.length == 0 || user == undefined) {
                                 resolve('account deleted');
                             } else {
-                                console.log('user: '+ user);
                                 resolve(user.username);
                             }
 						});
@@ -119,8 +118,6 @@ router.get('/', ensureAuthenticated, function(req, res) {
 				throw err;
 			}
 		}
-		console.log('result: '+result);
-
 		req.session.save(function(err) {
 			if(err) throw err;
 			
@@ -272,7 +269,6 @@ router.get('/thread*', function(req, res) {
 							if (!user || user == null || user.length == 0 || user == undefined) {
                                 resolve('account deleted');
                             } else {
-                                console.log('user: '+ user);
                                 resolve(user.username);
                             }
 						});
@@ -313,7 +309,6 @@ router.get('/thread*', function(req, res) {
 	], function(err, result) {
 		if(err) throw err;
 		//console.log('result: '+result);
-		console.log('user: '+req.user._id);
 		req.session.save(function(err){
 			if(err) throw err;
 			res.render('post', {
@@ -340,6 +335,7 @@ router.post('/thread*', function(req, res) {
                 if (err) throw err;
                 callback(null, key, thread.title);
             });
+
 		}, function(key, title, callback) {
 
 			// if the post ID exists
@@ -350,24 +346,34 @@ router.post('/thread*', function(req, res) {
 					if(err) throw err;
 
 					//if it is the top post
-					if(post.top == true) {
+					if(post.top === true) {
+
 						//check for content and title
 						if(!req.body.content || !req.body.title) {
 							req.flash('forumMessage', "Please fill in both fields");
 							res.redirect('/forum/edit?id='+req.body.postID);
-						} else {
+						}
+
+						else {
 							//then update
 							Post.update(
 								{ '_id' : req.body.postID },
-								{ $set: { "content" : req.body.content, "title" : req.body.title} },
-								function(err, post) {
+								{ $set: { "content" : req.body.content } }, function(err, post) {
 									if(err) throw err;
-									console.log('updated post: '+post);
-									callback(null, key);
+
+									Thread.update(
+										{ '_id' : key },
+										{ $set: { "title" : req.body.title } }, function(err, thread) {
+											if(err) throw err;
+											console.log('updated post: '+ req.body.postID +' and update thread: '+ key);
+											callback(null, key);
+										}
+									);
 								}
 							);
 						}
-					} 
+					}
+
 					// if it is NOT the top post
 					else {
 						// just check for content
@@ -381,7 +387,7 @@ router.post('/thread*', function(req, res) {
 								{ $set: { "content" : req.body.content} },
 								function(err, post) {
 									if(err) throw err;
-									console.log('updated post: '+post);
+									console.log('updated post: '+req.body.postID);
 									callback(null, key);
 								}
 							);
