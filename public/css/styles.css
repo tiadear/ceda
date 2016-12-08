@@ -1013,9 +1013,9 @@ header {
   .container .settingsWrap .settingsP {
     z-index: 20; }
   .container .errorWrap {
-    padding-top: 80px; }
+    padding-top: 20px; }
     .container .errorWrap .error {
-      padding: 80px; }
+      padding: 80px 40px 10px; }
       .container .errorWrap .error .errorImage {
         width: 80%;
         margin: 0 auto;
