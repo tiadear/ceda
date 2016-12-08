@@ -415,8 +415,8 @@ header {
 
 
     .errorWrap { @extend .chatWraps; padding-top: $pad;
-        .error { padding: $pad*4 $pad*2 $pad/2;
-            .errorImage { width: 80%; margin: 0 auto; padding-top: $pad*4;
+        .error { padding: $pad/2 $pad*2 $pad/2;
+            .errorImage { width: 80%; margin: 0 auto; padding-top: $pad;
                 img {width: 100%;}
             }
             #retry { @extend button; margin: $pad*2 auto; @include border-radius(10px); padding: $pad/2 $pad; }

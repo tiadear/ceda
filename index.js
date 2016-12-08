@@ -303,6 +303,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('safari', function(room) {
         socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+"'s browser does not support the video chat function.");
+        socket.broadcast.to(socket.room).emit("killVideo");
     });
 
 
@@ -392,7 +393,6 @@ io.sockets.on('connection', function(socket){
 
                 //socket.emit("sendImage", socket.username, msg);
                 io.sockets.in(socket.room).emit("sendImage", socket.username, msg);
-
             }
         });
     });
