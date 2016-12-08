@@ -4,7 +4,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var app = express();
-
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 var passport = require('passport');
 var nodemailer = require('nodemailer');
 var expressSession = require('express-session');
@@ -31,12 +32,6 @@ require('dotenv').config();
 
 // set port
 app.set('port', (process.env.PORT || 3000));
-var options = {
-    key: fs.readFileSync('./ssl/www_ceda_io.key'),
-    cert: fs.readFileSync('./ssl/www_ceda_io.pem'),
-};
-var server = require('https').createServer(options, app);
-var io = require('socket.io').listen(server);
 
 
 
