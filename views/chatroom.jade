@@ -35,39 +35,39 @@ block content
 					.defaultSettings
 						.micSettings
 							if (micSettings[1] == false)
-								img(src="/images/icon-microphone-false.png")
+								img(src="/images/icon-microphone-false.png", alt="microphone disabled")
 							else
-								img(src="/images/icon-microphone-true.png")
+								img(src="/images/icon-microphone-true.png", alt="microphone enabled")
 						.vidSettings
 							if (vidSettings[1] == false)
-								img(src="/images/icon-switchToVideo-false.png")
+								img(src="/images/icon-switchToVideo-false.png", alt="you cannot switch to video")
 							else
-								img(src="/images/icon-switchToVideo-true.png")
+								img(src="/images/icon-switchToVideo-true.png", alt="switch to video")
 				.displayMessagesWrap
 					ul#incoming
 				.sendMessagesWrap
 					textarea#outgoing(cols="30", rows="3")
 					.chatOptions
 						label.chat-btn#chat-btn-image(for="imageFile")
-							img(src='/images/icon-image.png')
+							img(src='/images/icon-image.png', alt='send an image')
 						input#imageFile(type="file", accept="image/*")
 						if (vidSettings[1] == false && micSettings[1] == false)
 							.chat-btn#chat-btn-video
-								img(src='/images/icon-switchToVideo-true.png')
+								img(src='/images/icon-switchToVideo-true.png', alt='you can switch to video')
 						else if (vidSettings[1] == false && micSettings[1] == true)
 							//-enable chat but make sure video is turned off
 							.chat-btn#chat-btn-video
-								img(src='/images/icon-phone.png')
+								img(src='/images/icon-phone.png', alt='switch to audio call')
 						else if (vidSettings[1] == true && micSettings[1] == false)
 							//-enable chat but make sure mic is turned off
 							.chat-btn#chat-btn-video
-								img(src='/images/icon-switchToVideo-true.png')
+								img(src='/images/icon-switchToVideo-true.png', alt='you can switch to video')
 						else
 							.chat-btn#chat-btn-video
-								img(src='/images/icon-switchToVideo-true.png')
+								img(src='/images/icon-switchToVideo-true.png', alt='you can switch to video')
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
-								img(src='/images/icon-block.png')
+								img(src='/images/icon-block.png', alt='block user')
 						button.chat-btn#outgoingSubmit(type='submit') Submit
 				.videoWrap
 					#remotes
@@ -76,17 +76,17 @@ block content
 						video#localVideo(autoplay muted)
 					.videoOptions
 						.chat-btn#switchToChat
-							img(src='/images/icon-backarrow.png')
+							img(src='/images/icon-backarrow.png', alt='go back')
 						.chat-btn#micOffButton
 							if (micSettings[0] == false)
-								img(src="/images/icon-microphone-true.png")
+								img(src="/images/icon-microphone-true.png", alt='microphone enabled')
 							else
-								img(src="/images/icon-microphone-false.png")
+								img(src="/images/icon-microphone-false.png", alt='microphone disabled')
 						.chat-btn#videoOffButton
 							if (vidSettings[0] == false)
-								img(src="/images/icon-switchToVideo-true.png")
+								img(src="/images/icon-switchToVideo-true.png", alt='you can switch to video')
 							else
-								img(src="/images/icon-switchToVideo-false.png")
+								img(src="/images/icon-switchToVideo-false.png", alt='you cannot switch to video')
 						a(href='/chat/blockuser?id=#{userIDs[1]}')
 							.chat-btn#chat-btn-block
-								img(src='/images/icon-block.png')
+								img(src='/images/icon-block.png', alt='block user')

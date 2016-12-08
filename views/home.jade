@@ -6,7 +6,7 @@ block content
 			if (user.isBlocked)
 				.open
 					.logo
-						img#logo(src='/images/ceda2.png')
+						img#logo(src='/images/ceda2.png', alt='logo')
 					p You have been flagged as being inappropriate on several occassions and as such, have been blocked from using Ceda.
 					p If you would like to appeal this please click the button below.
 					a#appeal(href='/appealblocking')
@@ -24,28 +24,28 @@ block content
 											.onboardText
 												p This is a safe space to talk, vent and seek help. 
 											.onboardImage
-												img(src="/images/onboard_1.png")
+												img(src="/images/onboard_1.png", alt='welcome to ceda')
 									li
 										.onboardMessage
 											h1 Forum
 											.onboardText
 												p Share your thoughts on our supportive and welcoming forum.
 											.onboardImage
-												img(src="/images/onboard_2.png")
+												img(src="/images/onboard_2.png", alt='check out our forum')
 									li
 										.onboardMessage
 											h1 Chat
 											.onboardText
 												p Feel like venting to an understanding stranger? We're all here to help each other out.
 											.onboardImage
-												img(src="/images/onboard_3.png")
+												img(src="/images/onboard_3.png", alt='chat with people')
 									li
 										.onboardMessage
 											h1 Ready?
 											.onboardText
 												p Let's go
 											.onboardImage
-													img(src="/images/onboard_4.png")
+													img(src="/images/onboard_4.png", alt='lets go')
 							.slider-nav
 								nav
 									.marker.item-1
@@ -87,7 +87,7 @@ block content
 														.middle-left
 															if (history[i][4] == history[i][0])
 																.icon
-																	img(src="/images/icon-block-red.png")
+																	img(src="/images/icon-block-red.png", alt='user is blocked')
 															p=history[i][1]
 														.middle-right
 															p #{formatDate(history[i][3])}
@@ -99,11 +99,11 @@ block content
 									h2 Recent Activity
 									p No activity yet.
 									.emptyImage
-										img(src="/images/empty.png")
+										img(src="/images/empty.png", alt='you have no history')
 				else
 					.open
 						.logo
-							img#logo(src='/images/ceda2.png')
+							img#logo(src='/images/ceda2.png', alt='logo')
 						h1 Please enter a username
 						if (message.length > 0)
 							.alert #{message}
