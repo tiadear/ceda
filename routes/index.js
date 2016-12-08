@@ -65,10 +65,10 @@ router.post('/signup', function(req, res, next) {
     } else {
 
        passport.authenticate('local-signup', {
-                    successRedirect: '/home',
-                    failureRedirect: '/signup',
-                    failureFlash: true
-                }) (req, res);
+            successRedirect: '/home',
+            failureRedirect: '/signup',
+            failureFlash: true
+        }) (req, res);
     }
 });
 
@@ -130,8 +130,6 @@ router.post('/reset', local.reset,
         res.redirect('/');
     }
 );
-
-//$2a$08$YPsDKBWB5Qy.Qvs8U9BdA.mI6Spy3EL8dbTfg9xvQWXBm3GAfFFBG"
 
 
 
@@ -215,11 +213,52 @@ router.get('/delete', function(req, res) {
 });
 
 router.post('/delete', function(req, res) {
-    User.findByIdAndRemove(req.user._id, function(err) {
+    async.waterfall([
+
+        function(callback){
+            //find the user to delete
+            User.findById(req.user._id, function(err, user) {
+                if (err) throw err;
+                callback(null, user._id);
+            });
+
+        },
+
+        function (userid, callback) {
+            // delete any rooms they were in
+            Room.find({ $or: [{ user_init : userid}, { user_resp : userid }]}, function(err, rooms) {
+                    if (err) throw err;
+                    if(rooms) {
+
+                        // delete each room
+                        for(i=0; i<rooms.length; i++) {
+                            var id = rooms[i]._id;
+                            Room.findByIdAndRemove(id, function(err) {
+                                if (err) throw err;
+                                console.log('room deleted: '+ id);
+                                if(i == (rooms.length -1)) {
+                                    callback(null, userid);
+                                }
+                            });
+                        }
+                        
+                    }
+                }
+            );
+        },
+
+        function (userid, callback) {
+            User.findByIdAndRemove(userid, function(err) {
+                if (err) throw err;
+                callback(null);
+            });
+        }
+
+    ], function(err, result){
         if (err) throw err;
         console.log('User deleted!');
         res.redirect('/');
-    });
+    });   
 });
 
 

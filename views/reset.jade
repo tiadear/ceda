@@ -9,11 +9,15 @@ block content
 			if (message.length > 0)
 				.alert #{message}
 			form.form-login(role='form', action="/reset", method="POST")
-				input.form-input(type='password', name="password", placeholder='Password')
-				input.form-input(type='password', name='confirmPassword', placeholder='Confirm Password')
+				.formError#password1Error
+				input.form-input#password1(type='password', name="password", placeholder='Password', onblur='validatePassword1("password1")')
+				.formError#password2Error
+				input.form-input#password2(type='password', name='confirmPassword', placeholder='Confirm Password', onblur='validatePassword2("password2")')
 				input(type="hidden" name="userid" value="#{user._id}")
+				input(type="hidden" name="token" value="#{user.resetPasswordToken}")
 				button.form-submit(type="submit") Submit
 				a.forgot(href='/') Cancel
+	script(src='/js/validation.js')
 	script.
 		var message = "#{message}";
 		if (message === "Success! You're password has been changed.") {
@@ -23,3 +27,9 @@ block content
 				}, 5000);
 			});
 		}
+
+		$('#password1, #password2').on('focus', function() {
+			var id = String($(this).attr("id") + 'Error');
+			var elem = document.getElementById(id)
+			$('#'+id).empty();
+		});

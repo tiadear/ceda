@@ -45,8 +45,12 @@ router.get('/', ensureAuthenticated, function(req, res) {
 					function(resolve, reject) {
 						User.findById(userId, function(err, user) {
 							if(err) throw err;
-							var username = user.username;
-							resolve(username);
+							if (!user || user == null || user.length == 0 || user == undefined) {
+                                resolve('account deleted');
+                            } else {
+                                console.log('user: '+ user);
+                                resolve(user.username);
+                            }
 						});
 					}
 				);
@@ -265,8 +269,12 @@ router.get('/thread*', function(req, res) {
 							// this is where it is getting out of order!!!
 							//console.log('User find: '+user.username+' : '+postContent);
 							if(err) throw err;
-							var username = user.username;
-							resolve(username);
+							if (!user || user == null || user.length == 0 || user == undefined) {
+                                resolve('account deleted');
+                            } else {
+                                console.log('user: '+ user);
+                                resolve(user.username);
+                            }
 						});
 					}
 				);

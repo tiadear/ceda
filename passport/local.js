@@ -159,9 +159,9 @@ exports.strategy = function(passport) {
 			if (err) throw err;
 			
 			if(user){
-				// check if the passwords match
-				if(req.body.password != req.body.confirmPassword) {
-					req.flash('resetMessage', 'Passwords do not match. Please try again.');
+				// check if both fields are filled in
+				if(!req.body.password || !req.body.confirmPassword) {
+					req.flash('resetMessage', 'Please fill in both fields');
 					res.redirect('reset?token='+user.resetPasswordToken);
 				}
 				else {

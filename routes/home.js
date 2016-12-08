@@ -88,12 +88,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
                 );
             }
 
-            function uniq(a) {
-                var seen = {};
-                return a.filter(function(item) {
-                    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-                });
-            }
+            
 
             // 3 - get the last post in that thread
             function lastPost(threadId, threadTitle, counter, total) {
@@ -120,13 +115,24 @@ router.get('/', ensureAuthenticated, function(req, res) {
                 );
             }
 
+            function uniq(a) {
+                var seen = {};
+                return a.filter(function(item) {
+                    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+                });
+            }
+
 
             function findUser(threadId, threadTitle, counter, total, postUser, postContent, postTime) {
                 var getUsername = new Promise (
                     function(resolve, reject) {
                         User.findById(postUser, function(err, user){
                             if (err) throw err;
-                            resolve(user.username);
+                            if (!user || user == null || user.length == 0 || user == undefined) {
+                                resolve('account deleted');
+                            } else {
+                                resolve(user.username);
+                            }
                         });
                     }
                 );
@@ -141,9 +147,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
 
                         //console.log('counter: '+counter);
                         if(counter === (total -1)) {
-                            uniq(arr2);
-                            req.alertsForum = arr2.slice(0,6);
-                            //console.log('req.alertsForum: '+ req.alertsForum);
+                            req.alertsForum = uniq(arr2).slice(0,6);
+                            console.log('req.alertsForum: '+ req.alertsForum);
                             callback(null, req.alertsForum);
                         }
                     }
