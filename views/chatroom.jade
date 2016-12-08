@@ -1,7 +1,5 @@
 extends layout
 block content
-	script(src='/js/simplewebrtc.js')
-	script(src='/js/client.js')
 	script.
 		isBlocked = '#{isBlocked}';
 
@@ -18,8 +16,8 @@ block content
 		user2username = '#{usersInRoom[1]}';
 		micSettings2 = '#{micSettings[1]}';
 		vidSettings2 = '#{vidSettings[1]}';
-
-		
+	script(src='/js/simplewebrtc.js')
+	script(src='/js/client.js')
 	.container
 		include includes/nav-simple.jade
 		.chatRoom
