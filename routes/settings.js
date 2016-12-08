@@ -131,7 +131,7 @@ router.post('/change*', function(req, res, done) {
 								var postmark = require("postmark")(process.env.POSTMARK_API_KEY);
 					        	postmark.send({
 									"From": "admin@ceda.io",
-									"To": user.email,
+									"To": email,
 									"Subject": "Password Change",
 									"TextBody": 'Hello,\n\n' + 'This is confirmation that your password was changed at Ceda. If this was not you, please advise us immediately. If this was you, please ignore this email.',
 									"Tag": "password"

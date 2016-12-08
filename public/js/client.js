@@ -329,31 +329,41 @@ $(function(){
             $('.chatPartner').hide();
             $('.chatRoom').css('padding-top', '0px');
             $('.videoWrap').show();
-        
-            var webrtc = new SimpleWebRTC({
-                localVideoEl: 'localVideo',
-                remoteVideosEl: '',
-                autoRequestMedia: false,
-                debug: false,
-                detectSpeakingEvents: true,
-                autoAdjustMic: false
-            });
 
-            var room = roomID;
 
-            webrtc.on('readyToCall', function () {
-                console.log('3. ready to call');
+            var hasWebRTC = navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia;
 
-                if (room) {
-                    console.log('4. webrtc join room');
-                    webrtc.joinRoom(room);
-                }
-            });
+            if (!hasWebRTC) {
+              alert('This browser does not support this feature');
+            }
+            else {
+                var webrtc = new SimpleWebRTC({
+                    localVideoEl: 'localVideo',
+                    remoteVideosEl: '',
+                    autoRequestMedia: false,
+                    debug: false,
+                    detectSpeakingEvents: true,
+                    autoAdjustMic: false
+                });
 
-            console.log('userAccepted: '+userAccepted);
-            console.log('userInitiated: '+userInitiated);
+                var room = roomID;
 
-            webrtc.startLocalVideo();
+                webrtc.on('readyToCall', function () {
+                    console.log('3. ready to call');
+
+                    if (room) {
+                        console.log('4. webrtc join room');
+                        webrtc.joinRoom(room);
+                    }
+                });
+
+                console.log('userAccepted: '+userAccepted);
+                console.log('userInitiated: '+userInitiated);
+
+                webrtc.startLocalVideo();
 
                 // we got access to the camera
                 webrtc.on('localStream', function (stream) {
@@ -528,7 +538,7 @@ $(function(){
                         fileinput.disabled = 'disabled';
                     }
                 });
-
+            }
         }
 
 
