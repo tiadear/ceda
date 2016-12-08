@@ -292,7 +292,8 @@ header {
                 
             }
         }
-        .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+        .sendMessagesWrap { width: 100%; position: fixed; bottom: 0; 
+            @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
             #outgoing { width: 100%; border: none; padding: $pad/2 $pad; font-family: $sans; font-size: 1em; @include box-shadow(0px -5px 14px -5px rgba(0,0,0,0.2)); margin-bottom: -5px; }
             .chatOptions {width: 100%; height: 40px;
                 .chat-btn { background-color: $primary; color: $white; width: 25%; height: 100%; display: inline-block; border: none; cursor: pointer; vertical-align: top; text-align: center;
@@ -305,12 +306,13 @@ header {
         }
 
         .videoWrap { display: none; width: 100%; height: 100%; background-color: $black; position: fixed;
+            @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
             #remotes { height: 100%; width: 100%;
                 .videoDisplay { position: relative; text-align: center; margin-top: 60px;
                     video { top: 0; left: 0; @include border-radius(20px); margin: 0 auto; width: 92%;}
                 }
             }
-            .localDisplay { width: 150px; height: 120px; position: fixed; bottom: 60px; right: 0px; margin-right: $pad;
+            .localDisplay { width: 150px; height: 120px; position: absolute; bottom: 60px; right: 0px; margin-right: $pad;
                 video { width: 100%; position: absolute; @include border-radius(20px); }
             }
             #localScreenContainer { display: none; }
@@ -331,9 +333,10 @@ header {
     // forum
     .forumWrap { @extend .chatWraps;
         .threadList {  }
-        .addPost { float: right; padding: $pad; position: relative; bottom: 0px; right: 0px; 
+        .addPost { padding: $pad; position: fixed; bottom: 0px; width: 100%; z-index: 500;
+            @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
             a {
-                .add {  width: 70px; height: auto; position: fixed; bottom: 20px; right: 10px; z-index: 500;
+                .add {  width: 70px; height: auto; position: absolute; bottom: 20px; right: 10px;
                     img {width: 100%;}
                 }
             }
@@ -344,8 +347,9 @@ header {
             }
         }
     }
-    .options { padding: $pad; position: fixed; bottom: 0px; right: 0px;
-        .reply { float: right; width: 60px; height: 60px; @include border-radius(30px); background-color: $tertiary; cursor: pointer; @include box-shadow( 0px 3px 14px 0px rgba(0,0,0,0.1)); bottom: 20px;
+    .options { padding: $pad; position: fixed; bottom: 0px; width: 100%; z-index: 500;
+        @media screen and (min-width: 700px) {width: 500px; margin: 0 auto;}
+        .reply { position: absolute; width: 60px; height: 60px; @include border-radius(30px); background-color: $tertiary; cursor: pointer; @include box-shadow( 0px 3px 14px 0px rgba(0,0,0,0.1)); bottom: 20px; right: 10px; 
             p { color: $white; text-align: center; padding-top: 21px;}
          }
     }

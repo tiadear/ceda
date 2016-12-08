@@ -756,6 +756,10 @@ header {
       height: 100%;
       background-color: #000000;
       position: fixed; }
+      @media screen and (min-width: 700px) {
+        .container .chatRoom .videoWrap {
+          width: 500px;
+          margin: 0 auto; } }
       .container .chatRoom .videoWrap #remotes {
         height: 100%;
         width: 100%; }
@@ -775,7 +779,7 @@ header {
       .container .chatRoom .videoWrap .localDisplay {
         width: 150px;
         height: 120px;
-        position: fixed;
+        position: absolute;
         bottom: 60px;
         right: 0px;
         margin-right: 20px; }
@@ -820,18 +824,21 @@ header {
             width: auto;
             margin: 0 auto; }
   .container .forumWrap .addPost {
-    float: right;
     padding: 20px;
-    position: relative;
+    position: fixed;
     bottom: 0px;
-    right: 0px; }
+    width: 100%;
+    z-index: 500; }
+    @media screen and (min-width: 700px) {
+      .container .forumWrap .addPost {
+        width: 500px;
+        margin: 0 auto; } }
     .container .forumWrap .addPost a .add {
       width: 70px;
       height: auto;
-      position: fixed;
+      position: absolute;
       bottom: 20px;
-      right: 10px;
-      z-index: 500; }
+      right: 10px; }
       .container .forumWrap .addPost a .add img {
         width: 100%; }
   .container .forumWrap .newPost form a {
@@ -841,9 +848,14 @@ header {
     padding: 20px;
     position: fixed;
     bottom: 0px;
-    right: 0px; }
+    width: 100%;
+    z-index: 500; }
+    @media screen and (min-width: 700px) {
+      .container .options {
+        width: 500px;
+        margin: 0 auto; } }
     .container .options .reply {
-      float: right;
+      position: absolute;
       width: 60px;
       height: 60px;
       -webkit-border-radius: 30px;
@@ -856,7 +868,8 @@ header {
       -moz-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
       -ms-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
       box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.1);
-      bottom: 20px; }
+      bottom: 20px;
+      right: 10px; }
       .container .options .reply p {
         color: #ffffff;
         text-align: center;
