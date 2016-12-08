@@ -302,8 +302,8 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('safari', function(room) {
-        socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+"'s browser does not support the video chat function.");
         socket.broadcast.to(socket.room).emit("killVideo");
+        socket.broadcast.to(socket.room).emit("updateChat", socket.username, socket.username+"'s browser does not support the video chat function.");
     });
 
 

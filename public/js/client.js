@@ -538,6 +538,7 @@ $(function(){
         }
 
         socket.on('killVideo', function() {
+            console.log('video killed');
             webrtc.stopLocalVideo();
             $('.videoWrap').hide();
             $('.chatRoom').css('padding-top', '20px');
