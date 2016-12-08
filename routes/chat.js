@@ -413,10 +413,11 @@ router.get('/chatpeer*', function(req, res) {
             
         }
     ], function (err, result) {
-        if (err) throw err
+        if (err) throw err;
 
         console.log('result: '+ result);
-
+        console.log('req.usersInRoom: ' + req.usersInRoom);
+        console.log('req.userIDs: ' + req.userIDs);
 
             res.render('chatroom', {
                 room : req.room,
