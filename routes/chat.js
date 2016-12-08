@@ -340,7 +340,6 @@ router.get('/chatpeer*', function(req, res) {
 
         function(user1, user1name, user2, user2name, isBlocked, callback) {
             console.log('looking for a room...');
-            console.log('1 isblocked: '+isBlocked);
             Room.findOne({user_init : user1, user_resp : user2}, function(err, room) {
                 if (err) throw err;
                 if (room) {
@@ -419,7 +418,6 @@ router.get('/chatpeer*', function(req, res) {
                 console.log(err);
                 throw err;
             }
-            console.log('3 isblocked: '+req.isBlocked);
             res.render('chatroom', {
                 room : req.room,
                 usersInRoom : req.usersInRoom,
